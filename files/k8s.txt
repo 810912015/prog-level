@@ -1,0 +1,221 @@
+0.
+# Install Docker CE
+## Set up the repository
+### Install required packages.
+yum install yum-utils device-mapper-persistent-data lvm2
+
+### Add Docker repository.
+yum-config-manager \
+  --add-repo \
+  https://download.docker.com/linux/centos/docker-ce.repo
+
+## Install Docker CE.
+yum update && yum install docker-ce-18.06.2.ce
+
+## Create /etc/docker directory.
+mkdir /etc/docker
+
+# Setup daemon.
+cat > /etc/docker/daemon.json <<EOF
+{
+  "insecure-registries":["10.10.72.168:3389"],
+  "registry-mirrors":["https://docker.mirrors.ustc.edu.cn"],
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ]
+}
+EOF
+
+mkdir -p /etc/systemd/system/docker.service.d
+
+# Restart Docker
+systemctl daemon-reload
+systemctl restart docker
+
+1.
+images=(
+    kubernetes-dashboard-amd64:v1.10.1
+    kube-apiserver:v1.15.1
+    kube-controller-manager:v1.15.1
+    kube-scheduler:v1.15.1
+    kube-proxy:v1.15.1
+    pause:3.1
+    etcd:3.3.10
+    coredns:1.3.1
+)
+
+for imageName in ${images[@]} ; do
+    docker pull gcr.azk8s.cn/google_containers/$imageName
+    docker tag gcr.azk8s.cn/google_containers/$imageName k8s.gcr.io/$imageName
+done
+1.01 ��װkubeadm
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+
+# Set SELinux in permissive mode (effectively disabling it)
+setenforce 0
+sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+
+yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+
+systemctl enable --now kubelet
+
+1.1
+����firewalld
+systemctl disable firewalld && systemctl stop firewalld
+1.2
+����swap
+swapoff -a
+vi /etc/fstab #swap
+
+echo "1" >/proc/sys/net/bridge/bridge-nf-call-iptables
+
+1.3 
+��װ������ canal
+hostnamectl set-hostname centos7
+
+For Canal to work correctly, --pod-network-cidr=10.244.0.0/16 has to be passed to kubeadm init. Note that Canal works on amd64 only.
+
+kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/canal.yaml
+
+2.
+���� kubeadm init --pod-network-cidr=10.244.0.0/16
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(bid -u):$(bid -g) $HOME/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+
+
+2.5 kubeadm reset
+     kubeadm init --pod-network-cidr=10.244.0.0/16
+
+kubeadm join 192.168.1.224:6443 --token i7c0f7.3d8m7z9f56z04ghp \
+    --discovery-token-ca-cert-hash sha256:eaa0add090ef88a44e18c8cfb987157f2c783757a75a2cd291a75f026798e525
+
+��������join token
+kubeadm token create --print-join-command
+
+kubeadm join 192.168.1.224:6443 --token et7uwq.p16x9cvv5rlc7vyl     --discovery-token-ca-cert-hash sha256:eaa0add090ef88a44e18c8cfb987157f2c783757a75a2cd291a75f026798e525
+
+ 
+3.
+[root@centos7 ~]# hostnamectl set-hostname centos7
+(�����޸���֮��ִ��`exec bash`�����ı�)��
+
+4.
+��ӽڵ�
+kubectl taint node k8s-master node-role.kubernetes.io/master-
+
+kubeadm join 192.168.1.224:6443 --token et7uwq.p16x9cvv5rlc7vyl     --discovery-token-ca-cert-hash sha256:eaa0add090ef88a44e18c8cfb987157f2c783757a75a2cd291a75f026798e525
+
+
+5.�鿴kubelet��־
+
+ journalctl -f -u kubelet
+
+6.
+�����Ų�:
+kubectl get nodes
+
+kubectl get pods -n kube-system -o wide | grep centos4
+
+ kubectl --namespace kube-system logs kube-proxy-nr86m
+
+ kubectl describe pod kube-proxy-nr86m --namespace kube-system
+
+7.
+dashboard��װ
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+ɾ��secret��,�޸�δnodePort
+
+��������֤��
+[root@master keys]# pwd
+/root/keys
+[root@master keys]# ls
+[root@master keys]# openssl genrsa -out dashboard.key 2048
+Generating RSA private key, 2048 bit long modulus
+.+++
+.................................................+++
+e is 65537 (0x10001)
+[root@master keys]# openssl req -new -out dashboard.csr -key dashboard.key -subj '/CN=192.168.246.200'
+[root@master keys]# ls
+dashboard.csr  dashboard.key
+[root@master keys]# 
+[root@master keys]# openssl x509 -req -in dashboard.csr -signkey dashboard.key -out dashboard.crt 
+Signature ok
+subject=/CN=192.168.246.200
+Getting Private key
+[root@master keys]# 
+[root@master keys]# ls
+dashboard.crt  dashboard.csr  dashboard.key
+
+# admin-user.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kube-system
+
+kubectl create -f admin-user.yaml
+
+# admin-user-role-binding.yaml
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kube-system
+
+kubectl create -f  admin-user-role-binding.yaml
+
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+
+
+����֤�����
+ksys create secret generic kubernetes-dashboard-certs --from-file=dashboard.key --from-file=dashboard.crt 
+
+
+���洴��Ӧ�õĻ�������,����spring.profiles.activeҪд��SPRING_PROFILES_ACTIVE
+
+��¼�õ�kubeconfig
+
+ DASH_TOCKEN=$(kubectl get secret -n kube-system admin-user-token-cnvlt -o jsonpath={.data.token}|bas
+e64 -d)
+
+���·���:ֱ���޸Ķ�Ӧdeploy����,--����,��!
+kubectl edit deploy front
+
+docker run -d -p 5000:5000 -v /opt/registry/data:/var/lib/registry --privileged=true --restart=always --name registry registry
+
+
+

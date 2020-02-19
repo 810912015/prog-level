@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pl.data.mapper.ValidationMapper">
+  <resultMap id="BaseResultMap" type="com.pl.data.model.Validation">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="qid" jdbcType="INTEGER" property="qid" />
+    <result column="sequnence" jdbcType="INTEGER" property="sequnence" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+    <result column="input" jdbcType="VARCHAR" property="input" />
+    <result column="output" jdbcType="VARCHAR" property="output" />
+    <result column="Remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="Dclt" jdbcType="TIMESTAMP" property="dclt" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, qid, sequnence, weight, input, output, Remarks, Dclt
+  </sql>
+  <select id="selectByExample" parameterType="com.pl.data.model.ValidationExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from validation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from validation
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from validation
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pl.data.model.ValidationExample">
+    delete from validation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pl.data.model.Validation">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into validation (qid, sequnence, weight, 
+      input, output, Remarks, 
+      Dclt)
+    values (#{qid,jdbcType=INTEGER}, #{sequnence,jdbcType=INTEGER}, #{weight,jdbcType=INTEGER}, 
+      #{input,jdbcType=VARCHAR}, #{output,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+      #{dclt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pl.data.model.Validation">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into validation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="qid != null">
+        qid,
+      </if>
+      <if test="sequnence != null">
+        sequnence,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="input != null">
+        input,
+      </if>
+      <if test="output != null">
+        output,
+      </if>
+      <if test="remarks != null">
+        Remarks,
+      </if>
+      <if test="dclt != null">
+        Dclt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="qid != null">
+        #{qid,jdbcType=INTEGER},
+      </if>
+      <if test="sequnence != null">
+        #{sequnence,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="input != null">
+        #{input,jdbcType=VARCHAR},
+      </if>
+      <if test="output != null">
+        #{output,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="dclt != null">
+        #{dclt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pl.data.model.ValidationExample" resultType="java.lang.Long">
+    select count(*) from validation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update validation
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.qid != null">
+        qid = #{record.qid,jdbcType=INTEGER},
+      </if>
+      <if test="record.sequnence != null">
+        sequnence = #{record.sequnence,jdbcType=INTEGER},
+      </if>
+      <if test="record.weight != null">
+        weight = #{record.weight,jdbcType=INTEGER},
+      </if>
+      <if test="record.input != null">
+        input = #{record.input,jdbcType=VARCHAR},
+      </if>
+      <if test="record.output != null">
+        output = #{record.output,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null">
+        Remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dclt != null">
+        Dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update validation
+    set id = #{record.id,jdbcType=INTEGER},
+      qid = #{record.qid,jdbcType=INTEGER},
+      sequnence = #{record.sequnence,jdbcType=INTEGER},
+      weight = #{record.weight,jdbcType=INTEGER},
+      input = #{record.input,jdbcType=VARCHAR},
+      output = #{record.output,jdbcType=VARCHAR},
+      Remarks = #{record.remarks,jdbcType=VARCHAR},
+      Dclt = #{record.dclt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pl.data.model.Validation">
+    update validation
+    <set>
+      <if test="qid != null">
+        qid = #{qid,jdbcType=INTEGER},
+      </if>
+      <if test="sequnence != null">
+        sequnence = #{sequnence,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="input != null">
+        input = #{input,jdbcType=VARCHAR},
+      </if>
+      <if test="output != null">
+        output = #{output,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        Remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="dclt != null">
+        Dclt = #{dclt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pl.data.model.Validation">
+    update validation
+    set qid = #{qid,jdbcType=INTEGER},
+      sequnence = #{sequnence,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      input = #{input,jdbcType=VARCHAR},
+      output = #{output,jdbcType=VARCHAR},
+      Remarks = #{remarks,jdbcType=VARCHAR},
+      Dclt = #{dclt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

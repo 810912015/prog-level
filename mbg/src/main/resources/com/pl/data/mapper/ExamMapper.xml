@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pl.data.mapper.ExamMapper">
+  <resultMap id="BaseResultMap" type="com.pl.data.model.Exam">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="Name" jdbcType="VARCHAR" property="name" />
+    <result column="Title" jdbcType="VARCHAR" property="title" />
+    <result column="Tag" jdbcType="VARCHAR" property="tag" />
+    <result column="Category" jdbcType="VARCHAR" property="category" />
+    <result column="Duration" jdbcType="INTEGER" property="duration" />
+    <result column="Start" jdbcType="TIMESTAMP" property="start" />
+    <result column="Remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="UserId" jdbcType="BIGINT" property="userid" />
+    <result column="Dclt" jdbcType="TIMESTAMP" property="dclt" />
+    <result column="clazz" jdbcType="CHAR" property="clazz" />
+    <result column="scope" jdbcType="CHAR" property="scope" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, Name, Title, Tag, Category, Duration, Start, Remarks, UserId, Dclt, clazz, scope
+  </sql>
+  <select id="selectByExample" parameterType="com.pl.data.model.ExamExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from exam
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from exam
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from exam
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pl.data.model.ExamExample">
+    delete from exam
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pl.data.model.Exam">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into exam (Name, Title, Tag, 
+      Category, Duration, Start, 
+      Remarks, UserId, Dclt, 
+      clazz, scope)
+    values (#{name,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{tag,jdbcType=VARCHAR}, 
+      #{category,jdbcType=VARCHAR}, #{duration,jdbcType=INTEGER}, #{start,jdbcType=TIMESTAMP}, 
+      #{remarks,jdbcType=VARCHAR}, #{userid,jdbcType=BIGINT}, #{dclt,jdbcType=TIMESTAMP}, 
+      #{clazz,jdbcType=CHAR}, #{scope,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pl.data.model.Exam">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into exam
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        Name,
+      </if>
+      <if test="title != null">
+        Title,
+      </if>
+      <if test="tag != null">
+        Tag,
+      </if>
+      <if test="category != null">
+        Category,
+      </if>
+      <if test="duration != null">
+        Duration,
+      </if>
+      <if test="start != null">
+        Start,
+      </if>
+      <if test="remarks != null">
+        Remarks,
+      </if>
+      <if test="userid != null">
+        UserId,
+      </if>
+      <if test="dclt != null">
+        Dclt,
+      </if>
+      <if test="clazz != null">
+        clazz,
+      </if>
+      <if test="scope != null">
+        scope,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null">
+        #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="start != null">
+        #{start,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="dclt != null">
+        #{dclt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clazz != null">
+        #{clazz,jdbcType=CHAR},
+      </if>
+      <if test="scope != null">
+        #{scope,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pl.data.model.ExamExample" resultType="java.lang.Long">
+    select count(*) from exam
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update exam
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        Name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null">
+        Title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tag != null">
+        Tag = #{record.tag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category != null">
+        Category = #{record.category,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duration != null">
+        Duration = #{record.duration,jdbcType=INTEGER},
+      </if>
+      <if test="record.start != null">
+        Start = #{record.start,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remarks != null">
+        Remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null">
+        UserId = #{record.userid,jdbcType=BIGINT},
+      </if>
+      <if test="record.dclt != null">
+        Dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.clazz != null">
+        clazz = #{record.clazz,jdbcType=CHAR},
+      </if>
+      <if test="record.scope != null">
+        scope = #{record.scope,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update exam
+    set id = #{record.id,jdbcType=INTEGER},
+      Name = #{record.name,jdbcType=VARCHAR},
+      Title = #{record.title,jdbcType=VARCHAR},
+      Tag = #{record.tag,jdbcType=VARCHAR},
+      Category = #{record.category,jdbcType=VARCHAR},
+      Duration = #{record.duration,jdbcType=INTEGER},
+      Start = #{record.start,jdbcType=TIMESTAMP},
+      Remarks = #{record.remarks,jdbcType=VARCHAR},
+      UserId = #{record.userid,jdbcType=BIGINT},
+      Dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      clazz = #{record.clazz,jdbcType=CHAR},
+      scope = #{record.scope,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pl.data.model.Exam">
+    update exam
+    <set>
+      <if test="name != null">
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        Title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null">
+        Tag = #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        Category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null">
+        Duration = #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="start != null">
+        Start = #{start,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null">
+        Remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        UserId = #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="dclt != null">
+        Dclt = #{dclt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clazz != null">
+        clazz = #{clazz,jdbcType=CHAR},
+      </if>
+      <if test="scope != null">
+        scope = #{scope,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pl.data.model.Exam">
+    update exam
+    set Name = #{name,jdbcType=VARCHAR},
+      Title = #{title,jdbcType=VARCHAR},
+      Tag = #{tag,jdbcType=VARCHAR},
+      Category = #{category,jdbcType=VARCHAR},
+      Duration = #{duration,jdbcType=INTEGER},
+      Start = #{start,jdbcType=TIMESTAMP},
+      Remarks = #{remarks,jdbcType=VARCHAR},
+      UserId = #{userid,jdbcType=BIGINT},
+      Dclt = #{dclt,jdbcType=TIMESTAMP},
+      clazz = #{clazz,jdbcType=CHAR},
+      scope = #{scope,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

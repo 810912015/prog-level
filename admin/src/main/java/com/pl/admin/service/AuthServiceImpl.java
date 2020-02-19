@@ -1,0 +1,124 @@
+package com.pl.admin.service;
+
+import com.pl.admin.dto.AuthDto;
+import com.pl.admin.dto.LoginDto;
+import com.pl.admin.dto.RegisterDto;
+import com.pl.admin.dto.Result;
+import com.pl.data.mapper.UUserMapper;
+import com.pl.data.model.UUser;
+import com.pl.data.model.UUserExample;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.*;
+
+@Component
+public class AuthServiceImpl implements AuthService {
+
+    public AuthServiceImpl(){
+    }
+
+    @Override
+    public Result<AuthDto> login(LoginDto ld) {
+        UUserExample ue=new UUserExample();
+        ue.createCriteria().andPswdEqualTo(ld.getPwd()).andEmailEqualTo(ld.getName());
+        List<UUser> ul=um.selectByExample(ue);
+        if(ul==null||ul.isEmpty()){
+            return new Result<>(false,"用户名或密码错误",new AuthDto(false,"",ld.getName()));
+        }
+        UUser u=ul.get(0);
+        Result<AuthDto> r=new Result<>();
+        r.setMsg("登录成功");
+        r.setSuccess(true);
+        AuthDto d=new AuthDto();
+        d.setAuthed(true);
+        d.setFirmId(u.getFirmid());
+        d.setPers(new String[0]);
+        d.setUname(ld.getName());
+        d.setUid(Long.toString(u.getId()));
+        r.setData(d);
+        return r;
+    }
+
+    @Override
+    public Result<AuthDto> logout(AuthDto ad) {
+        //sm.endSession(ad);
+        return new Result<>(true,"已登出",new AuthDto(false,"",""));
+    }
+
+
+
+    @Override
+    public Result<AuthDto> register(RegisterDto ld) {
+        if(ld.getPwd()==null||ld.getPwd().length()<8){
+            return new Result<>(false,"密码至少8位",
+                    new AuthDto(false,"",""));
+        }
+        // 简单注册:用户名,密码
+        if(ld.isSimple()){
+             List<UUser> lu=getUsers(ld.getName());
+            if(lu!=null&&!lu.isEmpty()){
+                return new Result<>(false,"用户名已存在",
+                        new AuthDto(false,"",""));
+            }
+            UUser u = makeUser(ld);
+            u.setEmail(ld.getName());
+            um.insert(u);
+            return new Result<>(true,"",new AuthDto(true,u.getId().toString(),u.getNickname()));
+        }
+        // 验证:1.邮箱是否唯一,2.密码位数,3.验证码,4.激活码
+        // 插入用户表
+        // 更新session
+        List<UUser> ul = getUsers(ld.getEmail());
+        if(ul!=null&&!ul.isEmpty()){
+            return new Result<>(false,"邮箱已注册",
+                    new AuthDto(false,"",""));
+        }
+
+
+        UUser u = makeUser(ld);
+        um.insert(u);
+
+
+        return new Result<>(true,"",new AuthDto(true,u.getId().toString(),u.getNickname()));
+    }
+
+    private UUser makeUser(RegisterDto ld) {
+        UUser u=new UUser();
+        u.setCreateTime(new Date());
+        u.setEmail(ld.getEmail());
+        u.setId(0L);
+        u.setNickname(ld.getName());
+        u.setPswd(ld.getPwd());
+        u.setStatus(0L);
+        u.setLastLoginTime(new Date());
+        u.setRoles("teacher");
+        return u;
+    }
+
+    private List<UUser> getUsers(String email) {
+        UUserExample ue = new UUserExample();
+        ue.createCriteria().andEmailEqualTo(email);
+        return um.selectByExample(ue);
+    }
+
+    @Override
+    public Result<AuthDto> reset(RegisterDto ld) {
+        List<UUser> ul = getUsers(ld.getEmail());
+        if(ul==null||ul.isEmpty()){
+            return new Result<>(false,"此邮箱未注册",
+                    new AuthDto(false,"",""));
+        }
+        UUser u=ul.get(0);
+        u.setPswd(ld.getPwd());
+        int r= um.updateByPrimaryKey(u);
+        return new Result<>(r>0,"",
+                new AuthDto(true,u.getId().toString(),u.getNickname()));
+    }
+    private UUserMapper um;
+
+    @Autowired
+    public void setUm(UUserMapper um) {
+        this.um = um;
+    }
+}

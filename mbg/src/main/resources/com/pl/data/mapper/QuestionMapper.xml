@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pl.data.mapper.QuestionMapper">
+  <resultMap id="BaseResultMap" type="com.pl.data.model.Question">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="Name" jdbcType="VARCHAR" property="name" />
+    <result column="Title" jdbcType="VARCHAR" property="title" />
+    <result column="Category" jdbcType="VARCHAR" property="category" />
+    <result column="Remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="Dclt" jdbcType="TIMESTAMP" property="dclt" />
+    <result column="lang" jdbcType="VARCHAR" property="lang" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="tag1" jdbcType="VARCHAR" property="tag1" />
+    <result column="tag2" jdbcType="VARCHAR" property="tag2" />
+    <result column="otherTag" jdbcType="VARCHAR" property="othertag" />
+    <result column="userId" jdbcType="BIGINT" property="userid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pl.data.model.Question">
+    <result column="Source" jdbcType="LONGVARCHAR" property="source" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, Name, Title, Category, Remarks, Dclt, lang, level, tag1, tag2, otherTag, userId
+  </sql>
+  <sql id="Blob_Column_List">
+    Source
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.pl.data.model.QuestionExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.pl.data.model.QuestionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from question
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from question
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pl.data.model.QuestionExample">
+    delete from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pl.data.model.Question">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into question (Name, Title, Category, 
+      Remarks, Dclt, lang, 
+      level, tag1, tag2, 
+      otherTag, userId, Source
+      )
+    values (#{name,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{dclt,jdbcType=TIMESTAMP}, #{lang,jdbcType=VARCHAR}, 
+      #{level,jdbcType=INTEGER}, #{tag1,jdbcType=VARCHAR}, #{tag2,jdbcType=VARCHAR}, 
+      #{othertag,jdbcType=VARCHAR}, #{userid,jdbcType=BIGINT}, #{source,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pl.data.model.Question">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        Name,
+      </if>
+      <if test="title != null">
+        Title,
+      </if>
+      <if test="category != null">
+        Category,
+      </if>
+      <if test="remarks != null">
+        Remarks,
+      </if>
+      <if test="dclt != null">
+        Dclt,
+      </if>
+      <if test="lang != null">
+        lang,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="tag1 != null">
+        tag1,
+      </if>
+      <if test="tag2 != null">
+        tag2,
+      </if>
+      <if test="othertag != null">
+        otherTag,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="source != null">
+        Source,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="dclt != null">
+        #{dclt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lang != null">
+        #{lang,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="tag1 != null">
+        #{tag1,jdbcType=VARCHAR},
+      </if>
+      <if test="tag2 != null">
+        #{tag2,jdbcType=VARCHAR},
+      </if>
+      <if test="othertag != null">
+        #{othertag,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pl.data.model.QuestionExample" resultType="java.lang.Long">
+    select count(*) from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update question
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        Name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null">
+        Title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category != null">
+        Category = #{record.category,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null">
+        Remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dclt != null">
+        Dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lang != null">
+        lang = #{record.lang,jdbcType=VARCHAR},
+      </if>
+      <if test="record.level != null">
+        level = #{record.level,jdbcType=INTEGER},
+      </if>
+      <if test="record.tag1 != null">
+        tag1 = #{record.tag1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tag2 != null">
+        tag2 = #{record.tag2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.othertag != null">
+        otherTag = #{record.othertag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null">
+        userId = #{record.userid,jdbcType=BIGINT},
+      </if>
+      <if test="record.source != null">
+        Source = #{record.source,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update question
+    set id = #{record.id,jdbcType=INTEGER},
+      Name = #{record.name,jdbcType=VARCHAR},
+      Title = #{record.title,jdbcType=VARCHAR},
+      Category = #{record.category,jdbcType=VARCHAR},
+      Remarks = #{record.remarks,jdbcType=VARCHAR},
+      Dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      lang = #{record.lang,jdbcType=VARCHAR},
+      level = #{record.level,jdbcType=INTEGER},
+      tag1 = #{record.tag1,jdbcType=VARCHAR},
+      tag2 = #{record.tag2,jdbcType=VARCHAR},
+      otherTag = #{record.othertag,jdbcType=VARCHAR},
+      userId = #{record.userid,jdbcType=BIGINT},
+      Source = #{record.source,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update question
+    set id = #{record.id,jdbcType=INTEGER},
+      Name = #{record.name,jdbcType=VARCHAR},
+      Title = #{record.title,jdbcType=VARCHAR},
+      Category = #{record.category,jdbcType=VARCHAR},
+      Remarks = #{record.remarks,jdbcType=VARCHAR},
+      Dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      lang = #{record.lang,jdbcType=VARCHAR},
+      level = #{record.level,jdbcType=INTEGER},
+      tag1 = #{record.tag1,jdbcType=VARCHAR},
+      tag2 = #{record.tag2,jdbcType=VARCHAR},
+      otherTag = #{record.othertag,jdbcType=VARCHAR},
+      userId = #{record.userid,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pl.data.model.Question">
+    update question
+    <set>
+      <if test="name != null">
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        Title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        Category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        Remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="dclt != null">
+        Dclt = #{dclt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lang != null">
+        lang = #{lang,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="tag1 != null">
+        tag1 = #{tag1,jdbcType=VARCHAR},
+      </if>
+      <if test="tag2 != null">
+        tag2 = #{tag2,jdbcType=VARCHAR},
+      </if>
+      <if test="othertag != null">
+        otherTag = #{othertag,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        userId = #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="source != null">
+        Source = #{source,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pl.data.model.Question">
+    update question
+    set Name = #{name,jdbcType=VARCHAR},
+      Title = #{title,jdbcType=VARCHAR},
+      Category = #{category,jdbcType=VARCHAR},
+      Remarks = #{remarks,jdbcType=VARCHAR},
+      Dclt = #{dclt,jdbcType=TIMESTAMP},
+      lang = #{lang,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      tag1 = #{tag1,jdbcType=VARCHAR},
+      tag2 = #{tag2,jdbcType=VARCHAR},
+      otherTag = #{othertag,jdbcType=VARCHAR},
+      userId = #{userid,jdbcType=BIGINT},
+      Source = #{source,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pl.data.model.Question">
+    update question
+    set Name = #{name,jdbcType=VARCHAR},
+      Title = #{title,jdbcType=VARCHAR},
+      Category = #{category,jdbcType=VARCHAR},
+      Remarks = #{remarks,jdbcType=VARCHAR},
+      Dclt = #{dclt,jdbcType=TIMESTAMP},
+      lang = #{lang,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      tag1 = #{tag1,jdbcType=VARCHAR},
+      tag2 = #{tag2,jdbcType=VARCHAR},
+      otherTag = #{othertag,jdbcType=VARCHAR},
+      userId = #{userid,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

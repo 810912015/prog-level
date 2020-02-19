@@ -1,0 +1,87 @@
+0. LTSC ������ M7XTQ-FN8P6-TTKYV-9D4CC-J462D
+
+1.mysql ��־ɾ��:
+MySQL> show binary logs;
+mysql> purge binary logs to 'mysql-bin.000003';
+
+2.windows�½�docker
+//����һ���ɲ��������ļ���docker
+docker run --net=host --ipc=host --uts=host --pid=host -it --security-opt=seccomp=unconfined --privileged --rm -v /:/host alpine /bin/sh
+//�л��������ļ�ϵͳ,�ɽ��б����ļ�����
+chroot /host
+
+3.�鿴docker��־�ļ���ַ
+docker inspect --format='{{.LogPath}}' mysql
+
+4.����mysql
+C:\Users\admin>docker exec -it mysql-test mysqldump -uroot -proot reader >G:\reader20190721.sql
+C:\Users\admin>docker exec -it mysql-test mysqldump -uroot -proot reader -w "bid>=5300000 and bid<5400000"  bms_chapter >G:\c_540k.sql.
+
+
+5. docker��es
+C:\Users\zj0031>docker run -p 9200:9200 -p 9300:9300 --name es
+ -v /e/es/plugins:/usr/share/elasticsearch/plugins 
+-v /e/es/data:/usr/share/elasticsearch/data 
+-e "cluster.name=es" 
+-e "discovery.type=single-node" 
+-e "ES_JAVA_OPTS=-Xms512m -Xmx512m"  
+-d elasticsearch:7.1.1
+
+6.copy file
+C:\Users\zj0031>scp D:\proj\reader-backend\reader-portal\target\reader-portal-1.0-SNAPSHOT.jar root@117.50.10.245:/data
+key_load_public: invalid format
+root@117.50.10.245's password:
+reader-portal-1.0-SNAPSHOT.jar
+
+7.run cmd
+[root@10-10-171-53 portal-srv]# java -jar reader-portal-1.0-SNAPSHOT.jar --server.port=9010 --spring.profiles.active=prod
+[root@10-10-171-53 portal-srv]# nohup java -jar reader-portal-1.0-SNAPSHOT.jar --server.port=9010 --spring.profiles.active=prod >log.file 2>&1 &
+
+
+8.
+$ sudo yum-config-manager \
+    --add-repo \
+    https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+9.
+)sudo vi  /etc/sysctl.conf    �ļ�������һ��
+vm.max_map_count=262144
+
+
+�������úõ�ϵͳ����
+sysctl [-n] [-e] -p <filename> (default /etc/sysctl.conf)
+
+sudo sysctl -p
+
+3)��������   bin>./elasticsearch
+
+
+10.
+cluster.name: "es-book"
+node.name: "esb-1"
+network.publish_host: 10.10.72.168
+network.host: 0.0.0.0
+
+discovery.zen.ping.unicast.hosts: ["10.10.86.205:9300"]
+discovery.zen.minimum_master_nodes: 1
+
+
+
+
+cluster.name: "es-book"
+node.name: "esb-2"
+network.publish_host: 10.10.86.205
+network.host: 0.0.0.0
+
+discovery.zen.ping.unicast.hosts: ["10.10.72.168:9300"]
+discovery.zen.minimum_master_nodes: 1
+
+11.nginxԴ
+rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+
+12.
+minikube start --vm-driver=hyperv --hyperv-virtual-switch=ExternalSwitch -p mk2
+
+
+
+ 

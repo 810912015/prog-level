@@ -1,0 +1,12 @@
+key-上报键值      描述                          value--json字串,列出的必选键值
+begin_read    开始阅读               bookId,chapterId,
+end_read       结束阅读               bookId,chapterId,
+detail            进入详情页             bookId
+add_cart       加入书架                bookId,
+remove_cart  移出书架               bookId,
+share            分享                      bookId,
+ad_show       广告显示                adId,
+ad_click        广告点击                  adId,
+nad_click      免广告点击               adId,
+device          设备信息                  k-v,
+read_speed   阅读进度                  bookId,chapterId,

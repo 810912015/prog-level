@@ -1,0 +1,15 @@
+[root@10-10-171-53 keys]# kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+Name:         admin-user-token-bsqrn
+Namespace:    kube-system
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: admin-user
+              kubernetes.io/service-account.uid: 9e52a387-605b-4c51-9b94-5c940762de1c
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1025 bytes
+namespace:  11 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLWJzcXJuIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI5ZTUyYTM4Ny02MDViLTRjNTEtOWI5NC01Yzk0MDc2MmRlMWMiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.MvWN-Tx9UoOGUlgjYPAPSo0uCDafkTmK2vil5xX5eHl5xiqVxP2hg5jooWKXaKlhGrzzKAJ7Jzn6M1QZjM2SWJzvkdS6agCmxvkJrFYE2L-pKff2HSmWClZ-wA4_6XU8pUl_PCqfy4YQJfwcn6xQ3IJ-qVN_rr3yIS00z1m8c07PnIlGQt6NbZ5hhmHS0LYl0AUa-jqbcEALpQJNm4NiaQRtZLV5U_w_ajFfTF64pLxgP_C7wdY8dW71Buq6f4yS_FnUTctnRUId1y7ZsJcWmcgKXVXHb-dfmZR4dTicRHOcCwzyTN37QhUREbk4oNIED0UPcXSFv1yopT9Fh5yinA
+[root@10-10-171-53 keys]#

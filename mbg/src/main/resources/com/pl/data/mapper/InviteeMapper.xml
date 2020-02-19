@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pl.data.mapper.InviteeMapper">
+  <resultMap id="BaseResultMap" type="com.pl.data.model.Invitee">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="firmId" jdbcType="INTEGER" property="firmid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="cat1" jdbcType="VARCHAR" property="cat1" />
+    <result column="cat2" jdbcType="VARCHAR" property="cat2" />
+    <result column="cat3" jdbcType="VARCHAR" property="cat3" />
+    <result column="cat4" jdbcType="VARCHAR" property="cat4" />
+    <result column="cat5" jdbcType="VARCHAR" property="cat5" />
+    <result column="Remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="Dclt" jdbcType="TIMESTAMP" property="dclt" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, firmId, name, email, cat1, cat2, cat3, cat4, cat5, Remarks, Dclt
+  </sql>
+  <select id="selectByExample" parameterType="com.pl.data.model.InviteeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from invitee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from invitee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from invitee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pl.data.model.InviteeExample">
+    delete from invitee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pl.data.model.Invitee">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into invitee (firmId, name, email, 
+      cat1, cat2, cat3, cat4, 
+      cat5, Remarks, Dclt
+      )
+    values (#{firmid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{cat1,jdbcType=VARCHAR}, #{cat2,jdbcType=VARCHAR}, #{cat3,jdbcType=VARCHAR}, #{cat4,jdbcType=VARCHAR}, 
+      #{cat5,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{dclt,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pl.data.model.Invitee">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into invitee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="firmid != null">
+        firmId,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="cat1 != null">
+        cat1,
+      </if>
+      <if test="cat2 != null">
+        cat2,
+      </if>
+      <if test="cat3 != null">
+        cat3,
+      </if>
+      <if test="cat4 != null">
+        cat4,
+      </if>
+      <if test="cat5 != null">
+        cat5,
+      </if>
+      <if test="remarks != null">
+        Remarks,
+      </if>
+      <if test="dclt != null">
+        Dclt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="firmid != null">
+        #{firmid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="cat1 != null">
+        #{cat1,jdbcType=VARCHAR},
+      </if>
+      <if test="cat2 != null">
+        #{cat2,jdbcType=VARCHAR},
+      </if>
+      <if test="cat3 != null">
+        #{cat3,jdbcType=VARCHAR},
+      </if>
+      <if test="cat4 != null">
+        #{cat4,jdbcType=VARCHAR},
+      </if>
+      <if test="cat5 != null">
+        #{cat5,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="dclt != null">
+        #{dclt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pl.data.model.InviteeExample" resultType="java.lang.Long">
+    select count(*) from invitee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update invitee
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.firmid != null">
+        firmId = #{record.firmid,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cat1 != null">
+        cat1 = #{record.cat1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cat2 != null">
+        cat2 = #{record.cat2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cat3 != null">
+        cat3 = #{record.cat3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cat4 != null">
+        cat4 = #{record.cat4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cat5 != null">
+        cat5 = #{record.cat5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null">
+        Remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dclt != null">
+        Dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update invitee
+    set id = #{record.id,jdbcType=INTEGER},
+      firmId = #{record.firmid,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      cat1 = #{record.cat1,jdbcType=VARCHAR},
+      cat2 = #{record.cat2,jdbcType=VARCHAR},
+      cat3 = #{record.cat3,jdbcType=VARCHAR},
+      cat4 = #{record.cat4,jdbcType=VARCHAR},
+      cat5 = #{record.cat5,jdbcType=VARCHAR},
+      Remarks = #{record.remarks,jdbcType=VARCHAR},
+      Dclt = #{record.dclt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pl.data.model.Invitee">
+    update invitee
+    <set>
+      <if test="firmid != null">
+        firmId = #{firmid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="cat1 != null">
+        cat1 = #{cat1,jdbcType=VARCHAR},
+      </if>
+      <if test="cat2 != null">
+        cat2 = #{cat2,jdbcType=VARCHAR},
+      </if>
+      <if test="cat3 != null">
+        cat3 = #{cat3,jdbcType=VARCHAR},
+      </if>
+      <if test="cat4 != null">
+        cat4 = #{cat4,jdbcType=VARCHAR},
+      </if>
+      <if test="cat5 != null">
+        cat5 = #{cat5,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        Remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="dclt != null">
+        Dclt = #{dclt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pl.data.model.Invitee">
+    update invitee
+    set firmId = #{firmid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      cat1 = #{cat1,jdbcType=VARCHAR},
+      cat2 = #{cat2,jdbcType=VARCHAR},
+      cat3 = #{cat3,jdbcType=VARCHAR},
+      cat4 = #{cat4,jdbcType=VARCHAR},
+      cat5 = #{cat5,jdbcType=VARCHAR},
+      Remarks = #{remarks,jdbcType=VARCHAR},
+      Dclt = #{dclt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

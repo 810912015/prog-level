@@ -1,0 +1,38 @@
+1.admin-svc
+
+scp D:\proj\rb\reader-admin\target\reader-admin-1.0-SNAPSHOT.jar root@106.75.31.46:/data/admin-srv
+
+nohup java -jar reader-admin-1.0-SNAPSHOT.jar --server.port=9020 --spring.profiles.active=prodhttps --cooee.job.enabled=true >log9020.file 2>&1 &
+
+nohup java -jar reader-admin-1.0-2-SNAPSHOT.jar --server.port=9021 --spring.profiles.active=prodhttps --cooee.job.enabled=false >log9021.file 2>&1 &
+
+2.admin-ui
+scp D:\proj\reader-store-front\build.zip root@106.75.31.46:/data/
+
+3.search-svc
+nohup java -jar reader-search-1.0-SNAPSHOT.jar --server.port=9030 --spring.profiles.active=prodhttps >log9030.file 2>&1 &
+
+nohup java -jar reader-search-1.0-2-SNAPSHOT.jar --server.port=9031 --spring.profiles.active=prod >log9031.file 2>&1 &
+
+3.search-svc
+scp D:\proj\rb\reader-search\target\reader-search-1.0-SNAPSHOT.jar root@106.75.17.41:/data/search-srv
+
+nohup java -jar reader-search-1.0-SNAPSHOT.jar --server.port=9030 --spring.profiles.active=prodhttps >log9030.file 2>&1 &
+
+nohup java -jar reader-search-1.0-2-SNAPSHOT.jar --server.port=9031 --spring.profiles.active=prod >log9031.file 2>&1 &
+
+4.portal-ui
+
+scp D:\proj\reader-store-front\build.zip root@117.50.10.245:/data/
+
+5.portal-svc
+
+scp D:\proj\rb\reader-portal\target\reader-portal-1.0-SNAPSHOT.jar root@117.50.10.245:/data/portal-srv/
+
+scp D:\proj\rb\reader-portal\target\reader-portal-1.0-SNAPSHOT.jar root@106.75.31.46:/data/portal-srv/
+
+scp D:\proj\rb\reader-portal\target\reader-portal-1.0-SNAPSHOT.jar root@106.75.17.41:/data/portal-srv/
+
+nohup java -jar reader-portal-1.0-SNAPSHOT.jar --server.port=9010 --spring.profiles.active=prodhttps >log9010.file 2>&1 &
+
+nohup java -jar reader-portal-1.0-2-SNAPSHOT.jar --server.port=9011 --spring.profiles.active=prod >log9011.file 2>&1 &
