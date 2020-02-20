@@ -12,6 +12,7 @@ import com.pl.data.mapper.UUserMapper;
 import com.pl.data.model.UUser;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ import java.util.UUID;
 public class AuthController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-
+    @ApiOperation(value = "login")
     @RequestMapping(value = "/tools/jsonbuild",method = RequestMethod.POST)
     @ResponseBody
     public Result login(@RequestBody Prm prm) {
@@ -76,7 +77,7 @@ public class AuthController extends BaseController {
         }
     }
 
-
+    @ApiOperation(value = "login2")
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
     public Result<AuthDto> login(@RequestBody LoginDto ld, HttpServletResponse response, HttpServletRequest request) {
@@ -86,7 +87,7 @@ public class AuthController extends BaseController {
         }
         return new Result<>(false,"用户名或密码错误,请重新输入",new AuthDto());
     }
-
+    @ApiOperation(value = "register")
     @RequestMapping(value = "register")
     @ResponseBody
     public Result<AuthDto> register(@RequestBody RegisterDto ld) {
@@ -126,7 +127,7 @@ public class AuthController extends BaseController {
             this.email = email;
         }
     }
-
+    @ApiOperation(value = "confirm")
     @RequestMapping(value = "confirm")
     @ResponseBody
     public Result confirm(@RequestBody ConfirmDto cd) {
@@ -144,7 +145,7 @@ public class AuthController extends BaseController {
         }
     }
 
-
+    @ApiOperation(value = "reset")
     @RequestMapping(value = "reset")
     @ResponseBody
     public Result<AuthDto> reset(@RequestBody RegisterDto ld) {
@@ -152,7 +153,7 @@ public class AuthController extends BaseController {
         if (x != null) return x;
         return as.reset(ld);
     }
-
+    @ApiOperation(value = "logout")
     @RequestMapping(value = "logout")
     @ResponseBody
     public Result<AuthDto> logout(@RequestBody AuthDto ld) {
@@ -220,7 +221,7 @@ public class AuthController extends BaseController {
             return new Result<>(false, "保存失败", null);
         }
     }
-
+    @ApiOperation(value = "profile")
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     @ResponseBody
     public Result<ProfileDto> getProfile() {
@@ -233,7 +234,7 @@ public class AuthController extends BaseController {
             return new Result<>(false, "请重新登录", new ProfileDto());
         }
     }
-
+    @ApiOperation(value = "profile")
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
     @ResponseBody
     public Result setProfile(@RequestBody ProfileDto d) {

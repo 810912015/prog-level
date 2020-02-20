@@ -22,7 +22,7 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.cooee.reader.portal.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.pl.admin.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

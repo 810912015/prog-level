@@ -3,13 +3,11 @@ package com.pl.admin.controller;
 import com.google.common.base.Throwables;
 import com.pl.admin.dao.ScoreMapper;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +15,7 @@ import java.util.Map;
 @Api(tags = "EntryController",description = "EntryController api")
 public class EntryController extends BaseController {
 
-
+    @ApiOperation(value = "invite")
     @RequestMapping(value = "/invite/{iid}")
     public String doInvite(Map<String, Object> model, @PathVariable String iid) {
         try {
