@@ -1,0 +1,185 @@
+package com.roncoo.education.course.service.api.auth;
+
+
+
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringBufferInputStream;
+import java.util.*;
+
+public class DbMaker {
+    String url="/main/resources/mybatis";
+    List<String> targets=new ArrayList<>();
+    Map<String,Db> dbMap=new HashMap<>();
+    void getDir(String dir){
+        File f=new File(dir);
+        if(!f.isDirectory()) return;
+        File[] fa=f.listFiles();
+        for(File t:fa){
+            if(!t.isDirectory()||t.getName().startsWith(".")
+                    ||t.getName().startsWith("target")
+            ) continue;
+            if(deepest(t)) {
+                String ts=t.getPath()+url;
+                if(new File(ts).exists()) {
+                    targets.add(t.getPath() + url);
+                }
+            }else{
+                getDir(t.getPath());
+            }
+        }
+    }
+
+    boolean deepest(File dir){
+        File[] f=dir.listFiles();
+        for(File t:f){
+            if(t.getName().startsWith("roncoo-education-")){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    String[] getDbAndTableName(String name){
+        String[] s=name.split("\\.");
+        String[] r=new String[]{s[3],s[s.length-1].toLowerCase()};
+        return r;
+    }
+    int i=0;
+    void log(String s){
+        System.out.println(new Date()+"|"+(i++)+"--"+s);
+    }
+    Table toTable(File f){
+        log("table: "+f.getPath()+f.getName());
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setValidating(false);
+        factory.setNamespaceAware(false);
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            builder.setEntityResolver(new EntityResolver() {
+                                          public org.xml.sax.InputSource resolveEntity(String publicId, String systemId) throws IOException {
+                                              return new org.xml.sax.InputSource(new StringBufferInputStream(""));
+                                          }
+                                      }
+                     );
+            Document doc = builder.parse(f);
+            Node nl=doc.getElementsByTagName("resultMap").item(0);
+
+            String type=nl.getAttributes().item(1).getNodeValue();
+            String[] ts=getDbAndTableName(type);
+            Table rt=new Table();
+            rt.db=ts[0];
+            rt.name=ts[1];
+            rt.cols=new ArrayList<>();
+            NodeList nl1=nl.getChildNodes();
+            for(int i=0;i<nl1.getLength();i++){
+                Node n=nl1.item(i);
+                if(n.getTextContent().length()>0) continue;
+                String cn=n.getAttributes().getNamedItem("column").getNodeValue();
+                String jt=n.getAttributes().getNamedItem("jdbcType").getNodeValue();
+                Col ci=new Col();
+                ci.name=cn;
+                ci.type=jt;
+                rt.cols.add(ci);
+            }
+            return rt;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log(e.getMessage());
+            return null;
+        }
+    }
+    void make(String dir){
+        File d=new File(dir);
+        File[] fa=d.listFiles();
+        for(File f:fa){
+           Table t=toTable(f);
+           if(t==null) continue;
+           if(!dbMap.containsKey(t.db)){
+               Db db=new Db();
+               db.name=t.db;
+               db.tables=new ArrayList<>();
+               db.tables.add(t);
+               dbMap.put(t.db,db);
+           }else{
+               dbMap.get(t.db).tables.add(t);
+           }
+        }
+    }
+    String toCreate(){
+        StringBuilder sb=new StringBuilder();
+        for(Db d:dbMap.values()){
+            d.toCreate(sb);
+            for(Table t:d.tables){
+                t.toCreate(sb);
+            }
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args){
+        DbMaker dm=new DbMaker();
+        dm.getDir("/home/zxf/proj/roncoo-education");
+        for(String dir:dm.targets){
+            dm.make(dir);
+        }
+        String r=dm.toCreate();
+        dm.log(r);
+    }
+
+    static class Col{
+        public String name;
+        public String type;
+
+        public void toCreate(StringBuilder sb){
+            if("id".equals(name)){
+                sb.append("`id` int(11) NOT NULL AUTO_INCREMENT,");
+            }else{
+                if("VARCHAR".equals(type)){
+                    sb.append("`" + name + "` " + type + "(100) default '',");
+                }else {
+                    sb.append("`" + name + "` " + type + " default null,");
+                }
+            }
+            sb.append("\n");
+        }
+    }
+
+
+    static class Table{
+        public String db;
+        public String name;
+        public List<Col> cols;
+        public void toCreate(StringBuilder sb){
+            sb.append("CREATE TABLE `"+name+"` ( \n");
+            for(Col c:cols){
+                c.toCreate(sb);
+            }
+            sb.append("PRIMARY KEY (`id`)");
+            sb.append("\n");
+            sb.append(") ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;");
+            sb.append("\n");
+        }
+    }
+    static class Db{
+        public String name;
+        public List<Table> tables;
+
+        public void toCreate(StringBuilder sb){
+            sb.append(" CREATE DATABASE `education_");
+            sb.append(name);
+            sb.append("`;\n use education_");
+            sb.append(name);
+            sb.append(";\n\n");
+        }
+    }
+
+}
