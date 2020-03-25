@@ -22,8 +22,8 @@ class UserLink extends Component {
         } else {
             c = (
                 <NavDropdown id={"user"} title={''}>
-                    <NavDropdown.Item href={"/login"}>登录</NavDropdown.Item>
-                    <NavDropdown.Item href={"/login/#/register"}>注册</NavDropdown.Item>
+                    <NavDropdown.Item href={"/login.html"}>登录</NavDropdown.Item>
+                    <NavDropdown.Item href={"/login.html/#/register"}>注册</NavDropdown.Item>
                 </NavDropdown>
             )
         }

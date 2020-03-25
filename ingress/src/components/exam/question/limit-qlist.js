@@ -4,7 +4,7 @@ import {bound} from "../exam/exam";
 import {Scroller} from "../../common/scroller";
 import {connect} from "react-redux";
 import {allQuestion} from "../../../action/question";
-import {QItem} from "./qlist";
+import {QItem,Qi2} from "./qlist";
 import PropTypes from 'prop-types'
 
 export class Sign extends Component{
@@ -41,7 +41,7 @@ class LimitQList extends Component {
         }
 
         if (!this.props.qs.all) {
-            this.props.allQuestion({data: {size: 10}})
+            this.props.allQuestion({data: {size: 50}})
         }
     }
 
@@ -57,22 +57,18 @@ class LimitQList extends Component {
         for (let i = 0; i < this.state.questions.length; i++) {
             let t = this.state.questions[i];
             p.push(
-                <Link to={"/pass/" + t.id} key={t.id} className={"btn"} style={{display: 'inherit'}}>
-                    <QItem name={t.name} title={t.title} id={t.id} level={t.level}>
-                    </QItem>
+                <Link to={"/pass/" + t.id} key={t.id} className={"btn"} style={{display: 'inline-block'}}>
+                    <Qi2 name={t.name} id={t.id} level={t.level}>
+                    </Qi2>
                 </Link>
             )
         }
         let bid = bound(this.state.questions)
         return (
-            <div className={"container"}>
+            <div className={"container-fluid"}>
                 <div className={"row no-gutters"}>
-                    <div className={"col-sm-2"}>
-                         <Sign cat={"支持的编程语言"} threme={"success"} list={["c","c++","c#","java","javascript","go","python"]}/>
-                         <Sign cat={"习题类型"} threme={"primary"} list={["基本习题","算法","数据结构"]}/>
-                         <Sign cat={"24小时排行"} threme={"secondary"} list={["点击率63%","通过率31%"]}/>
-                    </div>
-                    <div className={"col-sm-10"}>
+
+                    <div className={"col-sm-12"}>
 
 
                         <Scroller height={600} more={p.length > 9}
@@ -83,9 +79,9 @@ class LimitQList extends Component {
                                           minId: bid.minId
                                       }
                                   })}>
-                            <div className={"card-columns"}>
+                            <span>
                                 {p}
-                            </div>
+                            </span>
                         </Scroller>
 
                         <div>

@@ -81,11 +81,7 @@ public class AuthController extends BaseController {
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
     public Result<AuthDto> login(@RequestBody LoginDto ld, HttpServletResponse response, HttpServletRequest request) {
-        String s=(String)request.getAttribute("");
-        if(s!=null) {
-            return new Result<>(false, s, new AuthDto());
-        }
-        return new Result<>(false,"用户名或密码错误,请重新输入",new AuthDto());
+        return as.login(ld);
     }
     @ApiOperation(value = "register")
     @RequestMapping(value = "register")

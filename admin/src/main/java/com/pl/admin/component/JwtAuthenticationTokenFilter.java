@@ -50,8 +50,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                     LOGGER.info("authenticated user:{}", username);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
+                response.addHeader(this.tokenHeader,jwtTokenUtil.generateToken(userDetails));
             }
         }
+
         chain.doFilter(request, response);
     }
 }

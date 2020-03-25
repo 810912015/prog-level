@@ -147,14 +147,14 @@ class Pass extends Component{
         return (
             <div className={"container-fluid"}>
                 <div className={"row"}>
-                    <div className={"col-sm-3"}>
+                    <div className={"col-sm-5"}>
                         <div className={"h5 text-center"}>
                             {this.state.name}
                         </div>
                         <div className={"border-right"}>{ReactHtmlParser(this.state.title)}</div>
 
                     </div>
-                    <div className={"col-sm-9"}>
+                    <div className={"col-sm-7"}>
                         <div className={"p-3"}>
                             <MultiLangEditor sourceList={this.state.sourceObj}
                                              qid={this.state.id}

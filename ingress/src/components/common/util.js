@@ -94,15 +94,15 @@ export const get=(d)=>{
         })
     }).then(res=>{
        return redirect(res,"get")
+    }).then(d1=>{
+        d.func(d1);
+        busy.set(false)
     })
         .catch(ex=>{
             if(typeof d.errFunc==='function') d.errFunc(ex);
             else console.log(ex);
             busy.set(false)
-        }).then(d1=>{
-            d.func(d1);
-            busy.set(false)
-    })
+        })
 }
 
 export const post = (d) => {
@@ -115,16 +115,16 @@ export const post = (d) => {
         })
     }).then(res => {
        return redirect(res,'post')
+    }).then(p => {
+        d.func(p)
+        busy.set(false)
     })
         .catch(ex => {
             if (d.errFunc) d.errFunc(ex);
             else console.log(ex);
             busy.set(false)
         })
-        .then(p => {
-            d.func(p)
-            busy.set(false)
-        })
+
 }
 
 export class CtrlItem extends Component {

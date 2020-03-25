@@ -47,6 +47,26 @@ function convertLevel(level){
     }
 }
 
+export function Qi2(props) {
+    let c=limitTitle(props.title);
+    let cl=null
+    if(props.children){
+        cl=(
+            <div className={"card-footer"}>
+                {props.children}
+            </div>
+        )
+    }
+    let cr=convertLevel(props.level);
+    return (
+            <div style={{border:"1px solid #bbb",padding:"10px 15px"}}>
+                <span>{props.id}</span>
+                <span style={{fontWeight:550}}>{props.name}</span>
+                <span style={{marginLeft:"10px"}} className={cr[1]} title={"难度系数,从易到难依次为1-5"}>{cr[0]}</span>
+            </div>
+    )
+}
+
 export class QItem extends Component {
     render() {
         let c=limitTitle(this.props.title);
