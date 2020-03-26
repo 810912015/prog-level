@@ -160,7 +160,7 @@ public class SpiderDataImporter {
     }
 
     List<Qi> readAll(){
-        String dir="/home/zxf/文档/result4";
+        String dir="d:\\dl\\lc-result4\\result4";
         File f=new File(dir);
         List<Qi> r=new ArrayList<>();
         for(File t:f.listFiles()){

@@ -23,8 +23,8 @@ public class ConsoleRunner implements Runner {
         return inThread(()-> {
             try {
                 Process process = Runtime.getRuntime().exec(strCmd);
-                return new Result(write(process.getInputStream()),
-                        write(process.getErrorStream()));
+                return new Result(write(process.getInputStream(),"utf-8"),
+                        write(process.getErrorStream(),"gbk"));
             } catch (Throwable e) {
 
                 return new Result("", Throwables.getStackTraceAsString(e));
@@ -40,8 +40,8 @@ public class ConsoleRunner implements Runner {
         }
     }
 
-    private String write(InputStream ips) throws IOException {
-        BufferedReader strCon = new BufferedReader(new InputStreamReader(ips));
+    private String write(InputStream ips,String encoding) throws IOException {
+        BufferedReader strCon = new BufferedReader(new InputStreamReader(ips,encoding));
         StringBuilder sb=new StringBuilder();
         String line;
         while ((line = strCon.readLine()) != null) {
@@ -65,8 +65,8 @@ public class ConsoleRunner implements Runner {
                 out.println("exit");
 
                 proc.waitFor();
-                Result r = new Result(write(proc.getInputStream()),
-                        write(proc.getErrorStream()));
+                Result r = new Result(write(proc.getInputStream(),"utf-8"),
+                        write(proc.getErrorStream(),"gbk"));
                 in.close();
                 out.close();
                 proc.destroy();

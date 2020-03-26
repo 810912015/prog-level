@@ -60,7 +60,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Engine.ExecuteResult pass(Pass p) {
         try {
-            Engine je =ep.getByLang(p.getLang());
+            Engine je =ep.getByLang(p.getLang().toLowerCase());
             Engine.Result cr= je.compile(p.getSource());
             ValidationExample ve=new ValidationExample();
             ve.createCriteria().andQidEqualTo(p.getId());
@@ -81,6 +81,9 @@ public class QuestionServiceImpl implements QuestionService {
             Engine.ExecuteResult r=new Engine.ExecuteResult(cr,rr);
             List<Pass> prr=toVali(p,r,vl);
             for(Pass pv:prr){
+                if(pv.getUid()==null){
+                    pv.setUid(-1);
+                }
                 prm.insert(pv);
             }
             return r;
