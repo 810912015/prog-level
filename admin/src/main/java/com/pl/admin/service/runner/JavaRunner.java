@@ -1,6 +1,7 @@
 package com.pl.admin.service.runner;
 
 
+import com.alibaba.druid.sql.visitor.functions.Char;
 import com.pl.admin.service.JavaEngine;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.Order;
@@ -26,10 +27,17 @@ public class JavaRunner extends BaseRunnerEngine {
     @Override
     public SaveInfo getSaveInfo(String source) {
         SaveInfo si = new SaveInfo();
-        si.setName(JavaEngine.StringSourceJavaObject.getClassName(source));
+
+        si.setName(trim160(JavaEngine.StringSourceJavaObject.getClassName(source)));
         si.setExtension(EXTENSION);
         si.setPath(BASE_DIR + uid);
         return si;
+    }
+
+    public static String trim160(String source){
+        char c=(char)160;
+        char s=(char)32;
+        return source.replace(c,s).trim();
     }
 
     @Override

@@ -29,7 +29,6 @@ public abstract class BaseRunnerEngine implements Engine {
         this(new ConsoleRunner(), UUID.randomUUID().toString());
     }
 
-
     public static Engine.Result convert(Runner.Result r) {
         r.prettify();
         Engine.Result rr = new Engine.Result();
@@ -78,6 +77,12 @@ public abstract class BaseRunnerEngine implements Engine {
         public void modify(){
             String s=this.getClass().getResource("").getFile();
             this.path=(s+this.path);
+            if(s.contains("\\")){
+                this.path=this.path.replace("/","\\");
+                if(this.path.startsWith("/")){
+                    this.path=this.path.substring(1);
+                }
+            }
         }
     }
 
@@ -125,7 +130,7 @@ public abstract class BaseRunnerEngine implements Engine {
             f.getParentFile().mkdirs();
         }
         OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
-        os.write(source.getBytes());
+        os.write(JavaRunner.trim160(source).getBytes());
         os.flush();
     }
 

@@ -2,9 +2,11 @@ package com.pl.admin.service.runner;
 
 
 import com.pl.admin.service.Engine;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -23,25 +25,16 @@ public class DefaultEngineProvider implements EngineProvider {
     }
     @Override
     public Engine getByLang(String lang) {
-        switch (lang){
-            case "java":
-                return new JavaRunner();
-            case "c":
-                return new LangRunners.C();
-            case "cpp":
-                return new LangRunners.Cpp();
-            case "csharp":
-                return new LangRunners.Csharp();
-            case "python":
-                return new LangRunners.Python();
-            case "javascript":
-                return new LangRunners.Js();
-            case "go":
-                return new LangRunners.Go();
+        for(Engine e:engines){
+            if(lang.equals(e.getLang())){
+                return e;
+            }
         }
         return null;
     }
 
+    @Autowired
+    private List<Engine> engines;
     @Override
     public Map<String, String> getLangs() {
         return langs;
