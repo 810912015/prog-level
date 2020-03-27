@@ -1,5 +1,3 @@
-#命令行调用例子 -- PS D:\proj\reader-store-front> ./docker.ps1 ngconf-t-k8s.txt
-
 npm run build
 cd build
 $d=get-date -format "yyyyMMddHHmm"
