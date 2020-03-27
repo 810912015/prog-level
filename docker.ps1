@@ -1,9 +1,9 @@
 mvn clean package
-$baseDir="d:\proj\rb\"
-$names="reader-admin","reader-portal","reader-search"
-$reg="106.75.17.41:3389/"
+$baseDir="d:\proj\prog-level\"
+$names="admin",""
+$reg="registry.cn-shanghai.aliyuncs.com/proglevel/"
 $d=get-date -format "yyyyMMddHHmm"
-for($i=0;$i -lt 3;$i++){
+for($i=0;$i -lt 1;$i++){
    $nt=$names[$i]
    $iname=$nt+$d
    cd $baseDir$nt

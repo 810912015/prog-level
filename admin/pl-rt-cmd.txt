@@ -1,0 +1,17 @@
+1.pl运行环境的搭建：在centos中依次执行如下命令，分别安装java，c#,c,c++,js,python go的执行环境。
+
+yum install -y java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-devel.x86_64
+
+yum install -y gcc-c++.x86_64
+
+rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+
+yum install -y dotnet-sdk-3.1
+
+yum install -y epel-release
+
+yum install -y nodejs
+
+yum install -y python2
+
+yum install -y golang.x86_64

@@ -2,7 +2,7 @@
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/wpd?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.16.102:3306/wpd?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: root
     druid:
