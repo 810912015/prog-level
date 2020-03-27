@@ -1,8 +1,7 @@
-package com.pl.admin.service.runner;
+package com.pl.admin.service.runner.engine;
 
 
-import com.alibaba.druid.sql.visitor.functions.Char;
-import com.pl.admin.service.JavaEngine;
+import com.pl.admin.service.runner.ConsoleRunner;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -10,13 +9,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(1)
 @Scope("prototype")
-public class JavaRunner extends BaseRunnerEngine {
+public class JavaEngine extends BaseRunnerEngine {
 
-    public JavaRunner(String uid) {
+    public JavaEngine(String uid) {
         super(new ConsoleRunner(), uid);
     }
 
-    public JavaRunner() {
+    public JavaEngine() {
     }
 
     private static final String BASE_DIR = "/usr/upload-sources/java/";
@@ -28,7 +27,7 @@ public class JavaRunner extends BaseRunnerEngine {
     public SaveInfo getSaveInfo(String source) {
         SaveInfo si = new SaveInfo();
 
-        si.setName(trim160(JavaEngine.StringSourceJavaObject.getClassName(source)));
+        si.setName(trim160(JavaFlyEngine.StringSourceJavaObject.getClassName(source)));
         si.setExtension(EXTENSION);
         si.setPath(BASE_DIR + uid);
         return si;

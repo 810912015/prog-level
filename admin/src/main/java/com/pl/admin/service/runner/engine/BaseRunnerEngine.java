@@ -1,10 +1,11 @@
-package com.pl.admin.service.runner;
+package com.pl.admin.service.runner.engine;
 
 import com.google.common.base.Throwables;
-import com.pl.admin.service.Engine;
+import com.pl.admin.service.runner.ConsoleRunner;
+import com.pl.admin.service.runner.Engine;
+import com.pl.admin.service.runner.Runner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.util.Collections;
@@ -27,63 +28,6 @@ public abstract class BaseRunnerEngine implements Engine {
 
     public BaseRunnerEngine() {
         this(new ConsoleRunner(), UUID.randomUUID().toString());
-    }
-
-    public static Engine.Result convert(Runner.Result r) {
-        r.prettify();
-        Engine.Result rr = new Engine.Result();
-        boolean suc = StringUtils.isEmpty(r.getErr());
-        rr.setSuccess(suc);
-        rr.setMsg(suc ? r.getOut() : r.getErr());
-        return rr;
-    }
-
-    /**
-     * 文件保存信息,注意扩展名不带".",路径最后不带/.
-     */
-    public static class SaveInfo {
-        private String path;
-        private String name;
-        private String extension;
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getExtension() {
-            return extension;
-        }
-
-        public void setExtension(String extension) {
-            this.extension = extension;
-        }
-
-        public String toSavePath() {
-            return String.format("%s/%s.%s", path, name, extension);
-        }
-
-        public void modify(){
-            String s=this.getClass().getResource("").getFile();
-            this.path=(s+this.path);
-            if(s.contains("\\")){
-                this.path=this.path.replace("/","\\");
-                if(this.path.startsWith("/")){
-                    this.path=this.path.substring(1);
-                }
-            }
-        }
     }
 
     /**
@@ -130,7 +74,7 @@ public abstract class BaseRunnerEngine implements Engine {
             f.getParentFile().mkdirs();
         }
         OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
-        os.write(JavaRunner.trim160(source).getBytes());
+        os.write(JavaEngine.trim160(source).getBytes());
         os.flush();
     }
 
@@ -147,7 +91,7 @@ public abstract class BaseRunnerEngine implements Engine {
         }
         String cmd = getCompileCmd(si);
         Runner.Result r = runner.run(cmd);
-        return convert(r);
+        return r.convert();
     }
     @Override
     public Runner.Result doCompile(String source){
@@ -176,7 +120,7 @@ public abstract class BaseRunnerEngine implements Engine {
     public Result execute(Object[] args) {
         String cmd = getExecuteCmd(si, args);
         Runner.Result r = runner.run(cmd);
-        return convert(r);
+        return r.convert();
     }
 
     @Override

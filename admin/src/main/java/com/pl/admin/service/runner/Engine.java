@@ -1,8 +1,6 @@
-package com.pl.admin.service;
+package com.pl.admin.service.runner;
 
 
-
-import com.pl.admin.service.runner.Runner;
 
 import java.util.List;
 import java.util.UUID;
@@ -132,4 +130,73 @@ public interface Engine {
      * @return 结果
      */
     ExecuteResult compileAndExecute(String sourceCode, String[] args);
+
+
+    default String writeArgs(String cmd, Object[] args) {
+        if (args == null || args.length == 0) {
+            return cmd;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(cmd);
+        for (int i = 0; i < args.length; i++) {
+            sb.append(" ");
+            sb.append(args[i].toString());
+        }
+        return sb.toString();
+    }
+    /**
+     * 文件保存信息,注意扩展名不带".",路径最后不带/.
+     */
+    class SaveInfo {
+        private String path;
+        private String name;
+        private String extension;
+
+        public static SaveInfo create(String ext, String name, String base) {
+            SaveInfo si = new SaveInfo();
+            si.setExtension(ext);
+            si.setName(name);
+            si.setPath(base + UUID.randomUUID().toString());
+            return si;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getExtension() {
+            return extension;
+        }
+
+        public void setExtension(String extension) {
+            this.extension = extension;
+        }
+
+        public String toSavePath() {
+            return String.format("%s/%s.%s", path, name, extension);
+        }
+
+        public void modify(){
+            String s=this.getClass().getResource("").getFile();
+            this.path=(s+this.path);
+            if(s.contains("\\")){
+                this.path=this.path.replace("/","\\");
+                if(this.path.startsWith("/")){
+                    this.path=this.path.substring(1);
+                }
+            }
+        }
+    }
 }

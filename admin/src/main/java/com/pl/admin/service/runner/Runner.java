@@ -1,7 +1,8 @@
 package com.pl.admin.service.runner;
 
+import org.springframework.util.StringUtils;
+
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -14,6 +15,15 @@ public interface Runner {
         public Result(String out, String err) {
             this.out = out;
             this.err = err;
+        }
+
+        public Engine.Result convert(){
+            prettify();
+            Engine.Result rr = new Engine.Result();
+            boolean suc = StringUtils.isEmpty(getErr());
+            rr.setSuccess(suc);
+            rr.setMsg(suc ? getOut() : getErr());
+            return rr;
         }
 
         public String getOut() {

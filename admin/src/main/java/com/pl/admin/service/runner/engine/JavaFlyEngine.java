@@ -1,8 +1,9 @@
-package com.pl.admin.service;
+package com.pl.admin.service.runner.engine;
 
 
 
 import com.google.common.base.Throwables;
+import com.pl.admin.service.runner.Engine;
 import com.pl.admin.service.runner.Runner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,6 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,15 +25,15 @@ import java.util.regex.Pattern;
  * 3.编译结果放入内存
  * 4.动态执行
  */
-public class JavaEngine implements Engine {
+public class JavaFlyEngine implements Engine {
 
-    private static Logger logger = LoggerFactory.getLogger(JavaEngine.class);
+    private static Logger logger = LoggerFactory.getLogger(JavaFlyEngine.class);
 
     private String clazzName;
     private ClassFileManager fileManager;
     private JavaCompiler compiler;
 
-    public JavaEngine(){
+    public JavaFlyEngine(){
         try {
             compiler = ToolProvider.getSystemJavaCompiler();
             StandardJavaFileManager fm = compiler.getStandardFileManager(null, null, null);

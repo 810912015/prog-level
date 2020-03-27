@@ -1,7 +1,7 @@
 package com.pl.admin.service.runner;
 
 
-import com.pl.admin.service.Engine;
+import com.pl.admin.service.runner.engine.BaseRunnerEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
