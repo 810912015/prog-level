@@ -1,3 +1,31 @@
+.brand{
+  flex:1
+}
+.shortcut{
+  width:200px;
+}
+.main-brand{
+  margin-left: 200px;
+  font-size: 22px;
+  padding-right: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  .brand{
+    display: none;
+  }
+  .shortcut{
+    width:100px
+  }
+  .main-brand{
+    margin-left: 60px;
+    font-size: 20px;
+    padding-right: 20px;
+    flex:1;
+  }
+}
+
+
 .App {
   text-align: center;
 }

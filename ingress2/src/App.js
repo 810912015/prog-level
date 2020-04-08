@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import { Button,Layout } from 'antd';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+        <Layout className={"layout"}>
+            <Layout.Header style={{backgroundColor:"transparent"}}>
+                <div style={{display:"flex"}}>
+                    <div  className={"main-brand"}>
+                        分码网
+                    </div>
+                    <div className={"brand"}>
+                        一个你可以写代码的地方
+                    </div>
+                    <div className={"shortcut"}>
+                        <span>登录/注册</span>
+                    </div>
+                </div>
+            </Layout.Header>
+            <Layout.Content>
+
+                    <Button type="primary">Button</Button>
+
+            </Layout.Content>
+            <Layout.Footer>
+            </Layout.Footer>
+        </Layout>
+
+    );
+  }
 }
 
 export default App;
