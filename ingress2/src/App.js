@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Button,Layout } from 'antd';
+import {Button, Col, Layout, Row} from 'antd';
 import './App.css';
+import {QuestionBag} from "./component/question";
+import {HashRouter} from "react-router-dom";
 
 class App extends Component {
   render() {
     return (
-        <Layout className={"layout"}>
+        <Layout className={"layout"} style={{padding:"0px 10px"}}>
             <Layout.Header style={{backgroundColor:"transparent"}}>
                 <div style={{display:"flex"}}>
                     <div  className={"main-brand"}>
@@ -20,9 +22,14 @@ class App extends Component {
                 </div>
             </Layout.Header>
             <Layout.Content>
+                <HashRouter>
+                    <Row>
+                        <Col xs={24} sm={24} md={8} ></Col>
+                        <Col xs={24} sm={24} md={8} ><QuestionBag/></Col>
+                        <Col xs={24} sm={24} md={8} ></Col>
+                    </Row>
 
-                    <Button type="primary">Button</Button>
-
+                </HashRouter>
             </Layout.Content>
             <Layout.Footer>
             </Layout.Footer>

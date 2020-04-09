@@ -16,10 +16,7 @@ import com.pl.data.model.Invitee;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -27,7 +24,7 @@ import java.util.*;
 @RequestMapping(value = "/firm")
 @Api(tags = "FirmController",description = "FirmController api")
 public class FirmController extends BaseController {
-    @RequestMapping(value="/create")
+    @RequestMapping(value="/create",method = RequestMethod.POST)
     @ResponseBody
     public Result<Firm> create(@RequestBody FirmDto fd){
 
@@ -39,7 +36,7 @@ public class FirmController extends BaseController {
         }
         return new Result<>(true,"",f);
     }
-    @RequestMapping(value="/list")
+    @RequestMapping(value="/list",method = RequestMethod.POST)
     @ResponseBody
     public List<Firm> list(@RequestBody Pager.PagedQuery<FirmDto.FirmParam> p){
         FirmExample fe=null;
@@ -51,19 +48,19 @@ public class FirmController extends BaseController {
         List<Firm> r= fm.selectByExample(fe);
         return r;
     }
-    @RequestMapping(value="/get/{id}")
+    @RequestMapping(value="/get/{id}",method = RequestMethod.GET)
     @ResponseBody
     public Firm getById(@PathVariable("id") Integer id){
         return fm.selectByPrimaryKey(id);
     }
 
-    @RequestMapping(value="/del/{id}")
+    @RequestMapping(value="/del/{id}",method = RequestMethod.POST)
     @ResponseBody
     public int delById(@PathVariable("id") Integer id){
         return fm.deleteByPrimaryKey(id);
     }
 
-    @RequestMapping(value="/invite")
+    @RequestMapping(value="/invite",method = RequestMethod.POST)
     @ResponseBody
     public Result<String> invite(@RequestBody InvitePrm ip){
         try {
@@ -87,7 +84,7 @@ public class FirmController extends BaseController {
         }
     }
 
-    @RequestMapping(value="/score")
+    @RequestMapping(value="/score",method = RequestMethod.POST)
     @ResponseBody
     public Pager.Paged<List<ScoreDto.Firm>> score(@RequestBody Pager.PagedQuery<Map<String,Object>> map){
         int fid=curUser().getFirmid();

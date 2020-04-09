@@ -8,7 +8,7 @@ import com.pl.admin.dao.ScoreMapper;
 import com.pl.admin.dto.*;
 import com.pl.admin.service.runner.Engine;
 import com.pl.admin.service.Notifier;
-import com.pl.admin.service.QuestionService;
+import com.pl.admin.service.question.QuestionService;
 import com.pl.data.mapper.*;
 import com.pl.data.model.*;
 import com.pl.data.model.Pass;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Api(tags = "ExamController",description = "ExamController api")
 public class ExamController extends BaseController {
 
-    @RequestMapping(value = "/exam/pass")
+    @RequestMapping(value = "/exam/pass",method = RequestMethod.POST)
     @ResponseBody
     public Engine.ExecuteResult pass(@RequestBody Pass p) {
         ExamInviteExample ee = new ExamInviteExample();
@@ -39,13 +39,13 @@ public class ExamController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/play")
+    @RequestMapping(value = "/play",method = RequestMethod.POST)
     @ResponseBody
     public Result<String> play(@RequestBody PlayDto pd) {
         return new Result<>(true, "", qs.play(pd));
     }
 
-    @RequestMapping(value = "/exam/done/{gid}")
+    @RequestMapping(value = "/exam/done/{gid}",method = RequestMethod.GET)
     @ResponseBody
     public Result passDone(@PathVariable @Nullable String gid) {
         try {
@@ -55,7 +55,7 @@ public class ExamController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/question/create")
+    @RequestMapping(value = "/question/create",method = RequestMethod.POST)
     @ResponseBody
     public QuestionDto createQuestion(@RequestBody QuestionDto q) {
         try {
@@ -67,7 +67,7 @@ public class ExamController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/question/source")
+    @RequestMapping(value = "/question/source",method = RequestMethod.POST)
     @ResponseBody
     public Result<QsDto> getSource(@RequestBody QsDto.Request q) {
         QuestionSourceExample qse = new QuestionSourceExample();
@@ -79,7 +79,7 @@ public class ExamController extends BaseController {
         return new Result<>(true, "", new QsDto(l.get(0)));
     }
 
-    @RequestMapping(value = "/question/all")
+    @RequestMapping(value = "/question/all",method = RequestMethod.POST)
     @ResponseBody
     public List<ThinQuestion> getAll(@RequestBody Bound b) {
         try {
@@ -92,7 +92,7 @@ public class ExamController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/question/mine")
+    @RequestMapping(value = "/question/mine",method = RequestMethod.POST)
     @ResponseBody
     public List<ThinQuestion> getMine(@RequestBody OwnBound b) {
         try {
@@ -105,7 +105,7 @@ public class ExamController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/question/get/{id}")
+    @RequestMapping(value = "/question/get/{id}",method = RequestMethod.GET)
     @ResponseBody
     public PassDto getQuestionById(@PathVariable int id) {
         Question q = qm.selectByPrimaryKey(id);
@@ -113,7 +113,7 @@ public class ExamController extends BaseController {
         return new PassDto(q, getSourceById(id));
     }
 
-    @RequestMapping(value = "/question/delete/{id}")
+    @RequestMapping(value = "/question/delete/{id}",method = RequestMethod.GET)
     @ResponseBody
     public boolean deleteById(@PathVariable int id) {
         boolean qr = qm.deleteByPrimaryKey(id) > 0;
@@ -124,7 +124,7 @@ public class ExamController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/question/withvali/{id}")
+    @RequestMapping(value = "/question/withvali/{id}",method = RequestMethod.GET)
     @ResponseBody
     public QuestionDto getQuestionByIdWithVali(@PathVariable int id) {
         List<QuestionItem> l = qim.getById(id);
@@ -145,7 +145,7 @@ public class ExamController extends BaseController {
         return rl;
     }
 
-    @RequestMapping(value = "/exam/invite")
+    @RequestMapping(value = "/exam/invite",method = RequestMethod.POST)
     @ResponseBody
     public Result invite(@RequestBody ExamInvite invite) {
         try {
@@ -160,7 +160,7 @@ public class ExamController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/getbyeid/{eid}")
+    @RequestMapping(value = "/getbyeid/{eid}",method = RequestMethod.GET)
     @ResponseBody
     public List<Integer> getQidByEid(@PathVariable Integer eid) {
         ExamQuestionExample ee = new ExamQuestionExample();
@@ -170,7 +170,7 @@ public class ExamController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/exam/delete/{id}")
+    @RequestMapping(value = "/exam/delete/{id}",method = RequestMethod.GET)
     @ResponseBody
     public Result deleteExam(@PathVariable int id) {
         em.deleteByPrimaryKey(id);
@@ -191,14 +191,14 @@ public class ExamController extends BaseController {
         return mqm.getAllExam(b.getMaxId(), b.getMinId(), b.getSize());
     }
 
-    @RequestMapping(value = "/exam/mine")
+    @RequestMapping(value = "/exam/mine",method = RequestMethod.POST)
     @ResponseBody
     public List<ExamDto2> myExam(@RequestBody Bound b) {
         b.normalize();
         return mqm.getMyExam(curUser().getId(), b.getMaxId(), b.getMinId(), b.getSize());
     }
 
-    @RequestMapping(value = "/exam/get/{id}")
+    @RequestMapping(value = "/exam/get/{id}",method = RequestMethod.GET)
     @ResponseBody
     public ExamDto getExam(@PathVariable int id) {
         Exam e = em.selectByPrimaryKey(id);
@@ -208,7 +208,7 @@ public class ExamController extends BaseController {
         return new ExamDto(e, r);
     }
 
-    @RequestMapping(value = "/exam/create")
+    @RequestMapping(value = "/exam/create",method = RequestMethod.POST)
     @ResponseBody
     public ExamDto createExam(@RequestBody ExamDto ed) {
         Exam e = ed.toExam();
@@ -222,7 +222,7 @@ public class ExamController extends BaseController {
         return ed;
     }
 
-    @RequestMapping(value = "/score")
+    @RequestMapping(value = "/score",method = RequestMethod.GET)
     @ResponseBody
     public List<ScoreDto> getScore() {
         UUser u = curUser();

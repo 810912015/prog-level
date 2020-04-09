@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping(value = "/invitee")
 @Api(tags = "InviteeController",description = "InviteeController api")
 public class InviteeController extends BaseController {
-    @RequestMapping(value = "create")
+    @RequestMapping(value = "create",method = RequestMethod.POST)
     @ResponseBody
     public Result<Invitee> createOrUpdate(@RequestBody Invitee i) {
         try {
@@ -107,7 +107,7 @@ public class InviteeController extends BaseController {
     }
 
 
-    @RequestMapping(value = "list")
+    @RequestMapping(value = "list",method = RequestMethod.POST)
     @ResponseBody
     public Pager.Paged<List<Invitee>> get(@RequestBody Pager.PagedQuery<Invitee> p) {
         try {
@@ -127,13 +127,13 @@ public class InviteeController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "del/{id}")
+    @RequestMapping(value = "del/{id}",method = RequestMethod.POST)
     @ResponseBody
     public int delById(@PathVariable Integer id) {
         return im.deleteByPrimaryKey(id);
     }
 
-    @RequestMapping(value="get/{id}")
+    @RequestMapping(value="get/{id}",method = RequestMethod.GET)
     @ResponseBody
     public Invitee getById(@PathVariable Integer id){
         return im.selectByPrimaryKey(id);

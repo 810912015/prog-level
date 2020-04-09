@@ -29,7 +29,7 @@ import java.util.*;
 @RequestMapping(value = "/user")
 @Api(tags = "UserController",description = "UserController api")
 public class UserController extends BaseController {
-    @RequestMapping(value = "/all")
+    @RequestMapping(value = "/all",method = RequestMethod.POST)
     @ResponseBody
     public List<UUser> all(){
         UUserExample ue=new UUserExample();
@@ -38,7 +38,7 @@ public class UserController extends BaseController {
         return r;
     }
 
-    @RequestMapping(value="/create")
+    @RequestMapping(value="/create",method = RequestMethod.POST)
     @ResponseBody
     public Result<UUser> create(@RequestBody UserDto ud){
         try {
@@ -55,19 +55,19 @@ public class UserController extends BaseController {
         }
     }
 
-    @RequestMapping(value="/get/{id}")
+    @RequestMapping(value="/get/{id}",method = RequestMethod.GET)
     @ResponseBody
     public UUser getById(@PathVariable("id") Long id){
         return um.selectByPrimaryKey(id);
     }
 
-    @RequestMapping(value="/del/{id}")
+    @RequestMapping(value="/del/{id}",method = RequestMethod.POST)
     @ResponseBody
     public int delByid(@PathVariable("id") Long id){
         return um.deleteByPrimaryKey(id);
     }
 
-    @RequestMapping(value="/updateFirm")
+    @RequestMapping(value="/updateFirm",method = RequestMethod.POST)
     @ResponseBody
     public Result<String> updateFirm(@RequestBody Map<String,Object> map){
         int r=mqm.updateUserFirm(map);
@@ -76,7 +76,7 @@ public class UserController extends BaseController {
 
 
     @ResponseBody
-    @RequestMapping("/all-url")
+    @RequestMapping(value="/all-url",method = RequestMethod.GET)
     public Result<Map<String,String>> getUrlMapping(HttpServletRequest request) {
         Map<String,String> result = new HashMap<String,String>();
         WebApplicationContext wc = (WebApplicationContext) request.getAttribute(DispatcherServlet.WEB_APPLICATION_CONTEXT_ATTRIBUTE);

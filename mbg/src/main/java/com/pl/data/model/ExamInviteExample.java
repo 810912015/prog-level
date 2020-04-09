@@ -11,6 +11,10 @@ public class ExamInviteExample {
 
     protected List<Criteria> oredCriteria;
 
+    private Integer limit;
+
+    private Integer offset;
+
     public ExamInviteExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
@@ -62,6 +66,33 @@ public class ExamInviteExample {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public ExamInviteExample handleQueryArgs(com.pl.data.common.api.IQueryArgs query) {
+        if(query==null) return this;
+        if(query.toSql()!=null){
+            createCriteria().addCriterion(query.toSql());
+        }
+        setOrderByClause("id desc");
+        setLimit(query.getSize());
+        if(query.makeStart()!=null) setOffset(query.makeStart());
+        return this;
     }
 
     protected abstract static class GeneratedCriteria {
@@ -750,6 +781,10 @@ public class ExamInviteExample {
 
         protected Criteria() {
             super();
+        }
+
+        public void addCriterion(String sql) {
+            super.addCriterion(sql);
         }
     }
 

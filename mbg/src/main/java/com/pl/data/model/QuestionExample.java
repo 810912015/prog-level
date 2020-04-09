@@ -11,6 +11,10 @@ public class QuestionExample {
 
     protected List<Criteria> oredCriteria;
 
+    private Integer limit;
+
+    private Integer offset;
+
     public QuestionExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
@@ -62,6 +66,33 @@ public class QuestionExample {
         oredCriteria.clear();
         orderByClause = null;
         distinct = false;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public QuestionExample handleQueryArgs(com.pl.data.common.api.IQueryArgs query) {
+        if(query==null) return this;
+        if(query.toSql()!=null){
+            createCriteria().addCriterion(query.toSql());
+        }
+        setOrderByClause("id desc");
+        setLimit(query.getSize());
+        if(query.makeStart()!=null) setOffset(query.makeStart());
+        return this;
     }
 
     protected abstract static class GeneratedCriteria {
@@ -236,72 +267,72 @@ public class QuestionExample {
         }
 
         public Criteria andTitleIsNull() {
-            addCriterion("Title is null");
+            addCriterion("title is null");
             return (Criteria) this;
         }
 
         public Criteria andTitleIsNotNull() {
-            addCriterion("Title is not null");
+            addCriterion("title is not null");
             return (Criteria) this;
         }
 
         public Criteria andTitleEqualTo(String value) {
-            addCriterion("Title =", value, "title");
+            addCriterion("title =", value, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleNotEqualTo(String value) {
-            addCriterion("Title <>", value, "title");
+            addCriterion("title <>", value, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleGreaterThan(String value) {
-            addCriterion("Title >", value, "title");
+            addCriterion("title >", value, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleGreaterThanOrEqualTo(String value) {
-            addCriterion("Title >=", value, "title");
+            addCriterion("title >=", value, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleLessThan(String value) {
-            addCriterion("Title <", value, "title");
+            addCriterion("title <", value, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleLessThanOrEqualTo(String value) {
-            addCriterion("Title <=", value, "title");
+            addCriterion("title <=", value, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleLike(String value) {
-            addCriterion("Title like", value, "title");
+            addCriterion("title like", value, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleNotLike(String value) {
-            addCriterion("Title not like", value, "title");
+            addCriterion("title not like", value, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleIn(List<String> values) {
-            addCriterion("Title in", values, "title");
+            addCriterion("title in", values, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleNotIn(List<String> values) {
-            addCriterion("Title not in", values, "title");
+            addCriterion("title not in", values, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleBetween(String value1, String value2) {
-            addCriterion("Title between", value1, value2, "title");
+            addCriterion("title between", value1, value2, "title");
             return (Criteria) this;
         }
 
         public Criteria andTitleNotBetween(String value1, String value2) {
-            addCriterion("Title not between", value1, value2, "title");
+            addCriterion("title not between", value1, value2, "title");
             return (Criteria) this;
         }
 
@@ -910,6 +941,10 @@ public class QuestionExample {
 
         protected Criteria() {
             super();
+        }
+
+        public void addCriterion(String sql) {
+            super.addCriterion(sql);
         }
     }
 

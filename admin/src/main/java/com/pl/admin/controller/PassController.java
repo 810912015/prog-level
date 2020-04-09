@@ -12,10 +12,7 @@ import com.pl.data.model.Question;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +20,7 @@ import java.util.List;
 @RequestMapping(value="/pass")
 @Api(tags = "PassController",description = "PassController api")
 public class PassController extends BaseController{
-    @RequestMapping(value="/judge")
+    @RequestMapping(value="/judge",method = RequestMethod.POST)
     @ResponseBody
     public Result<List<String>> getByPrm(@RequestBody PassParam p){
         try {
@@ -34,7 +31,7 @@ public class PassController extends BaseController{
         }
     }
 
-    @RequestMapping(value="/source/{id}")
+    @RequestMapping(value="/source/{id}",method = RequestMethod.GET)
     @ResponseBody
     public PassParam.PassDetail getById(@PathVariable("id") String id){
         PassExample e=new PassExample();
@@ -47,7 +44,7 @@ public class PassController extends BaseController{
         return new PassParam.PassDetail(q,pr);
     }
 
-    @RequestMapping(value="/score/update")
+    @RequestMapping(value="/score/update",method = RequestMethod.POST)
     @ResponseBody
     public Result<Integer> updateScore(@RequestBody PassParam.PassScore score){
         int r=qm.updatePassScore(score);

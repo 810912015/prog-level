@@ -1,4 +1,4 @@
-package com.pl.admin.service;
+package com.pl.admin.service.question;
 
 import com.google.common.base.Throwables;
 import com.pl.admin.dto.PlayDto;

@@ -29,9 +29,9 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("阅读器前台系统")
-                .description("阅读器前台系统")
-                .version("1.0")
+                .title("分码网api")
+                .description("分码网api")
+                .version("1.1")
                 .build();
     }
 }

@@ -37,9 +37,9 @@ public class RawSqlPlugin extends PluginAdapter {
         setOffset.setVisibility(JavaVisibility.PUBLIC);
         setOffset.setName("handleQueryArgs");
         setOffset.setReturnType(topLevelClass.getType());
-        setOffset.addParameter(new Parameter(new FullyQualifiedJavaType("com.cooee.reader.common.api.IQueryArgs"), "query"));
+        setOffset.addParameter(new Parameter(new FullyQualifiedJavaType("com.pl.data.common.api.IQueryArgs"), "query"));
         setOffset.addBodyLine("if(query==null) return this;\n" +
-                "        if(query.hasSql()){\n" +
+                "        if(query.toSql()!=null){\n" +
                 "            createCriteria().addCriterion(query.toSql());\n" +
                 "        }\n" +
                 "        setOrderByClause(\"id desc\");\n" +

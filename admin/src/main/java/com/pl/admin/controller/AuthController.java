@@ -84,7 +84,7 @@ public class AuthController extends BaseController {
         return as.login(ld);
     }
     @ApiOperation(value = "register")
-    @RequestMapping(value = "register")
+    @RequestMapping(value = "register",method = RequestMethod.POST)
     @ResponseBody
     public Result<AuthDto> register(@RequestBody RegisterDto ld) {
         if(!ld.isSimple()) {
@@ -124,7 +124,7 @@ public class AuthController extends BaseController {
         }
     }
     @ApiOperation(value = "confirm")
-    @RequestMapping(value = "confirm")
+    @RequestMapping(value = "confirm",method = RequestMethod.POST)
     @ResponseBody
     public Result confirm(@RequestBody ConfirmDto cd) {
         try {
@@ -142,7 +142,7 @@ public class AuthController extends BaseController {
     }
 
     @ApiOperation(value = "reset")
-    @RequestMapping(value = "reset")
+    @RequestMapping(value = "reset",method = RequestMethod.POST)
     @ResponseBody
     public Result<AuthDto> reset(@RequestBody RegisterDto ld) {
         Result<AuthDto> x = validate(ld);
@@ -150,7 +150,7 @@ public class AuthController extends BaseController {
         return as.reset(ld);
     }
     @ApiOperation(value = "logout")
-    @RequestMapping(value = "logout")
+    @RequestMapping(value = "logout",method = RequestMethod.POST)
     @ResponseBody
     public Result<AuthDto> logout(@RequestBody AuthDto ld) {
 //        SecurityUtils.getSubject().logout();
@@ -230,8 +230,8 @@ public class AuthController extends BaseController {
             return new Result<>(false, "请重新登录", new ProfileDto());
         }
     }
-    @ApiOperation(value = "profile")
-    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+    @ApiOperation(value = "profile-set")
+    @RequestMapping(value = "/profile-set", method = RequestMethod.POST)
     @ResponseBody
     public Result setProfile(@RequestBody ProfileDto d) {
         long uid = curUser().getId();

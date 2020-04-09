@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +18,7 @@ import java.util.Map;
 public class EntryController extends BaseController {
 
     @ApiOperation(value = "invite")
-    @RequestMapping(value = "/invite/{iid}")
+    @RequestMapping(value = "/invite/{iid}",method = RequestMethod.POST)
     public String doInvite(Map<String, Object> model, @PathVariable String iid) {
         try {
             List<Integer> li = sm.getQid(iid);
