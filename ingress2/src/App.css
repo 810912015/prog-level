@@ -64,3 +64,8 @@
     transform: rotate(360deg);
   }
 }
+
+.space{
+  margin:10px;
+  line-height: 25px;
+}

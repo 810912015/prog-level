@@ -52,6 +52,31 @@ public class QuestionSvc implements IQuestionSvc {
         return Result.success(questionMapper.selectByExample(qe));
     }
 
+    static List<Index<Question>> recommends=null;
+    synchronized void initRecommends(){
+        if(recommends!=null) return;
+        String[] ra=new String[]{"最热","提交最多","搜索最多"};
+
+        recommends=new ArrayList<>();
+        int count=0;
+        for(String s:ra){
+            Index<Question> i=new Index<>();
+            QuestionExample qe=new QuestionExample();
+            qe.setLimit(10);
+            qe.setOffset(500+(count++*71));
+            List<Question> ql=questionMapper.selectByExample(qe);
+            i.setList(ql);
+            i.setName(s);
+            i.setDesc(Arrays.asList(s+"的问题"));
+            recommends.add(i);
+        }
+    }
+    @Override
+    public Result<List<Index<Question>>> recommend() {
+        if(recommends==null) initRecommends();
+        return Result.success(recommends);
+    }
+
     @Autowired
     private QuestionMapper questionMapper;
 }

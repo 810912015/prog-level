@@ -30,6 +30,12 @@ public class QuestionController extends BaseController{
         return questionService.byTag(meta);
     }
 
+    @RequestMapping(value = "recommend",method = RequestMethod.GET)
+    @ResponseBody
+    public Result<List<IQuestionSvc.Index<Question>>> recommend(){
+        return questionService.recommend();
+    }
+
     @Autowired
     private IQuestionSvc questionService;
 }

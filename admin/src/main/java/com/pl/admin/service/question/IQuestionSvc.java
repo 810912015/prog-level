@@ -10,6 +10,7 @@ import java.util.List;
 public interface IQuestionSvc {
     Result<List<Meta>> allTags();
     Result<List<Question>> byTag(Args tag);
+    Result<List<Index<Question>>> recommend();
 
     class Meta{
         private int count;
@@ -68,6 +69,18 @@ public interface IQuestionSvc {
 
         public void setBound(Bound bound) {
             this.bound = bound;
+        }
+    }
+
+    class Index<T> extends Meta{
+        private List<T> list;
+
+        public List<T> getList() {
+            return list;
+        }
+
+        public void setList(List<T> list) {
+            this.list = list;
         }
     }
 }
