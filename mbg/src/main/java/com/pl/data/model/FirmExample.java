@@ -84,15 +84,16 @@ public class FirmExample {
         return offset;
     }
 
-    public FirmExample handleQueryArgs(com.pl.data.common.api.IQueryArgs query) {
-        if(query==null) return this;
+    public Criteria handleQueryArgs(com.pl.data.common.api.IQueryArgs query) {
+        Criteria c=createCriteria();
+        if(query==null) return c;
         if(query.toSql()!=null){
-            createCriteria().addCriterion(query.toSql());
+            c.addCriterion(query.toSql());
         }
         setOrderByClause("id desc");
         setLimit(query.getSize());
         if(query.makeStart()!=null) setOffset(query.makeStart());
-        return this;
+        return c;
     }
 
     protected abstract static class GeneratedCriteria {

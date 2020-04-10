@@ -47,8 +47,7 @@ public class QuestionSvc implements IQuestionSvc {
             args.setBound(new Bound());
         }
         args.getBound().normalize();
-        qe.handleQueryArgs(args.getBound());
-        qe.createCriteria().andLangEqualTo(args.getMeta().getName());
+        qe.handleQueryArgs(args.getBound()).andLangEqualTo(args.getMeta().getName());
         return Result.success(questionMapper.selectByExample(qe));
     }
 

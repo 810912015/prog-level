@@ -1,13 +1,33 @@
-import React, { Component } from 'react';
+import React, { Component ,useEffect,useState} from 'react';
 import {Button, Col, Layout, Row} from 'antd';
 import './App.css';
 import {QuestionBag, RecommendBag, TagBag} from "./component/question";
-import {HashRouter} from "react-router-dom";
-
+import {HashRouter, Route,withRouter} from "react-router-dom";
+import {Ing} from "./component/index-main";
+import {QuestionContext,questionStore} from "./component/context";
+import {Take} from "./component/take";
 
 class App extends Component {
-  render() {
+    state={
+        list:[],
+        setList:(d)=>this.setState({list:d}),
+        height:0
+    }
+     resize=()=>{
+        this.setState({height:window.innerHeight-50})
+     }
+     componentDidMount() {
+        this.setState({height:window.innerHeight-50})
+        window.addEventListener("resize",this.resize)
+     }
+     componentWillUnmount() {
+        window.removeEventListener("resize",this.resize)
+     }
+
+    render() {
+        let h=this.state.height+"px"
     return (
+        <QuestionContext.Provider value={this.state}>
         <Layout className={"layout"}>
             <Layout.Header style={{backgroundColor:"transparent"}}>
                 <div style={{display:"flex"}}>
@@ -22,26 +42,19 @@ class App extends Component {
                     </div>
                 </div>
             </Layout.Header>
-            <Layout.Content>
+            <Layout.Content style={{minHeight:h}}>
                 <HashRouter>
-                    <Row>
-                        <Col xs={24} sm={24} md={{span:3,offset:2}}><TagBag/></Col>
-                        <Col xs={24} sm={24} md={13} ><QuestionBag/></Col>
-                        <Col xs={24} sm={24} md={6} >
-                            {<RecommendBag/>}
-                        </Col>
-                    </Row>
-
+                    <Ing/>
                 </HashRouter>
             </Layout.Content>
-            <Layout.Footer>
+            <Layout.Footer style={{padding:0}}>
                 <div style={{textAlign:"center",backgroundColor:"#888",color:"#eee",padding:"10px"}}>
                     <div className={"space"}>上海信息科技有限公司</div>
                     <div className={"space"}>沪icp备45862号</div>
                 </div>
             </Layout.Footer>
         </Layout>
-
+        </QuestionContext.Provider>
     );
   }
 }

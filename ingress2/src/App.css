@@ -9,8 +9,23 @@
   font-size: 22px;
   padding-right: 10px;
 }
+.my-row {
+  display: flex;
+}
+.my-gutter{
+  width:5px;
+  background-color: #cdc;
+  cursor: grab;
+  display: block;
+}
 
 @media screen and (max-width: 600px) {
+  .my-row{
+    display: block;
+  }
+  .my-gutter{
+    display: none;
+  }
   .brand{
     display: none;
   }

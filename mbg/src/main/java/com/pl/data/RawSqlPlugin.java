@@ -30,22 +30,24 @@ public class RawSqlPlugin extends PluginAdapter {
 
     private void addRowSql(TopLevelClass topLevelClass,IntrospectedTable introspectedTable, InnerClass criteria) {
         add(criteria);
-        add2(topLevelClass);
+        add2(topLevelClass,criteria);
     }
-    private void add2(TopLevelClass topLevelClass) {
+    private void add2(TopLevelClass topLevelClass, InnerClass criteria) {
         Method setOffset = new Method();
         setOffset.setVisibility(JavaVisibility.PUBLIC);
         setOffset.setName("handleQueryArgs");
-        setOffset.setReturnType(topLevelClass.getType());
+        setOffset.setReturnType(criteria.getType());
         setOffset.addParameter(new Parameter(new FullyQualifiedJavaType("com.pl.data.common.api.IQueryArgs"), "query"));
-        setOffset.addBodyLine("if(query==null) return this;\n" +
+        setOffset.addBodyLine(
+                "Criteria c=createCriteria();\n" +
+                "        if(query==null) return c;\n" +
                 "        if(query.toSql()!=null){\n" +
-                "            createCriteria().addCriterion(query.toSql());\n" +
+                "            c.addCriterion(query.toSql());\n" +
                 "        }\n" +
                 "        setOrderByClause(\"id desc\");\n" +
                 "        setLimit(query.getSize());\n" +
                 "        if(query.makeStart()!=null) setOffset(query.makeStart());\n" +
-                "        return this;");
+                "        return c;");
         topLevelClass.addMethod(setOffset);
     }
     private void add(InnerClass criteria) {

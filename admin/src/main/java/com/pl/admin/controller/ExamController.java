@@ -105,7 +105,7 @@ public class ExamController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/question/get/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/question/get/{id}",method = RequestMethod.POST)
     @ResponseBody
     public PassDto getQuestionById(@PathVariable int id) {
         Question q = qm.selectByPrimaryKey(id);

@@ -3,6 +3,7 @@ import {post,get} from "./common/network";
 import {Link} from "react-router-dom";
 import {Badge,Card,Input} from "antd";
 import {DesktopOutlined,UnorderedListOutlined} from "@ant-design/icons";
+import {QuestionContext} from "./context";
 
 function RecommendItem(props) {
     return (
@@ -33,10 +34,28 @@ export function RecommendBag() {
 
 function Tag(props) {
     return (
-        <Card type={"inner"} title={props.name}>
-            <div>{props.count}</div>
-            <div>{props.desc}</div>
-        </Card>
+        <QuestionContext.Consumer>
+            {
+                (c) => {
+                    return (
+                        <a onClick={() => {
+                            post("question/bytag",
+                                {meta: props, bound: {size: 100}},
+                                (d) => {
+                                    c.setList(d.data)
+                                })
+                        }}>
+                            <Card>
+                                <div>{props.name}</div>
+                                <div>{props.count}</div>
+                                <div>{props.desc}</div>
+                            </Card>
+                        </a>
+                    )
+                }
+            }
+
+        </QuestionContext.Consumer>
     )
 }
 export function TagBag(){
@@ -76,19 +95,39 @@ function AQuestion(props) {
     )
 }
 
-export function QuestionBag() {
-    const [bag,setBag]=useState([])
-    useEffect(()=>{
-        post("question/all",{size:100},(d)=>{
-            setBag(d)
-        })
-    },[])
-    const loadMore=()=>{
 
+
+export function QuestionBag(props) {
+    useEffect(()=>{
+        getData({size:100})
+        return ()=>{
+            props.setList([])
+        }
+    },[])
+    const getData=(b)=>{
+        post("question/all",b,
+            (d)=>{
+            let o=props.list||[]
+            o.push.apply(o,d||[])
+            props.setList(o)
+            })
+    }
+    const loadMore=()=>{
+        let bound={
+            size:50,
+            minId:100000000,
+            maxId:0,
+            forward:true
+        }
+        props.list.forEach(a=>{
+            if(bound.maxId<a.id) bound.maxId=a.id;
+            if(bound.minId>a.id) bound.minId=a.id;
+        })
+        getData(bound)
     }
     let qa=[]
-    if(bag){
-        qa=bag.map(a=>(<AQuestion {...a} key={a.id}/>))
+    if(props.list){
+        qa=props.list.map(a=>(<AQuestion {...a} key={a.id}/>))
     }
     return (
         <Card type={"inner"} title={
@@ -97,7 +136,6 @@ export function QuestionBag() {
                 <span>习题列表</span>
                 <Input.Search style={{marginLeft:"30px",flex:1}}/>
             </div>
-
         }>
             {qa}
             <a onClick={loadMore}>更多</a>

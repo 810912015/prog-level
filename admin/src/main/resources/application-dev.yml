@@ -1,4 +1,6 @@
-
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 spring:
   datasource:
@@ -32,3 +34,7 @@ spring:
 #    username: admin
 #    password: admin
     publisher-confirms: true #如果对异步消息需要回调必须设置为true
+logging:
+  level:
+    root: info #日志配置DEBUG,INFO,WARN,ERROR
+    com.cooee.reader: debug
