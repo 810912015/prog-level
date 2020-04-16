@@ -1,8 +1,8 @@
 import React, { Component ,useEffect,useState} from 'react';
-import {Button, Col, Layout, Row} from 'antd';
+import {Button, Col, Layout, Row,Affix} from 'antd';
 import './App.css';
 import {QuestionBag, RecommendBag, TagBag} from "./component/question";
-import {HashRouter, Route,withRouter} from "react-router-dom";
+import {HashRouter, Route,withRouter,Link} from "react-router-dom";
 import {Ing} from "./component/index-main";
 import {QuestionContext,questionStore} from "./component/context";
 import {Take} from "./component/take";
@@ -29,10 +29,13 @@ class App extends Component {
     return (
         <QuestionContext.Provider value={this.state}>
         <Layout className={"layout"}>
-            <Layout.Header style={{backgroundColor:"transparent"}}>
+            <Affix offsetTop={0}>
+            <Layout.Header style={{backgroundColor:"#eee"}}>
+
                 <div style={{display:"flex"}}>
                     <div  className={"main-brand"}>
-                        分码网
+                        <a href={"#"}> 分码网</a>
+
                     </div>
                     <div className={"brand"}>
                         一个你可以写代码的地方
@@ -41,7 +44,9 @@ class App extends Component {
                         <span>登录/注册</span>
                     </div>
                 </div>
+
             </Layout.Header>
+            </Affix>
             <Layout.Content style={{minHeight:h}}>
                 <HashRouter>
                     <Ing/>

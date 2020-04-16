@@ -1,5 +1,6 @@
 package com.pl.admin.component;
 
+import com.pl.admin.component.mq.sender.IQSender;
 import com.pl.admin.util.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -32,20 +34,30 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+    @Autowired
+    private IQSender iqSender;
+
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         String authHeader = request.getHeader(this.tokenHeader);
-        if (authHeader != null && authHeader.startsWith(this.tokenHead)) {
-            String authToken = authHeader.substring(this.tokenHead.length());// The part after "Bearer "
-            String username = jwtTokenUtil.getUserNameFromToken(authToken);
+
+        if(StringUtils.isEmpty(authHeader)){
+            authHeader=jwtTokenUtil.generateToken();
+
+            response.addHeader(this.tokenHeader,authHeader);
+        }else if (authHeader.startsWith(this.tokenHead)) {
+
+            String username = jwtTokenUtil.getUserNameFromToken(authHeader);
             LOGGER.info("checking username:{}", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                if (jwtTokenUtil.validateToken(authHeader, userDetails)) {
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
+                            null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     LOGGER.info("authenticated user:{}", username);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -53,7 +65,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 response.addHeader(this.tokenHeader,jwtTokenUtil.generateToken(userDetails));
             }
         }
-
+        request.setAttribute("aid",jwtTokenUtil.getAid(authHeader));
+        sendMsg(authHeader,request.getRequestURI());
         chain.doFilter(request, response);
+    }
+
+    private void sendMsg(String token,String url){
+        IQSender.ReqMsg m=new IQSender.ReqMsg(jwtTokenUtil.getAid(token),jwtTokenUtil.getUserNameFromToken(token),url);
+        iqSender.send(IQSender.Types.REQUEST,IQSender.Types.REQUEST,m);
     }
 }

@@ -41,6 +41,10 @@ public class BaseController {
         }
     }
 
+    public String getAid(){
+        return (String) request.getAttribute("aid");
+    }
+
     public Expirtable expirtableFromSession(String key) {
         try {
             String s = (String)request.getAttribute(key);

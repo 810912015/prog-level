@@ -36,7 +36,7 @@ export class LangChooser extends React.Component {
             )
         }
         return (
-            <select className={"form-control form-control-sm"} style={{marginLeft: '20px', width: '150px'}}
+            <select style={{marginLeft: '20px', width: '150px'}}
                     onChange={(e)=>this.props.change(e.target.value)}
                     defaultValue={this.props.selected}
             >
@@ -66,7 +66,7 @@ export class JavaCodeEditor extends React.Component {
 
 
         return (
-            <React.Suspense fallback={<div>加载中...</div>}>
+            <React.Suspense fallback={<div style={{marginLeft:"20px"}}>加载中...</div>}>
                 <MonacoEditor
                     height={this.props.height || '600'}
                     value={this.props.value}
@@ -98,16 +98,17 @@ export class MultiLangEditor extends React.Component{
         langInSource:false,
         qid:0
     }
+
     constructor(props){
         super(props)
-        let s=''
-        if(this.props.sourceList&&this.props.sourceList['java']){
-            s=this.props.sourceList['java']
-        }
+
+        let sl=this.getFirstLang(this.props.sourceList);
+
+
 
         this. state={
-            lang:'java',
-            source:s,
+            lang:sl[0]||"",
+            source:sl[1]||"",
             list:this.props.sourceList||{},
             set:false,
             qid:this.props.qid
@@ -119,15 +120,24 @@ export class MultiLangEditor extends React.Component{
         {
             let js=JSON.stringify(nextProps.sourceList);
             if(js==="{}") return;
+            let sl=this.getFirstLang(nextProps.sourceList)
             this.setState({
                 set:true,
                 qid:nextProps.qid,
                 list: nextProps.sourceList,
-                source: nextProps.sourceList[this.state.lang]
+                lang:sl[0]||"",
+                source: sl[1]||""
             })
         }
     }
-
+    getFirstLang=(list)=>{
+        let sl;
+        for(let t in list){
+            sl=t;
+            break;
+        }
+        return [sl,list[sl]];
+    }
     langChange=(e)=>{
         let sc=this.state.list[e]||'';
 

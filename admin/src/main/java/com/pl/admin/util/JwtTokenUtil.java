@@ -6,10 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * JwtToken生成的工具类
@@ -27,6 +29,7 @@ public class JwtTokenUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
+    private static final String CLAIM_KEY_USER_A_ID="id";
     @Value("${jwt.secret}")
     private String secret;
     @Value("${jwt.expiration}")
@@ -80,6 +83,16 @@ public class JwtTokenUtil {
         return username;
     }
 
+    public String getAid(String token){
+        try {
+            if(StringUtils.isEmpty(token)) return null;
+            Claims claims = getClaimsFromToken(token);
+            return (String) claims.get(CLAIM_KEY_USER_A_ID);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
     /**
      * 验证token是否还有效
      *
@@ -113,10 +126,20 @@ public class JwtTokenUtil {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+        claims.put(CLAIM_KEY_USER_A_ID, UUID.randomUUID().toString());
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
     }
-
+    /**
+     * 根据用户信息生成token
+     */
+    public String generateToken() {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(CLAIM_KEY_USERNAME, "");
+        claims.put(CLAIM_KEY_USER_A_ID, UUID.randomUUID().toString());
+        claims.put(CLAIM_KEY_CREATED, new Date());
+        return generateToken(claims);
+    }
     /**
      * 判断token是否可以被刷新
      */
