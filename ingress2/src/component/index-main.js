@@ -4,6 +4,7 @@ import {Row,Col} from 'antd'
 import {QuestionContext} from "./context";
 import {HashRouter, Route,withRouter,Switch} from 'react-router-dom'
 import {Take} from "./take";
+import {Login,Register} from "./login";
 
 function Qb() {
 
@@ -29,10 +30,11 @@ function IndexMain() {
 }
 
 export function Ing() {
-   return ( <HashRouter>
+   return (
        <Switch>
            <Route exact path={"/"} component={IndexMain} key={"q"}/>
            <Route path="/pass/:id" component={Take} key={"pass"}/>
-       </Switch>
-    </HashRouter>)
+           <Route path={"/login"} component={Login} key={"login"}/>
+           <Route path={"/register"} component={Register} key={"register"}/>
+       </Switch>)
 }

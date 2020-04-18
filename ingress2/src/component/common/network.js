@@ -20,10 +20,8 @@ busy.register = (f) => {
 const redirect=(res,m)=>{
     if(res.headers.has(authHeader.key)){
         authHeader.str=res.headers.get(authHeader.key)
-        console.log(authHeader,res.headers.get(authHeader.key))
     }
     if(res.redirected){
-        console.log(m+"_redirect",res);
         let u=res.url.replace(".jsp",".html");
         window.location=u;
         return {}

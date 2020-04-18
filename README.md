@@ -9,3 +9,16 @@
 #注意点
 
 1.ingress发布时要修改public/ngconf.txt中的server ip为实际ip（当前ip是本机ip）。
+
+#发布点
+
+1. rabbitmq
+
+  a.docker run -d --hostname my-rabbit --name rabbit1 -p 5671:5671 -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+  
+  b.http://localhost:15672/#/queues/%2F/pl-req
+  
+  c.https://hub.docker.com/_/rabbitmq
+  
+  d.There is a second set of tags provided with the management plugin installed and enabled by default,
+   which is available on the standard management port of 15672, with the default username and password of guest / guest.
