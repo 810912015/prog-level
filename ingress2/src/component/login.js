@@ -1,13 +1,8 @@
 import React, {useEffect, useState,useRef} from 'react'
-import {Form,Input,Button,Checkbox,Row,Col,
-    Tooltip,
-    Cascader,
-    Select,
-    AutoComplete,
-} from "antd";
+import {Form,Input,Button,Checkbox,Row,Col} from "antd";
 import {post} from "./common/network";
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import {Commencer} from "./common/commencer";
+import {Commence} from "./common/commence";
 
 export function CenterBox(props) {
     let totalMinHeight=props.totalMinHeight||"600px";
@@ -23,10 +18,10 @@ export function CenterBox(props) {
 const tailLayout={
     wrapperCol:{
         offset:8,
-        span:6
+        span:8
     }
 }
-export function Login() {
+export function Login(props) {
     const [form]=Form.useForm()
     const finish=values=>{
         console.log(values)
@@ -35,38 +30,44 @@ export function Login() {
         })
     }
   return(
-      <CenterBox>
-          <>
-          <Form form={form} labelCol={{span:8}} wrapperCol={{span:8}} onFinish={finish}
-               initialValues={{remember:true}}
+      <Form form={form}   wrapperCol={
+          {sm:{offset:9,span:6},xs:{span:16}}
+      } onFinish={finish}
+            initialValues={{remember:true}}
+      >
+          <Form.Item name={"name"}
+                     rules={[
+                         {
+                             required:true,
+                             message:"用户名不能为空"
+                         }
+                     ]}
           >
-              <Form.Item label={"用户名"} name={"name"}
-                         rules={[
-                             {
-                                 required:true,
-                                 message:"用户名不能为空"
-                             }
-                         ]}
-              >
-                  <Input/>
-              </Form.Item>
-              <Form.Item label={"密码"} name={"pwd"} rules={[
-                  {
-                      required:true,
-                      message:"密码不能为空"
-                  }
-              ]}>
-                  <Input.Password/>
-              </Form.Item>
-              <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-                  <Checkbox>记住我</Checkbox>
-              </Form.Item>
-              <Form.Item {...tailLayout}>
-                  <Button htmlType="submit" type="primary">登录</Button>
-              </Form.Item>
-          </Form>
-              </>
-      </CenterBox>
+              <Input placeholder={"请输入用户名"}/>
+          </Form.Item>
+          <Form.Item name={"pwd"} rules={[
+              {
+                  required:true,
+                  message:"密码不能为空"
+              }
+          ]}>
+              <Input.Password/>
+          </Form.Item>
+          <Form.Item name="remember" valuePropName="checked">
+              <Checkbox>记住我</Checkbox>
+              <a href={"#/reset"} style={{float:"right"}}>忘记密码？</a>
+          </Form.Item>
+          <Form.Item >
+              <Button htmlType="submit" type="primary"
+                      style={{width:"100%"}}
+              >登录</Button>
+
+          </Form.Item>
+          <Form.Item>
+              <a href={"#/register"} type={"link"}
+              >注册</a>
+          </Form.Item>
+      </Form>
   )
 }
 
@@ -78,7 +79,7 @@ const formItemLayout = {
             span: 24,
         },
         sm: {
-            span: 8,
+            span: 9,
         },
     },
     wrapperCol: {
@@ -86,26 +87,26 @@ const formItemLayout = {
             span: 24,
         },
         sm: {
-            span: 16,
+            span: 6,
         },
     },
 };
 const tailFormItemLayout = {
     wrapperCol: {
         xs: {
-            span: 24,
-            offset: 0,
+            span: 23,
+            offset: 1,
         },
         sm: {
-            span: 16,
-            offset: 8,
+            span: 6,
+            offset: 9,
         },
     },
 };
 
 const CountDown=(props)=>{
     return (
-        <Commencer tip={"发送验证码"} can={props.can}
+        <Commence tip={"发送验证码"} can={props.can}
             call={(setTip)=>{
                 post("/auth/confirm",{email:props.email||""},(d)=>{
                     setTip(d.msg)
@@ -115,7 +116,7 @@ const CountDown=(props)=>{
             {(can,tip,start)=>{
                 return (<Button disabled={!can} onClick={start}>{tip}</Button>)
             }}
-        </Commencer>
+        </Commence>
     )
 }
 export const Register= () => {
@@ -138,7 +139,7 @@ export const Register= () => {
     }
 
     return (
-        <CenterBox>
+
         <Form
             {...formItemLayout}
             form={form}
@@ -257,8 +258,92 @@ export const Register= () => {
                 <Button type="primary" htmlType="submit">
                     注册
                 </Button>
+                <a href={"#/login"} style={{marginLeft:"100px"}}>登录</a>
             </Form.Item>
         </Form>
-        </CenterBox>
+
     );
 };
+
+export const Reset=()=>{
+   const [form]=Form.useForm();
+   const onFinish=(values)=>{
+
+   }
+   const valueChange=()=>{
+
+   }
+   return (
+       <Form
+           {...formItemLayout}
+           form={form}
+           name="register"
+           onFinish={onFinish}
+           scrollToFirstError
+           hideRequiredMark
+           initialValues={{agreement:true}}
+           onValuesChange={valueChange}
+       >
+           <Form.Item
+               name="email"
+               label="电子邮件"
+               rules={[
+                   {
+                       type: 'email',
+                       message: '电子邮件格式错误',
+                   },
+                   {
+                       required: true,
+                       message: '电子邮件不能为空',
+                   },
+               ]}
+           >
+               <Input />
+           </Form.Item>
+
+           <Form.Item
+               name="pwd"
+               label="新密码"
+               rules={[
+                   {
+                       required: true,
+                       message: '密码不能为空',
+                   },
+               ]}
+               hasFeedback
+           >
+               <Input.Password />
+           </Form.Item>
+
+           <Form.Item
+               name="pwd2"
+               label="确认密码"
+               dependencies={['pwd']}
+               hasFeedback
+               rules={[
+                   {
+                       required: true,
+                       message: '密码不能为空',
+                   },
+                   ({ getFieldValue }) => ({
+                       validator(rule, value) {
+                           if (!value || getFieldValue('password') === value) {
+                               return Promise.resolve();
+                           }
+
+                           return Promise.reject('密码不一致');
+                       },
+                   }),
+               ]}
+           >
+               <Input.Password />
+           </Form.Item>
+           <Form.Item {...tailFormItemLayout}>
+               <Button type="primary" htmlType="submit">
+                   重置密码
+               </Button>
+               <a href={"#/login"} style={{marginLeft:"100px"}}>登录</a>
+           </Form.Item>
+       </Form>
+   )
+}
