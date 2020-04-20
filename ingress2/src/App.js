@@ -12,6 +12,8 @@ class App extends Component {
     state={
         list:[],
         setList:(d)=>this.setState({list:d}),
+        loginName:null,
+        setLoginName:(n)=>this.setState({loginName:n}),
         height:0
     }
      resize=()=>{

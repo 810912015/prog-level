@@ -1,5 +1,7 @@
 package com.pl.admin.service;
 
+import com.google.common.base.Throwables;
+import com.pl.admin.controller.BaseController;
 import com.pl.admin.dto.AuthDto;
 import com.pl.admin.dto.LoginDto;
 import com.pl.admin.dto.RegisterDto;
@@ -7,14 +9,19 @@ import com.pl.admin.dto.Result;
 import com.pl.data.mapper.UUserMapper;
 import com.pl.data.model.UUser;
 import com.pl.data.model.UUserExample;
+import com.pl.data.redis.RedisService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.Duration;
 import java.util.*;
 
 @Component
 public class AuthServiceImpl implements AuthService {
-
+    private static final Logger logger= LoggerFactory.getLogger(AuthService.class);
     public AuthServiceImpl(){
     }
 
@@ -46,20 +53,18 @@ public class AuthServiceImpl implements AuthService {
         return new Result<>(true,"已登出",new AuthDto(false,"",""));
     }
 
-
-
     @Override
     public Result<AuthDto> register(RegisterDto ld) {
         if(ld.getPwd()==null||ld.getPwd().length()<8){
-            return new Result<>(false,"密码至少8位",
-                    new AuthDto(false,"",""));
+            return new Result.Complex<>(false,"密码至少8位",
+                    new AuthDto(false,"","")).addMsg("pwd","密码至少8位");
         }
         // 简单注册:用户名,密码
         if(ld.isSimple()){
              List<UUser> lu=getUsers(ld.getName());
             if(lu!=null&&!lu.isEmpty()){
-                return new Result<>(false,"用户名已存在",
-                        new AuthDto(false,"",""));
+                return new Result.Complex<>(false,"用户名已存在",
+                        new AuthDto(false,"","")).addMsg("name","用户名已存在");
             }
             UUser u = makeUser(ld);
             u.setEmail(ld.getName());
@@ -71,8 +76,8 @@ public class AuthServiceImpl implements AuthService {
         // 更新session
         List<UUser> ul = getUsers(ld.getEmail());
         if(ul!=null&&!ul.isEmpty()){
-            return new Result<>(false,"邮箱已注册",
-                    new AuthDto(false,"",""));
+            return new Result.Complex<>(false,"邮箱已注册",
+                    new AuthDto(false,"","")).addMsg("email","邮箱已注册");
         }
 
 
@@ -80,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
         um.insert(u);
 
 
-        return new Result<>(true,"",new AuthDto(true,u.getId().toString(),u.getNickname()));
+        return new Result.Complex<>(true,"",new AuthDto(true,u.getId().toString(),u.getNickname()));
     }
 
     private UUser makeUser(RegisterDto ld) {
@@ -106,19 +111,49 @@ public class AuthServiceImpl implements AuthService {
     public Result<AuthDto> reset(RegisterDto ld) {
         List<UUser> ul = getUsers(ld.getEmail());
         if(ul==null||ul.isEmpty()){
-            return new Result<>(false,"此邮箱未注册",
-                    new AuthDto(false,"",""));
+            return new Result.Complex<>(false,"此邮箱未注册",
+                    new AuthDto(false,"","")).addMsg("email","此邮箱未注册");
         }
         UUser u=ul.get(0);
         u.setPswd(ld.getPwd());
         int r= um.updateByPrimaryKey(u);
-        return new Result<>(r>0,"",
+        return new Result.Complex<>(r>0,"",
                 new AuthDto(true,u.getId().toString(),u.getNickname()));
     }
+    static String makeEmailRedisKey(String email){
+        return String.format("confirm_%s",email);
+    }
+    @Override
+    public Result sendRegister(String email) {
+        try {
+            String s = UUID.randomUUID().toString().substring(0, 5);
+
+            Result r = notifier.sendRegister(email, "", s);
+            if (r.isSuccess()) {
+                redisService.set(makeEmailRedisKey(email),s, Duration.ofMinutes(10));
+            }
+            return new Result(r.isSuccess(), r.isSuccess() ? "发送成功" : "发送失败");
+        } catch (Exception e) {
+            logger.error(e.getMessage() + Throwables.getStackTraceAsString(e));
+            return new Result<>(e.getMessage());
+        }
+    }
+
+    @Override
+    public Boolean isConfirmMatch(String email,String confirm) {
+        String s=redisService.get(makeEmailRedisKey(email));
+        boolean r= confirm.equals(s);
+        return r;
+    }
+
     private UUserMapper um;
 
     @Autowired
     public void setUm(UUserMapper um) {
         this.um = um;
     }
+    @Autowired
+    private Notifier notifier;
+    @Autowired
+    private RedisService redisService;
 }

@@ -97,15 +97,10 @@ public class AuthController extends BaseController {
     }
 
     private Result<AuthDto> validate(@RequestBody RegisterDto ld) {
-        Expirtable ke = expirtableFromSession(AuthKeys.KAPTCHA);
-        Expirtable ce = expirtableFromSession(AuthKeys.CONFIRM);
-        if (ke.isExpirt() || !ke.getData().equals(ld.getKapcha())) {
-            return new Result<>(false, "验证码错误,请点击图片刷新",
-                    new AuthDto(false, "", ld.getName()));
-        }
-        if (ce.isExpirt() || !ce.getData().equals(ld.getConfirm())) {
-            return new Result<>(false, "邮箱激活码错误,请重新输入",
-                    new AuthDto(false, "", ld.getName()));
+        boolean r=as.isConfirmMatch(ld.getEmail(),ld.getConfirm());
+        if (!r) {
+            return new Result.Complex<>(false, "邮箱激活码错误,请重新输入",
+                    new AuthDto(false, "", ld.getName())).addMsg("confirm","邮箱激活码错误,请重新输入");
         }
         return null;
     }
@@ -127,18 +122,7 @@ public class AuthController extends BaseController {
     @RequestMapping(value = "confirm",method = RequestMethod.POST)
     @ResponseBody
     public Result confirm(@RequestBody ConfirmDto cd) {
-        try {
-            String s = UUID.randomUUID().toString().substring(0, 5);
-
-            Result r = notifier.sendRegister(cd.email, "", s);
-            if (r.isSuccess()) {
-                expirtableIntoSession(AuthKeys.CONFIRM, s, 5);
-            }
-            return new Result(r.isSuccess(), r.isSuccess() ? "发送成功" : "发送失败");
-        } catch (Exception e) {
-            logger.error(e.getMessage() + Throwables.getStackTraceAsString(e));
-            return new Result<>(e.getMessage());
-        }
+        return as.sendRegister(cd.email);
     }
 
     @ApiOperation(value = "reset")

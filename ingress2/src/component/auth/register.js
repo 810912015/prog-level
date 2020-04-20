@@ -34,7 +34,7 @@ export const tailFormItemLayout = {
     },
 };
 
-const CountDown=(props)=>{
+export const CountDown=(props)=>{
     return (
         <Commence tip={"发送验证码"} can={props.can}
                   call={(setTip)=>{
@@ -49,14 +49,27 @@ const CountDown=(props)=>{
         </Commence>
     )
 }
-export const Register= () => {
+export const Register= (props) => {
     const [form] = Form.useForm();
 
     const [can,setCan]=useState(false)
-
+    const [msgs,setMsgs]=useState({})
 
     const onFinish = values => {
-        console.log('Received values of form: ', values);
+        var ro={
+            name:form.getFieldValue("name"),
+            pwd:form.getFieldValue("pwd"),
+            email:form.getFieldValue("email"),
+            kapcha:"",
+            confirm:form.getFieldValue("confirm")
+        }
+        post("/auth/register",ro,(d)=>{
+            if(!d.success){
+                setMsgs(d.msgs)
+            }else{
+                props.history.push("/login")
+            }
+        })
     };
     const valueChange=(changed,all)=>{
         let key="email"
@@ -66,6 +79,14 @@ export const Register= () => {
         if(c!==can){
             setCan(c)
         }
+    }
+    const getVStatus=(key)=>{
+        if(msgs&&(key in msgs)) return "error";
+        return "success";
+    }
+    const getVHelp=(key)=>{
+        if(msgs&&(key in msgs)) return msgs[key]
+        return null;
     }
 
     return (
@@ -83,6 +104,8 @@ export const Register= () => {
             <Form.Item
                 name="name"
                 label="用户名"
+                validateStatus={getVStatus("name")}
+                help={getVHelp("name")}
                 rules={[
                     {
                         required: true,
@@ -95,6 +118,8 @@ export const Register= () => {
             <Form.Item
                 name="email"
                 label="电子邮件"
+                validateStatus={getVStatus("email")}
+                help={getVHelp("email")}
                 rules={[
                     {
                         type: 'email',
@@ -135,7 +160,7 @@ export const Register= () => {
                     },
                     ({ getFieldValue }) => ({
                         validator(rule, value) {
-                            if (!value || getFieldValue('password') === value) {
+                            if (!value || getFieldValue('pwd') === value) {
                                 return Promise.resolve();
                             }
 
@@ -152,7 +177,8 @@ export const Register= () => {
                     <Col span={12}>
                         <Form.Item
                             name="confirm"
-                            noStyle
+                            validateStatus={getVStatus("confirm")}
+                            help={getVHelp("confirm")}
                             rules={[
                                 {
                                     required: true,

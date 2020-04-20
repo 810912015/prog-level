@@ -1,14 +1,45 @@
-import {Button, Form, Input} from "antd";
-import React from "react";
+import {Button, Col, Form, Input, Row} from "antd";
+import React, {useState} from "react";
 import {formItemLayout,tailFormItemLayout} from "./register";
+import {CountDown} from "./register";
+import {post} from "../common/network";
 
-export const Reset=()=>{
+export const Reset=(props)=>{
     const [form]=Form.useForm();
-    const onFinish=(values)=>{
+    const [can,setCan]=useState(false)
+    const [msgs,setMsgs]=useState({})
 
+    const onFinish = values => {
+        var ro={
+            pwd:form.getFieldValue("pwd"),
+            email:form.getFieldValue("email"),
+            kapcha:"",
+            confirm:form.getFieldValue("confirm")
+        }
+        post("/auth/reset",ro,(d)=>{
+            if(!d.success){
+                setMsgs(d.msgs)
+            }else{
+                props.history.push("/login")
+            }
+        })
+    };
+    const valueChange=(changed,all)=>{
+        let key="email"
+        if(!(key in changed)) return;
+        let e=form.getFieldError(key);
+        let c=e.length===0
+        if(c!==can){
+            setCan(c)
+        }
     }
-    const valueChange=()=>{
-
+    const getVStatus=(key)=>{
+        if(msgs&&(key in msgs)) return "error";
+        return "success";
+    }
+    const getVHelp=(key)=>{
+        if(msgs&&(key in msgs)) return msgs[key]
+        return null;
     }
     return (
         <Form
@@ -24,6 +55,8 @@ export const Reset=()=>{
             <Form.Item
                 name="email"
                 label="电子邮件"
+                validateStatus={getVStatus("email")}
+                help={getVHelp("email")}
                 rules={[
                     {
                         type: 'email',
@@ -37,7 +70,28 @@ export const Reset=()=>{
             >
                 <Input />
             </Form.Item>
-
+            <Form.Item label="邮箱验证码" extra="填入邮箱收到的验证码">
+                <Row gutter={8}>
+                    <Col span={12}>
+                        <Form.Item
+                            name="confirm"
+                            validateStatus={getVStatus("confirm")}
+                            help={getVHelp("confirm")}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: '填入邮箱收到的验证码',
+                                },
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <CountDown can={can} email={form.getFieldValue("email")||""}/>
+                    </Col>
+                </Row>
+            </Form.Item>
             <Form.Item
                 name="pwd"
                 label="新密码"
@@ -64,7 +118,7 @@ export const Reset=()=>{
                     },
                     ({ getFieldValue }) => ({
                         validator(rule, value) {
-                            if (!value || getFieldValue('password') === value) {
+                            if (!value || getFieldValue('pwd') === value) {
                                 return Promise.resolve();
                             }
 

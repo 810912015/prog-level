@@ -13,6 +13,7 @@ import com.pl.admin.service.Notifier;
 import com.pl.data.mapper.UUserMapper;
 import com.pl.data.model.UUser;
 
+import com.pl.data.redis.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -54,26 +56,20 @@ public class Auth2Controller extends BaseController {
     @ApiOperation(value = "register")
     @RequestMapping(value = "register",method = RequestMethod.POST)
     @ResponseBody
-    public Result<AuthDto> register(@RequestBody RegisterDto ld) {
+    public Result register(@RequestBody RegisterDto ld) {
         if(!ld.isSimple()) {
-            Result<AuthDto> x = validate(ld);
+            Result.Complex<AuthDto> x = (Result.Complex<AuthDto>)validate(ld);
             if (x != null) return x;
         }
-        Result<AuthDto> r = as.register(ld);
-
+        Result.Complex<AuthDto> r = (Result.Complex<AuthDto>)as.register(ld);
         return r;
     }
 
     private Result<AuthDto> validate(@RequestBody RegisterDto ld) {
-        Expirtable ke = expirtableFromSession(AuthKeys.KAPTCHA);
-        Expirtable ce = expirtableFromSession(AuthKeys.CONFIRM);
-        if (ke.isExpirt() || !ke.getData().equals(ld.getKapcha())) {
-            return new Result<>(false, "验证码错误,请点击图片刷新",
-                    new AuthDto(false, "", ld.getName()));
-        }
-        if (ce.isExpirt() || !ce.getData().equals(ld.getConfirm())) {
-            return new Result<>(false, "邮箱激活码错误,请重新输入",
-                    new AuthDto(false, "", ld.getName()));
+        boolean r=as.isConfirmMatch(ld.getEmail(),ld.getConfirm());
+        if(!r){
+             return new Result.Complex<>(false, "邮箱激活码错误或已过期,请重新输入或重新获取",
+                    new AuthDto(false, "", ld.getName())).addMsg("confirm","邮箱激活码错误或已过期,请重新输入或重新获取");
         }
         return null;
     }
@@ -91,31 +87,21 @@ public class Auth2Controller extends BaseController {
             this.email = email;
         }
     }
+
     @ApiOperation(value = "confirm")
     @RequestMapping(value = "confirm",method = RequestMethod.POST)
     @ResponseBody
     public Result confirm(@RequestBody ConfirmDto cd) {
-        try {
-            String s = UUID.randomUUID().toString().substring(0, 5);
-
-            Result r = notifier.sendRegister(cd.email, "", s);
-            if (r.isSuccess()) {
-                expirtableIntoSession(AuthKeys.CONFIRM, s, 5);
-            }
-            return new Result(r.isSuccess(), r.isSuccess() ? "发送成功" : "发送失败");
-        } catch (Exception e) {
-            logger.error(e.getMessage() + Throwables.getStackTraceAsString(e));
-            return new Result<>(e.getMessage());
-        }
+         return as.sendRegister(cd.email);
     }
 
     @ApiOperation(value = "reset")
     @RequestMapping(value = "reset",method = RequestMethod.POST)
     @ResponseBody
-    public Result<AuthDto> reset(@RequestBody RegisterDto ld) {
-        Result<AuthDto> x = validate(ld);
+    public Result.Complex<AuthDto> reset(@RequestBody RegisterDto ld) {
+        Result.Complex<AuthDto> x = (Result.Complex<AuthDto>)validate(ld);
         if (x != null) return x;
-        return as.reset(ld);
+        return (Result.Complex<AuthDto>)as.reset(ld);
     }
     @ApiOperation(value = "logout")
     @RequestMapping(value = "logout",method = RequestMethod.POST)
@@ -200,14 +186,11 @@ public class Auth2Controller extends BaseController {
         this.um = um;
     }
 
-    @Autowired
-    public void setNotifier(Notifier notifier) {
-        this.notifier = notifier;
-    }
 
     @Autowired
     public void setAs(AuthService as) {
         this.as = as;
     }
+
 }
 

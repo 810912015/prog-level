@@ -1,6 +1,30 @@
 package com.pl.admin.dto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Result<T> {
+    public static class Complex<T> extends Result<T>{
+        private Map<String,String> msgs;
+
+        public Map<String, String> getMsgs() {
+            return msgs;
+        }
+
+        public void setMsgs(Map<String, String> msgs) {
+            this.msgs = msgs;
+        }
+
+        public Complex(boolean success, String msg, T data) {
+           super(success,msg,data);
+           msgs=new HashMap<>();
+        }
+        public Complex addMsg(String key,String value){
+            msgs.put(key,value);
+            return this;
+        }
+    }
+
     private boolean success;
     private String msg;
     private T data;

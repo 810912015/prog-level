@@ -3,6 +3,7 @@ import {Form,Input,Button,Checkbox,Row,Col} from "antd";
 import {post} from "../common/network";
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import {Commence} from "../common/commence";
+import {QuestionContext} from "../context";
 
 export function CenterBox(props) {
     let totalMinHeight=props.totalMinHeight||"600px";
@@ -16,18 +17,34 @@ export function CenterBox(props) {
     )
 }
 export function Login(props) {
+  return(
+      <QuestionContext.Consumer>
+          {
+              (c)=><Login2 {...c} {...props}/>
+          }
+      </QuestionContext.Consumer>
+  )
+}
+
+function Login2(props) {
     const [form]=Form.useForm()
+    const [msg,setMsg]=useState("")
     const finish=values=>{
-        console.log(values)
         post("/auth/login",{name:values.name,pwd:values.pwd,kapcha:""},(d)=>{
-            console.log(d);
+            if(d.success){
+                console.log(d)
+                props.setLoginName(d.data.uname);
+                props.history.push("/")
+            }else{
+                setMsg(d.msg)
+            }
         })
     }
   return(
       <Form form={form}   wrapperCol={
           {sm:{offset:9,span:6},xs:{span:16}}
       } onFinish={finish}
-            initialValues={{remember:true}}
+          initialValues={{remember:true}}
       >
           <Form.Item name={"name"}
                      rules={[
@@ -52,6 +69,7 @@ export function Login(props) {
               <a href={"#/reset"} style={{float:"right"}}>忘记密码？</a>
           </Form.Item>
           <Form.Item >
+              <div><span style={{marginLeft:"20px"}}>{msg}</span></div>
               <Button htmlType="submit" type="primary"
                       style={{width:"100%"}}
               >登录</Button>

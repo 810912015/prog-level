@@ -9,13 +9,11 @@ import {Register} from "./auth/register";
 import {Reset} from "./auth/reset";
 
 function Qb() {
-
     return (
         <QuestionContext.Consumer>
             {(context)=><QuestionBag {...context}/>}
         </QuestionContext.Consumer>
     )
-
 }
 
 function IndexMain() {

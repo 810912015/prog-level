@@ -15,6 +15,8 @@
 }
 .shortcut{
   width:200px;
+  text-overflow:ellipsis;
+  white-space:nowrap
 }
 .main-brand{
   margin-left: 200px;
@@ -42,7 +44,9 @@
     display: none;
   }
   .shortcut{
-    width:100px
+    width:100px;
+    text-overflow:ellipsis;
+    white-space:nowrap;
   }
   .main-brand{
     margin-left: 60px;
