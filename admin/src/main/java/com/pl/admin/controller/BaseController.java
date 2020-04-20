@@ -2,6 +2,7 @@ package com.pl.admin.controller;
 
 
 import com.google.common.base.Throwables;
+import com.pl.admin.dto.UUserDetails;
 import com.pl.admin.service.Json;
 import com.pl.data.model.UUser;
 import org.slf4j.Logger;
@@ -45,7 +46,19 @@ public class BaseController {
         return (String) request.getAttribute("aid");
     }
 
+    public UUserDetails getUserDetail(){
+        Object o=SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(o instanceof UUserDetails) {
+            return (UUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        }
+        return null;
+    }
 
+    public Long getUid(){
+        UUserDetails u=getUserDetail();
+        if(u==null) return -1L;
+        return u.getUser().getId();
+    }
 
     public static class AuthKeys {
 

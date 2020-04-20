@@ -11,6 +11,10 @@ public class UUserDetails implements UserDetails {
     public UUserDetails(UUser u){
         this.user=u;
     }
+
+    public UUserDetails() {
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -45,4 +49,22 @@ public class UUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public UUser getUser() {
+        return user;
+    }
+
+    public void setUser(UUser user) {
+        this.user = user;
+    }
+
+    public String getAid() {
+        return aid;
+    }
+
+    public void setAid(String aid) {
+        this.aid = aid;
+    }
+
+    private String aid;
 }

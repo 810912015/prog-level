@@ -1,6 +1,7 @@
 package com.pl.admin.component;
 
 import com.pl.admin.component.mq.sender.IQSender;
+import com.pl.admin.dto.UUserDetails;
 import com.pl.admin.util.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             LOGGER.info("checking username:{}", username);
             if (!StringUtils.isEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
+                ((UUserDetails)userDetails).setAid(jwtTokenUtil.getAid(authHeader));
                 if (jwtTokenUtil.validateToken(authHeader, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
                             null, userDetails.getAuthorities());

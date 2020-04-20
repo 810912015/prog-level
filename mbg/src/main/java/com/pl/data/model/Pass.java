@@ -47,6 +47,9 @@ public class Pass implements Serializable {
     @ApiModelProperty(value = "邀请码")
     private String eiid;
 
+    @ApiModelProperty(value = "未登录时客户端id")
+    private String aid;
+
     private String source;
 
     private static final long serialVersionUID = 1L;
@@ -203,6 +206,14 @@ public class Pass implements Serializable {
         this.eiid = eiid;
     }
 
+    public String getAid() {
+        return aid;
+    }
+
+    public void setAid(String aid) {
+        this.aid = aid;
+    }
+
     public String getSource() {
         return source;
     }
@@ -236,6 +247,7 @@ public class Pass implements Serializable {
         sb.append(", score=").append(score);
         sb.append(", scorereason=").append(scorereason);
         sb.append(", eiid=").append(eiid);
+        sb.append(", aid=").append(aid);
         sb.append(", source=").append(source);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

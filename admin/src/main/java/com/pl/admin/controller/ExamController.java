@@ -37,7 +37,14 @@ public class ExamController extends BaseController {
                 p.setEid(l.get(0).getEid());
             }
         }
+        p.setUid(getUid().intValue());
+        p.setAid(getAid());
         return qs.pass(p);
+    }
+    @RequestMapping(value = "/exam/pass-mine",method = RequestMethod.POST)
+    @ResponseBody
+    public List<Pass> get(@RequestBody QuestionService.PassArgs b){
+        return qs.getByUidOrAid(getUid().intValue(),getAid(),b);
     }
 
 

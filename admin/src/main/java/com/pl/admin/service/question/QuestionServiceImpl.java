@@ -1,6 +1,7 @@
 package com.pl.admin.service.question;
 
 import com.google.common.base.Throwables;
+import com.pl.admin.dto.Bound;
 import com.pl.admin.dto.PlayDto;
 import com.pl.admin.dto.QuestionDto;
 import com.pl.admin.service.runner.Engine;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -93,6 +95,7 @@ public class QuestionServiceImpl implements QuestionService {
                 if(pv.getEid()==null){
                     pv.setEid(-1);
                 }
+
                 prm.insert(pv);
             }
             return r;
@@ -119,6 +122,23 @@ public class QuestionServiceImpl implements QuestionService {
         return sb.toString();
     }
 
+    @Override
+    public List<Pass> getByUidOrAid(Integer uid, String aid, PassArgs bound) {
+        if(uid==null&&aid==null) return new ArrayList<>();
+        bound.normalize();
+        PassExample pe=new PassExample();
+        PassExample.Criteria c=pe.handleQueryArgs(bound);
+        c.andQidEqualTo(bound.getQid().intValue());
+        if(uid!=null&&uid>0){
+            c.andUidEqualTo(uid);
+        }else if(!StringUtils.isEmpty(aid)){
+            c.andAidEqualTo(aid);
+        }
+        pe.setLimit(10);
+        pe.setOrderByClause("id desc");
+        return prm.selectByExample(pe);
+    }
+
     Pass make(Pass p,String gid){
         Pass v=new Pass();
         v.setGroupid(gid);
@@ -130,7 +150,7 @@ public class QuestionServiceImpl implements QuestionService {
         v.setDclt(new Date());
         v.setSource(p.getSource());
         v.setInput("");
-
+        v.setAid(p.getAid());
         v.setRemarks("F");
         v.setSequence(0);
         v.setLang(p.getLang());

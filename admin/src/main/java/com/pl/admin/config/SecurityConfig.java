@@ -108,6 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return username -> {
             UUserExample ue=new UUserExample();
             ue.createCriteria().andEmailEqualTo(username);
+            ue.or(ue.createCriteria().andEmailEqualTo(username));
             List<UUser> ul=userMapper.selectByExample(ue);
             if(ul==null||ul.isEmpty()) {
                 throw new UsernameNotFoundException("用户名或密码错误");

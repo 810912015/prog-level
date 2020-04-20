@@ -58,6 +58,7 @@ export function Take(props) {
     const [qid,setQid]=useState(parseInt(props.match.params.id)||props.id||0)
     const [cr,setCr]=useState({})
     const [show,setShow]=useState(false)
+    const [pass,setPass]=useState([])
     useEffect(()=>{
         let id=qid;
         post("/question/get/"+id,{},
@@ -106,7 +107,12 @@ export function Take(props) {
         })
     }
     const changeTab=(k)=>{
-        console.log("change tab",k)
+        console.log("change tab",k,k==2)
+        if(k==2){
+            post("/exam/pass-mine",{qid:qid,size:10},(d)=>{
+                setPass(d)
+            })
+        }
     }
     let leftWidth=(lw.w||window.innerWidth/2)+"px"
     let rightWidth=((window.innerWidth-lw.w-10)||window.innerWidth/2-10)+"px"
@@ -147,7 +153,7 @@ export function Take(props) {
                             </div>
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="我的提交" key="2">
-                            Content of Tab Pane 2
+                            {JSON.stringify(pass)}
                         </Tabs.TabPane>
 
                     </Tabs>

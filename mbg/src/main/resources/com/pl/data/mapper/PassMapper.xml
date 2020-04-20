@@ -21,6 +21,7 @@
     <result column="score" jdbcType="INTEGER" property="score" />
     <result column="scoreReason" jdbcType="VARCHAR" property="scorereason" />
     <result column="eiid" jdbcType="VARCHAR" property="eiid" />
+    <result column="aid" jdbcType="VARCHAR" property="aid" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pl.data.model.Pass">
     <result column="source" jdbcType="LONGVARCHAR" property="source" />
@@ -85,7 +86,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, qid, eid, vid, uid, groupId, input, output, success, msg, weight, sequence, stage, 
-    Remarks, Dclt, lang, score, scoreReason, eiid
+    Remarks, Dclt, lang, score, scoreReason, eiid, aid
   </sql>
   <sql id="Blob_Column_List">
     source
@@ -164,14 +165,14 @@
       weight, sequence, stage, 
       Remarks, Dclt, lang, 
       score, scoreReason, eiid, 
-      source)
+      aid, source)
     values (#{qid,jdbcType=INTEGER}, #{eid,jdbcType=INTEGER}, #{vid,jdbcType=INTEGER}, 
       #{uid,jdbcType=INTEGER}, #{groupid,jdbcType=VARCHAR}, #{input,jdbcType=VARCHAR}, 
       #{output,jdbcType=VARCHAR}, #{success,jdbcType=CHAR}, #{msg,jdbcType=VARCHAR}, 
       #{weight,jdbcType=INTEGER}, #{sequence,jdbcType=INTEGER}, #{stage,jdbcType=CHAR}, 
       #{remarks,jdbcType=VARCHAR}, #{dclt,jdbcType=TIMESTAMP}, #{lang,jdbcType=VARCHAR}, 
       #{score,jdbcType=INTEGER}, #{scorereason,jdbcType=VARCHAR}, #{eiid,jdbcType=VARCHAR}, 
-      #{source,jdbcType=LONGVARCHAR})
+      #{aid,jdbcType=VARCHAR}, #{source,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pl.data.model.Pass">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -233,6 +234,9 @@
       <if test="eiid != null">
         eiid,
       </if>
+      <if test="aid != null">
+        aid,
+      </if>
       <if test="source != null">
         source,
       </if>
@@ -291,6 +295,9 @@
       </if>
       <if test="eiid != null">
         #{eiid,jdbcType=VARCHAR},
+      </if>
+      <if test="aid != null">
+        #{aid,jdbcType=VARCHAR},
       </if>
       <if test="source != null">
         #{source,jdbcType=LONGVARCHAR},
@@ -363,6 +370,9 @@
       <if test="record.eiid != null">
         eiid = #{record.eiid,jdbcType=VARCHAR},
       </if>
+      <if test="record.aid != null">
+        aid = #{record.aid,jdbcType=VARCHAR},
+      </if>
       <if test="record.source != null">
         source = #{record.source,jdbcType=LONGVARCHAR},
       </if>
@@ -392,6 +402,7 @@
       score = #{record.score,jdbcType=INTEGER},
       scoreReason = #{record.scorereason,jdbcType=VARCHAR},
       eiid = #{record.eiid,jdbcType=VARCHAR},
+      aid = #{record.aid,jdbcType=VARCHAR},
       source = #{record.source,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -417,7 +428,8 @@
       lang = #{record.lang,jdbcType=VARCHAR},
       score = #{record.score,jdbcType=INTEGER},
       scoreReason = #{record.scorereason,jdbcType=VARCHAR},
-      eiid = #{record.eiid,jdbcType=VARCHAR}
+      eiid = #{record.eiid,jdbcType=VARCHAR},
+      aid = #{record.aid,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -479,6 +491,9 @@
       <if test="eiid != null">
         eiid = #{eiid,jdbcType=VARCHAR},
       </if>
+      <if test="aid != null">
+        aid = #{aid,jdbcType=VARCHAR},
+      </if>
       <if test="source != null">
         source = #{source,jdbcType=LONGVARCHAR},
       </if>
@@ -505,6 +520,7 @@
       score = #{score,jdbcType=INTEGER},
       scoreReason = #{scorereason,jdbcType=VARCHAR},
       eiid = #{eiid,jdbcType=VARCHAR},
+      aid = #{aid,jdbcType=VARCHAR},
       source = #{source,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -527,7 +543,8 @@
       lang = #{lang,jdbcType=VARCHAR},
       score = #{score,jdbcType=INTEGER},
       scoreReason = #{scorereason,jdbcType=VARCHAR},
-      eiid = #{eiid,jdbcType=VARCHAR}
+      eiid = #{eiid,jdbcType=VARCHAR},
+      aid = #{aid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

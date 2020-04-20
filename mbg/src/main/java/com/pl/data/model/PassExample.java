@@ -1376,6 +1376,76 @@ public class PassExample {
             addCriterion("eiid not between", value1, value2, "eiid");
             return (Criteria) this;
         }
+
+        public Criteria andAidIsNull() {
+            addCriterion("aid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidIsNotNull() {
+            addCriterion("aid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidEqualTo(String value) {
+            addCriterion("aid =", value, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidNotEqualTo(String value) {
+            addCriterion("aid <>", value, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidGreaterThan(String value) {
+            addCriterion("aid >", value, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidGreaterThanOrEqualTo(String value) {
+            addCriterion("aid >=", value, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidLessThan(String value) {
+            addCriterion("aid <", value, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidLessThanOrEqualTo(String value) {
+            addCriterion("aid <=", value, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidLike(String value) {
+            addCriterion("aid like", value, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidNotLike(String value) {
+            addCriterion("aid not like", value, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidIn(List<String> values) {
+            addCriterion("aid in", values, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidNotIn(List<String> values) {
+            addCriterion("aid not in", values, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidBetween(String value1, String value2) {
+            addCriterion("aid between", value1, value2, "aid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAidNotBetween(String value1, String value2) {
+            addCriterion("aid not between", value1, value2, "aid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
