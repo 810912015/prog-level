@@ -10,6 +10,7 @@ import com.pl.admin.dao.AuthMapper;
 import com.pl.admin.dto.*;
 import com.pl.admin.service.AuthService;
 import com.pl.admin.service.Notifier;
+import com.pl.admin.util.JwtTokenUtil;
 import com.pl.data.mapper.UUserMapper;
 import com.pl.data.model.UUser;
 
@@ -46,12 +47,17 @@ import java.util.UUID;
 @RequestMapping("/auth")
 public class Auth2Controller extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(AuthController.class);
-
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
     @ApiOperation(value = "login")
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
     public Result<AuthDto> login(@RequestBody LoginDto ld, HttpServletResponse response, HttpServletRequest request) {
-        return as.login(ld);
+        Result<AuthDto> r= as.login(ld);
+        if(r.isSuccess()){
+            response.addHeader("authorization",jwtTokenUtil.generateToken(r.getData().getUname()));
+        }
+        return r;
     }
     @ApiOperation(value = "register")
     @RequestMapping(value = "register",method = RequestMethod.POST)
@@ -106,10 +112,9 @@ public class Auth2Controller extends BaseController {
     @ApiOperation(value = "logout")
     @RequestMapping(value = "logout",method = RequestMethod.POST)
     @ResponseBody
-    public Result<AuthDto> logout(@RequestBody AuthDto ld) {
-//        SecurityUtils.getSubject().logout();
-//        return as.logout(ld);
-        return null;
+    public Result<AuthDto> logout(HttpServletResponse response,@RequestBody AuthDto ld) {
+        response.addHeader("authorization",jwtTokenUtil.generateToken(""));
+        return Result.success(null);
     }
 
     public static final int K32 = 8 * 1024 * 32;

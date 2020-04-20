@@ -29,11 +29,13 @@ public class ExamController extends BaseController {
     @RequestMapping(value = "/exam/pass",method = RequestMethod.POST)
     @ResponseBody
     public Engine.ExecuteResult pass(@RequestBody Pass p) {
-        ExamInviteExample ee = new ExamInviteExample();
-        ee.createCriteria().andIidEqualTo(p.getEiid());
-        List<ExamInvite> l = eim.selectByExample(ee);
-        if (l != null && l.size() > 0) {
-            p.setEid(l.get(0).getEid());
+        if(p.getEiid()!=null) {
+            ExamInviteExample ee = new ExamInviteExample();
+            ee.createCriteria().andIidEqualTo(p.getEiid());
+            List<ExamInvite> l = eim.selectByExample(ee);
+            if (l != null && l.size() > 0) {
+                p.setEid(l.get(0).getEid());
+            }
         }
         return qs.pass(p);
     }
@@ -45,7 +47,7 @@ public class ExamController extends BaseController {
         return new Result<>(true, "", qs.play(pd));
     }
 
-    @RequestMapping(value = "/exam/done/{gid}",method = RequestMethod.GET)
+    @RequestMapping(value = "/exam/done/{gid}",method = RequestMethod.POST)
     @ResponseBody
     public Result passDone(@PathVariable @Nullable String gid) {
         try {

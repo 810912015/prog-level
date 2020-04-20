@@ -54,7 +54,7 @@ public class JwtTokenUtil {
         try {
             claims = Jwts.parser()
                     .setSigningKey(secret)
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(token.substring(2))
                     .getBody();
         } catch (Exception e) {
             LOGGER.info("JWT格式验证失败:{}",token);
@@ -123,23 +123,15 @@ public class JwtTokenUtil {
     /**
      * 根据用户信息生成token
      */
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+        claims.put(CLAIM_KEY_USERNAME, userName);
         claims.put(CLAIM_KEY_USER_A_ID, UUID.randomUUID().toString());
         claims.put(CLAIM_KEY_CREATED, new Date());
-        return generateToken(claims);
+        String prefix=StringUtils.isEmpty(userName)?"00":"01";
+        return  prefix+generateToken(claims);
     }
-    /**
-     * 根据用户信息生成token
-     */
-    public String generateToken() {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(CLAIM_KEY_USERNAME, "");
-        claims.put(CLAIM_KEY_USER_A_ID, UUID.randomUUID().toString());
-        claims.put(CLAIM_KEY_CREATED, new Date());
-        return generateToken(claims);
-    }
+
     /**
      * 判断token是否可以被刷新
      */

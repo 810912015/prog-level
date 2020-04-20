@@ -4,6 +4,12 @@ import com.pl.admin.component.JwtAuthenticationTokenFilter;
 import com.pl.admin.component.RestAuthenticationEntryPoint;
 import com.pl.admin.component.RestfulAccessDeniedHandler;
 
+import com.pl.admin.dto.AuthDto;
+import com.pl.admin.dto.Result;
+import com.pl.admin.dto.UUserDetails;
+import com.pl.data.mapper.UUserMapper;
+import com.pl.data.model.UUser;
+import com.pl.data.model.UUserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +22,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +33,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -41,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    @Autowired
+    UUserMapper userMapper;
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -95,12 +106,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
         return username -> {
-//            UmsAdmin admin = adminService.getAdminByUsername(username);
-//            if (admin != null) {
-//                List<UmsPermission> permissionList = adminService.getPermissionList(admin.getId());
-//                return new AdminUserDetails(admin,permissionList);
-//            }
-            throw new UsernameNotFoundException("用户名或密码错误");
+            UUserExample ue=new UUserExample();
+            ue.createCriteria().andEmailEqualTo(username);
+            List<UUser> ul=userMapper.selectByExample(ue);
+            if(ul==null||ul.isEmpty()) {
+                throw new UsernameNotFoundException("用户名或密码错误");
+            }
+            UUser u=ul.get(0);
+            return new UUserDetails(u);
         };
     }
 

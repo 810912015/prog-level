@@ -61,13 +61,19 @@ public class QuestionServiceImpl implements QuestionService {
     public Engine.ExecuteResult pass(Pass p) {
         try {
             Engine je =ep.getByLang(p.getLang().toLowerCase());
+            if(je==null){
+                return new Engine.ExecuteResult(new Engine.Result(false, "未能找到"+p.getLang()+"编译环境"),null);
+            }
             Engine.Result cr= je.compile(p.getSource());
+
             ValidationExample ve=new ValidationExample();
             ve.createCriteria().andQidEqualTo(p.getId());
             List<Validation> vl=vm.selectByExample(ve);
             List<Engine.Result> rr=new ArrayList<>();
-            int i=0;
 
+            Engine.Result t0=je.execute(new String[]{});
+            rr.add(t0);
+            int i=1;
             for(Validation v :vl){
                 String si=v.getInput();
                 Engine.Result tr=je.execute(new String[]{si});
@@ -83,6 +89,9 @@ public class QuestionServiceImpl implements QuestionService {
             for(Pass pv:prr){
                 if(pv.getUid()==null){
                     pv.setUid(-1);
+                }
+                if(pv.getEid()==null){
+                    pv.setEid(-1);
                 }
                 prm.insert(pv);
             }
@@ -114,7 +123,9 @@ public class QuestionServiceImpl implements QuestionService {
         Pass v=new Pass();
         v.setGroupid(gid);
         v.setId(0);
-        v.setEid((int)p.getEid());
+        if(p.getEiid()!=null) {
+            v.setEid((int) p.getEid());
+        }
         v.setQid(p.getId());
         v.setDclt(new Date());
         v.setSource(p.getSource());
@@ -145,8 +156,8 @@ public class QuestionServiceImpl implements QuestionService {
             truncateOutput(v);
             r.add(v);
         }
-        if(er.getTest()!=null&&!er.getTest().isEmpty()){
-            for(int i=0;i<er.getTest().size();i++){
+        if(er.getTest()!=null&&er.getTest().size()>1){
+            for(int i=1;i<er.getTest().size();i++){
                 Engine.Result t=er.getTest().get(i);
                 Validation tv=vl.get(i);
                 Pass v=make(p,er.getGid());

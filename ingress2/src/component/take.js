@@ -1,9 +1,8 @@
 import React,{useState,useEffect} from "react";
-import {Row,Col,Affix,Button} from "antd"
+import {Row,Col,Affix,Button,Drawer,message,Tabs} from "antd"
 import {post} from "./common/network";
 import ReactHtmlParser from 'react-html-parser'
 import {MultiLangEditor} from "./common/CoderEditor";
-import {Link} from "react-router-dom";
 
 export function getSourceObjFromArray(list) {
     let so={}
@@ -14,12 +13,51 @@ export function getSourceObjFromArray(list) {
     return so;
 }
 
+export function AResult(props) {
+    return (
+       <div>
+           <div>{props.tip}{props.success?"成功":"失败"}</div>
+           <pre>{props.msg}</pre>
+       </div>
+    )
+}
+
+export function Results(props) {
+    let r;
+    if(props.test&&props.test.length>0){
+        r=(
+            <>
+                <div>执行</div>
+                {
+                    props.test.map((a,i)=><AResult {...a} tip={i} key={i}/>)
+                }
+            </>
+        )
+    }
+    let c;
+    if(props.compile){
+        c=(
+            <>
+                <AResult {...props.compile} tip={"编译"}/>
+                </>
+        )
+    }
+    return (
+        <>
+            {c}
+            {r}
+        </>
+    )
+}
+
 export function Take(props) {
     const [item,setItem]=useState({id:props.match.params.id||props.id||0})
     const [so,setSo]=useState({})
     const [cur,setCur]=useState({})
     const [lw,setLw]=useState({})
     const [qid,setQid]=useState(parseInt(props.match.params.id)||props.id||0)
+    const [cr,setCr]=useState({})
+    const [show,setShow]=useState(false)
     useEffect(()=>{
         let id=qid;
         post("/question/get/"+id,{},
@@ -31,6 +69,7 @@ export function Take(props) {
                 let so=getSourceObjFromArray(d.s);
                 setCur({
                     skeleton:d.s[0].source,
+                    lang:d.s[0].lang,
                     l:d.s[0].lang
                 })
                setItem(d.q)
@@ -46,7 +85,28 @@ export function Take(props) {
     }
     const change=(e,l)=>{
         setCur({ skeleton:e,
-            lang:l})
+            lang:l,l:l})
+        console.log("change",e,l,cur)
+    }
+    const compile=()=>{
+        let payload={...item}
+
+        payload.lang=cur.lang||cur.l;
+        payload.source=cur.skeleton
+        console.log(cur,so,payload)
+        post("/exam/pass",payload,(d)=>{
+            console.log(JSON.stringify(d))
+            setCr(d)
+            setShow(true)
+        })
+    }
+    const save=()=>{
+        post("/exam/done/"+cr.gid,{},(d)=>{
+            message.info(d.msg)
+        })
+    }
+    const changeTab=(k)=>{
+        console.log("change tab",k)
     }
     let leftWidth=(lw.w||window.innerWidth/2)+"px"
     let rightWidth=((window.innerWidth-lw.w-10)||window.innerWidth/2-10)+"px"
@@ -60,16 +120,38 @@ export function Take(props) {
         props.history.push("/pass/"+fn)
     }
     let height=window.innerHeight -80;
+    let lb;
+
+    if(cr.compile&&!show){
+        lb=(
+            <Button type={"link"} onClick={()=>setShow(true)}>最近</Button>
+        )
+    }
+    let sb;
+    if(cr.gid){
+        sb=(
+           <Button type={"link"} onClick={save}>{"保存"}</Button>
+       )
+    }
     return (
         <div>
             <div className={"my-row"}>
                 <div className={"no-scrollbar"}
                      style={{paddingLeft:"10px",width:leftWidth,height:height,overflowY:"auto"}}>
-                    {item.id}
-                    <span>{item.name}</span>
-                    <div>
-                        {ReactHtmlParser(item.title)}
-                    </div>
+                    <Tabs defaultActiveKey="1" onChange={changeTab}>
+                        <Tabs.TabPane tab="题目详情" key="1">
+                            {item.id}
+                            <span>{item.name}</span>
+                            <div>
+                                {ReactHtmlParser(item.title)}
+                            </div>
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="我的提交" key="2">
+                            Content of Tab Pane 2
+                        </Tabs.TabPane>
+
+                    </Tabs>
+
                 </div>
                 <div className={"my-gutter"}
                      onDrag={(e)=>{
@@ -123,6 +205,18 @@ export function Take(props) {
                     />
                 </div>
             </div>
+            <Drawer
+                title="运行结果"
+                placement={window.innerWidth<800?"bottom":"left"}
+                closable={true}
+                onClose={()=>{setShow(false)}}
+                visible={show}
+                mask={false}
+                height={400}
+                width={window.innerWidth/2-5}
+            >
+               <Results {...cr}/>
+            </Drawer>
             <Affix  offsetBottom={0}>
                 <div className={"bottom-bar"}>
                     <div style={{flex:1,display:"flex",alignItems:"center",paddingRight:"15px"}}>
@@ -135,9 +229,10 @@ export function Take(props) {
 
                     <div style={{flex:1,display:"flex",alignItems:"center",paddingLeft:"15px"}}>
                         <div style={{flex:4}}/>
-                        <Button>编译运行</Button>
-                        <div style={{width:"30px"}}/>
-                        <Button>保存</Button>
+                        <Button type={"primary"} onClick={compile}>运行</Button>
+                        {lb}
+                        <div style={{width:"6px"}}/>
+                        {sb}
                         <div style={{flex:4}}/>
                     </div>
                 </div>

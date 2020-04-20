@@ -1,19 +1,28 @@
 import React from 'react'
-import {Layout} from "antd";
+import {Layout,Button,message} from "antd";
 import {Link} from "react-router-dom";
 import {QuestionContext} from "./context";
-import {Bi} from "./common/busy-indicator";
+import {LogoutOutlined,LoginOutlined,RetweetOutlined} from "@ant-design/icons";
+import {post} from "./common/network";
 
 
 function Tb(props) {
+    const logout=()=>{
+       post("/auth/logout",{},(d)=>{
+           message.info("已注销")
+           props.setLoginName("")
+       })
+    }
     let c;
     if(props.loginName){
-        c= (<>{props.loginName}</>)
+        c= (<>{props.loginName}
+        <Button type={"link"} onClick={logout} title={"注销"}><LogoutOutlined /></Button>
+        </>)
     }else{
         c=(
             <>
-            <Link to={"/login"}>登录</Link>
-            <Link to={"/register"} style={{marginLeft:"20px"}}>注册</Link>
+            <Link to={"/login"} title={"登录"}><LoginOutlined/></Link>
+            <Link to={"/register"} style={{marginLeft:"20px"}} title={"注册"}><RetweetOutlined/></Link>
                 </>
         )
     }

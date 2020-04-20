@@ -12,7 +12,11 @@ busy.set = function (b) {
 export const authHeader={
     key:"authorization",
     setStr:(str)=>{
+       console.log("set authorization",str)
        window.localStorage.setItem(authHeader.key,str)
+        if(str&&str.startsWith("00")){
+            authHeader.setName("")
+        }
     },
     getStr:()=>{
         return window.localStorage.getItem(authHeader.key)
@@ -27,6 +31,7 @@ busy.register = (f) => {
     busy.cba.push(f);
 }
 const redirect=(res,m)=>{
+    console.log("ah",res.headers,res.headers.has(authHeader.key))
     if(res.headers.has(authHeader.key)){
         authHeader.setStr(res.headers.get(authHeader.key))
     }
