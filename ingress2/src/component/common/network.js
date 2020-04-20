@@ -9,9 +9,18 @@ busy.set = function (b) {
     }
 }
 
-const authHeader={
+export const authHeader={
     key:"authorization",
-    str:""
+    setStr:(str)=>{
+       window.localStorage.setItem(authHeader.key,str)
+    },
+    getStr:()=>{
+        return window.localStorage.getItem(authHeader.key)
+    },
+    setName:(name)=>{
+        window.localStorage.setItem("name",name)
+    },
+    getName:()=>window.localStorage.getItem("name")
 }
 
 busy.register = (f) => {
@@ -19,7 +28,7 @@ busy.register = (f) => {
 }
 const redirect=(res,m)=>{
     if(res.headers.has(authHeader.key)){
-        authHeader.str=res.headers.get(authHeader.key)
+        authHeader.setStr(res.headers.get(authHeader.key))
     }
     if(res.redirected){
         let u=res.url.replace(".jsp",".html");
@@ -30,12 +39,11 @@ const redirect=(res,m)=>{
 }
 export const get=(url,success,fail)=>{
     busy.set(true)
-    console.log("get",authHeader)
     fetch(url,{
         method:'GET',
         headers: new Headers({
             'Content-Type': 'application/json',
-            [authHeader.key]:authHeader.str
+            [authHeader.key]:authHeader.getStr()
         })
     }).then(res=>{
         return redirect(res,"get")
@@ -57,7 +65,7 @@ export const post = (url,data,success,fail) => {
         body: JSON.stringify(data),
         headers: new Headers({
             'Content-Type': 'application/json',
-            [authHeader.key]:authHeader.str
+            [authHeader.key]:authHeader.getStr()
         })
     }).then(res => {
         return redirect(res,'post')
@@ -81,7 +89,7 @@ export const upload = function (url, file, success, fail) {
         method: 'POST',
         body: filedata,
         headers:new Headers({
-            [authHeader.key]:authHeader.str
+            [authHeader.key]:authHeader.getStr()
         })
     }).then(res =>{
         return redirect(res,"upload")

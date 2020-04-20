@@ -4,6 +4,8 @@ export const QuestionContext=React.createContext({
     list:[],
     setList:()=>{},
     loginName:null,
-    setLoginName:()=>{}
+    setLoginName:()=>{},
+    busy:false,
+    setBusy:()=>{}
 })
 

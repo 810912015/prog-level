@@ -7,19 +7,30 @@ import {Ing} from "./component/index-main";
 import {QuestionContext,questionStore} from "./component/context";
 import {Take} from "./component/take";
 import {TitleBar} from "./component/title-bar";
+import {authHeader,busy} from "./component/common/network";
+import {Bi} from "./component/common/busy-indicator"
 
 class App extends Component {
     state={
         list:[],
         setList:(d)=>this.setState({list:d}),
-        loginName:null,
-        setLoginName:(n)=>this.setState({loginName:n}),
+        loginName:authHeader.getName(),
+        setLoginName:(n)=>{
+            authHeader.setName(n)
+            this.setState({loginName:n})
+        },
+        busy:false,
+        setBusy:(b)=>{
+            this.setState({busy:b})
+        },
         height:0
     }
+
      resize=()=>{
         this.setState({height:window.innerHeight-50})
      }
      componentDidMount() {
+         busy.register(this.state.setBusy)
         this.setState({height:window.innerHeight-50})
         window.addEventListener("resize",this.resize)
      }
@@ -37,7 +48,9 @@ class App extends Component {
                         <Layout.Header style={{backgroundColor:"#eee"}}>
                             <TitleBar/>
                         </Layout.Header>
+                        <Bi/>
                     </Affix>
+
                     <Layout.Content style={{minHeight:h}}>
                         <Ing/>
                     </Layout.Content>

@@ -2,6 +2,7 @@ import React from 'react'
 import {Layout} from "antd";
 import {Link} from "react-router-dom";
 import {QuestionContext} from "./context";
+import {Bi} from "./common/busy-indicator";
 
 
 function Tb(props) {
@@ -17,6 +18,7 @@ function Tb(props) {
         )
     }
    return (
+
        <div style={{display:"flex"}}>
            <div  className={"main-brand"}>
                <a href={"#"}> 分码网</a>
@@ -29,6 +31,7 @@ function Tb(props) {
               {c}
            </div>
        </div>
+
    )
 }
 

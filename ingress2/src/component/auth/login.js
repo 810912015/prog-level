@@ -32,7 +32,6 @@ function Login2(props) {
     const finish=values=>{
         post("/auth/login",{name:values.name,pwd:values.pwd,kapcha:""},(d)=>{
             if(d.success){
-                console.log(d)
                 props.setLoginName(d.data.uname);
                 props.history.push("/")
             }else{
