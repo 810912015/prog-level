@@ -50,6 +50,37 @@ export function Results(props) {
     )
 }
 
+export function PassResultItem(props) {
+    return (
+        <div style={{}} key={props.id}>
+            <div style={{display:"flex",borderBottom:"1px solid #d50"}}>
+                <span style={{flex:1}}>{props.remarks==="F"?"编译":"执行"}</span>
+                <span style={{flex:1}}>{props.qid}</span>
+                <span style={{flex:1}}>{props.lang}</span>
+                <span style={{flex:5}}>{props.dclt}</span>
+            </div>
+            <div >
+                <pre className={"no-scrollbar"}>{props.source}</pre>
+                <pre  className={"no-scrollbar"}>{props.output}</pre>
+            </div>
+
+        </div>
+    )
+}
+
+export function Prs(props) {
+    if(!props.items||props.items.length<1) {
+        return null;
+    }
+    return (
+        <>
+            {props.items.map((a)=>{
+                return (<PassResultItem {...a}/>)
+            })}
+            </>
+    )
+}
+
 export function Take(props) {
     const [item,setItem]=useState({id:props.match.params.id||props.id||0})
     const [so,setSo]=useState({})
@@ -153,7 +184,7 @@ export function Take(props) {
                             </div>
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="我的提交" key="2">
-                            {JSON.stringify(pass)}
+                            {<Prs items={pass}/>}
                         </Tabs.TabPane>
 
                     </Tabs>
