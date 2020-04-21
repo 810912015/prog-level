@@ -54,9 +54,8 @@ class App extends Component {
                     </Layout.Content>
                 </HashRouter>
                 <Layout.Footer style={{padding:0}}>
-                    <div style={{textAlign:"center",backgroundColor:"#888",color:"#eee",padding:"10px"}}>
-                        <div className={"space"}>上海信息科技有限公司</div>
-                        <div className={"space"}>沪icp备45862号</div>
+                    <div style={{textAlign:"center",backgroundColor:"#888",color:"#eee",padding:"2px"}}>
+                        <div className={"space"}>分码网 编程入门社区 联系请邮件810912015@qq.com</div>
                     </div>
                 </Layout.Footer>
             </Layout>
