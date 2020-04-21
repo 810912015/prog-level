@@ -13,6 +13,8 @@
         <module>common</module>
         <module>mbg</module>
         <module>admin</module>
+        <module>search</module>
+        <module>portal</module>
     </modules>
 
     <parent>

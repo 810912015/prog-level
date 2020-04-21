@@ -6,15 +6,12 @@ package com.pl.admin.controller;
 import com.google.common.base.Throwables;
 import com.pivot.json.AntlrJsonBuilder;
 import com.pivot.json.JsonBuilder;
-import com.pl.admin.dao.AuthMapper;
 import com.pl.admin.dto.*;
 import com.pl.admin.service.AuthService;
-import com.pl.admin.service.Notifier;
 import com.pl.admin.util.JwtTokenUtil;
 import com.pl.data.mapper.UUserMapper;
 import com.pl.data.model.UUser;
 
-import com.pl.data.redis.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -27,26 +24,18 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import javax.annotation.Resource;
-import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URI;
-import java.nio.file.Path;
-import java.time.Duration;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Controller
 @Api(tags = "Auth2Controller",description = "Auth2Controller api")
 @RequestMapping("/auth")
 public class Auth2Controller extends BaseController {
-    private static Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private static Logger logger = LoggerFactory.getLogger(Auth2Controller.class);
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @ApiOperation(value = "login")
@@ -151,40 +140,13 @@ public class Auth2Controller extends BaseController {
             return new Result<>(false, "保存失败", null);
         }
     }
-    @ApiOperation(value = "profile")
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    @ResponseBody
-    public Result<ProfileDto> getProfile() {
-        try {
-            long uid = curUser().getId();
-            UUser u = um.selectByPrimaryKey(uid);
-            return new Result<>(true, "", new ProfileDto(u));
-        } catch (Exception e) {
-            logger.error(Throwables.getStackTraceAsString(e));
-            return new Result<>(false, "请重新登录", new ProfileDto());
-        }
-    }
-    @ApiOperation(value = "profile-set")
-    @RequestMapping(value = "/profile-set", method = RequestMethod.POST)
-    @ResponseBody
-    public Result setProfile(@RequestBody ProfileDto d) {
-        long uid = curUser().getId();
-        if (uid == 0) {
-            return new Result(false, "请重新登录");
-        }
-        int i = am.updateProfile(d, uid);
-        return new Result(i > 0, i > 0 ? "成功" : "失败");
-    }
+
+
 
     private AuthService as;
-    private Notifier notifier;
-    private UUserMapper um;
-    private AuthMapper am;
 
-    @Autowired
-    public void setAm(AuthMapper am) {
-        this.am = am;
-    }
+    private UUserMapper um;
+
 
     @Autowired
     public void setUm(UUserMapper um) {

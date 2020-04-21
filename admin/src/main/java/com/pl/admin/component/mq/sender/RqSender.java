@@ -1,6 +1,6 @@
 package com.pl.admin.component.mq.sender;
 
-import com.pl.admin.service.Json;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;

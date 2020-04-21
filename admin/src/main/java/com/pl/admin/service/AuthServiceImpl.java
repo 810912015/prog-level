@@ -126,13 +126,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Result sendRegister(String email) {
         try {
-            String s = UUID.randomUUID().toString().substring(0, 5);
-
-            Result r = notifier.sendRegister(email, "", s);
-            if (r.isSuccess()) {
-                redisService.set(makeEmailRedisKey(email),s, Duration.ofMinutes(10));
-            }
-            return new Result(r.isSuccess(), r.isSuccess() ? "发送成功" : "发送失败");
+            return null;
         } catch (Exception e) {
             logger.error(e.getMessage() + Throwables.getStackTraceAsString(e));
             return new Result<>(e.getMessage());
@@ -152,8 +146,7 @@ public class AuthServiceImpl implements AuthService {
     public void setUm(UUserMapper um) {
         this.um = um;
     }
-    @Autowired
-    private Notifier notifier;
+
     @Autowired
     private RedisService redisService;
 }

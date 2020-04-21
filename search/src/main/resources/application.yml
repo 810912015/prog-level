@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: dev-localhost #默认为开发环境
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+server:
+  port: 8082
+
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
+
+logging:
+  level:
+    root: info
+    com.cooee.reader: debug
+
+
+
