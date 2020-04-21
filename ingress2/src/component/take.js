@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from "react";
-import {Row,Col,Affix,Button,Drawer,message,Tabs} from "antd"
+import {Affix,Button,Drawer,message,Tabs} from "antd"
 import {post} from "./common/network";
 import ReactHtmlParser from 'react-html-parser'
 import {MultiLangEditor} from "./common/CoderEditor";

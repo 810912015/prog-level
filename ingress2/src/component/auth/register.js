@@ -207,7 +207,7 @@ export const Register= (props) => {
                 {...tailFormItemLayout}
             >
                 <Checkbox>
-                    已阅读并同意 <a href="">服务协议</a>
+                    已阅读并同意 <a >服务协议</a>
                 </Checkbox>
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>

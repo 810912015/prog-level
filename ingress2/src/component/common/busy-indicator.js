@@ -1,5 +1,4 @@
 import React, {useRef, useState,useEffect} from 'react'
-import {Commence} from "./commence";
 import {Progress} from "antd";
 import {QuestionContext} from "../context";
 

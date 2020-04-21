@@ -1,11 +1,9 @@
-import React, { Component ,useEffect,useState} from 'react';
-import {Button, Col, Layout, Row,Affix} from 'antd';
+import React, { Component } from 'react';
+import { Layout, Affix} from 'antd';
 import './App.css';
-import {QuestionBag, RecommendBag, TagBag} from "./component/question";
-import {HashRouter, Route,withRouter,Link} from "react-router-dom";
+import {HashRouter} from "react-router-dom";
 import {Ing} from "./component/index-main";
-import {QuestionContext,questionStore} from "./component/context";
-import {Take} from "./component/take";
+import {QuestionContext} from "./component/context";
 import {TitleBar} from "./component/title-bar";
 import {authHeader,busy} from "./component/common/network";
 import {Bi} from "./component/common/busy-indicator"

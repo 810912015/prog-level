@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import {post,get} from "./common/network";
 import {Link} from "react-router-dom";
 import {Badge,Card,Input} from "antd";
-import {DesktopOutlined,UnorderedListOutlined} from "@ant-design/icons";
+import {DesktopOutlined} from "@ant-design/icons";
 import {QuestionContext} from "./context";
 
 function RecommendItem(props) {
@@ -77,7 +77,13 @@ export function TagBag(){
 }
 
 function AQuestion(props) {
-    let s=props.lang==="简单"?"#558":props.lang==="中等"?"#585":"#855";
+    let level;
+    if(!props.lang){
+        level=props.level>3?"困难":props.level<3?"简单":"中等"
+    }else{
+        level=props.lang;
+    }
+    let s=level==="简单"?"#558":level==="中等"?"#585":"#855";
 
     return (
         <span style={{padding:"0 20px",display:"inline-block",lineHeight:"30px"}}>
@@ -87,7 +93,7 @@ function AQuestion(props) {
                       </Link>
          </span>
             <span style={{marginLeft:"10px",display:"inline-block"}}>
-                 <Badge count={props.lang}   offset={[0,-10]} style={{backgroundColor:s}}/>
+                 <Badge count={level}   offset={[0,-10]} style={{backgroundColor:s}}/>
             </span>
 
         </span>
@@ -98,6 +104,7 @@ function AQuestion(props) {
 
 
 export function QuestionBag(props) {
+    const [sk,setSk]=useState("")
     useEffect(()=>{
         getData({size:100})
         return ()=>{
@@ -125,6 +132,17 @@ export function QuestionBag(props) {
         })
         getData(bound)
     }
+    const search=()=>{
+        if(!sk) {
+            getData(100)
+        }else {
+            get("/s/search?s=100&&k=" + sk, (d) => {
+                if (d && d.data && d.data.content) {
+                    props.setList(d.data.content)
+                }
+            })
+        }
+    }
     let qa=[]
     if(props.list){
         qa=props.list.map(a=>(<AQuestion {...a} key={a.id}/>))
@@ -134,7 +152,10 @@ export function QuestionBag(props) {
             <div style={{display:"flex"}}>
                 <DesktopOutlined />
                 <span>习题列表</span>
-                <Input.Search style={{marginLeft:"30px",flex:1}}/>
+                <Input.Search onSearch={search}
+                              onChange={(e)=>{
+                    setSk(e.target.value)
+                }} style={{marginLeft:"30px",flex:1}}/>
             </div>
         }>
             {qa}

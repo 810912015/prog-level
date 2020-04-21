@@ -1,8 +1,8 @@
-import React,{useState,useEffect} from 'react'
+import React from 'react'
 import {TagBag,QuestionBag,RecommendBag} from "./question";
 import {Row,Col} from 'antd'
 import {QuestionContext} from "./context";
-import {HashRouter, Route,withRouter,Switch} from 'react-router-dom'
+import {Route,Switch} from 'react-router-dom'
 import {Take} from "./take";
 import {Login} from "./auth/login";
 import {Register} from "./auth/register";

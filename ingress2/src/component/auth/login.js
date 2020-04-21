@@ -1,8 +1,6 @@
-import React, {useEffect, useState,useRef} from 'react'
+import React, { useState} from 'react'
 import {Form,Input,Button,Checkbox,Row,Col} from "antd";
 import {post} from "../common/network";
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import {Commence} from "../common/commence";
 import {QuestionContext} from "../context";
 
 export function CenterBox(props) {

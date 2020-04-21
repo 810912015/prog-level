@@ -1,5 +1,5 @@
 import React from 'react'
-import {Layout,Button,message} from "antd";
+import {Button,message} from "antd";
 import {Link} from "react-router-dom";
 import {QuestionContext} from "./context";
 import {LogoutOutlined,LoginOutlined,RetweetOutlined} from "@ant-design/icons";
