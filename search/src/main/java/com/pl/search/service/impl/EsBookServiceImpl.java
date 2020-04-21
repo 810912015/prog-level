@@ -153,17 +153,14 @@ public class EsBookServiceImpl implements EsBookService {
 
     private RedisService redisService;
 
-    private SearchIndex si;
+
 
     @Autowired
     public void setRedisService(RedisService redisService) {
         this.redisService = redisService;
     }
 
-    @Autowired
-    public void setSi(SearchIndex si) {
-        this.si = si;
-    }
+
     @Autowired
     private QueryMaker queryMaker;
 }

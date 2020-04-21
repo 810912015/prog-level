@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
-
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.pl")
 public class SearchApplication {
 
     public static void main(String[] args) {

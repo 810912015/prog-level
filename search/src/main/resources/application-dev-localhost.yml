@@ -21,7 +21,7 @@ spring:
 #    password: admin
     publisher-confirms: true #如果对异步消息需要回调必须设置为true
   datasource:
-    url: jdbc:mysql://localhost:3306/reader?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/wpd?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: root
     druid:

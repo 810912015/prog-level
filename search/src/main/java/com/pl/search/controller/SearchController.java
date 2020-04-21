@@ -95,25 +95,19 @@ public class SearchController {
     @RequestMapping(value = "/hot", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<Set<String>> hot(Integer type) {
-        if(type==null) type=0;
-        Set<String> esProductPage = si.hot(type);
-        return CommonResult.success(esProductPage);
+        return null;
     }
     @ApiOperation(value = "搜索热词,参数:0-日,1-周,2-月,3-总")
     @RequestMapping(value = "/hot2", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<List<EsBookService.HotKey>> hot2(Integer type) {
-        if(type==null) type=0;
-        List<EsBookService.HotKey> esProductPage = si.hot2(type);
-        return CommonResult.success(esProductPage);
+       return null;
     }
     @ApiOperation(value = "搜索书籍,参数:0-日,1-周,2-月,3-总")
     @RequestMapping(value = "/hotbooks", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<List<EsBook.Scored>> hotBook(Integer type) {
-        if(type==null) type=0;
-        List<EsBook.Scored> esProductPage = si.hotBooks(type);
-        return CommonResult.success(esProductPage);
+       return null;
     }
 
     @ApiOperation(value = "根据id推荐书籍")
@@ -134,6 +128,5 @@ public class SearchController {
     }
     @Autowired
     private EsOperator esOperator;
-    @Autowired
-    private SearchIndex si;
+
 }

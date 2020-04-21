@@ -91,6 +91,10 @@ docker run -p 9200:9200 -p 9300:9300 --name elasticsearch \
 -v /mydata/elasticsearch/plugins:/usr/share/elasticsearch/plugins \
 -v /mydata/elasticsearch/data:/usr/share/elasticsearch/data \
 -d elasticsearch:6.4.0
+
+###使用7.6.2
+docker run -d --name es --net bridge -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.6.2
+
 ### 测试
 访问会返回版本信息：http://192.168.1.66:9200/
 ### 安装目录位置
@@ -106,6 +110,8 @@ docker run -p 9200:9200 -p 9300:9300 --name elasticsearch \
     - 访问header插件：打开地址http://192.168.1.66:9200/_plugin/head/ 
     - 选择复合查询，输入地址：POST:http://192.168.1.66:9200/_analyze 
     - 输入参数：JSON:{"analyzer":"ik","text":"我们是大数据开发人员"}
+
+
 
 ## mongodb安装
 ### 下载镜像文件
