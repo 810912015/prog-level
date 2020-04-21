@@ -45,8 +45,11 @@ public class Result<T> {
         this.msg = msg;
     }
 
-    public static <T> Result success(T data){
+    public static <T> Result<T> success(T data){
         return new Result(true,"",data);
+    }
+    public static Result success(){
+        return new Result(true,"");
     }
     public static Result failed(String m){
         return new Result(m);

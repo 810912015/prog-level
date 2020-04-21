@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -41,12 +42,8 @@ public class HttpUtil {
     }
 
     public static String postJson(String url, String json) {
-        StringEntity s = null;
-        try {
-            s = new StringEntity(json);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        //这里要指定编码，否则某些情况下会乱码导致服务器识别失败
+        StringEntity s = new StringEntity(json,"utf-8");
         s.setContentEncoding("UTF-8");
         s.setContentType("application/json");
         return post(url, s);

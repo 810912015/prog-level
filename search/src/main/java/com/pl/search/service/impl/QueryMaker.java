@@ -20,12 +20,7 @@ public class QueryMaker implements IQueryMaker {
     static final Map<String,Integer> score=new HashMap<>();
     static {
         score.put("name",128);
-        score.put("author",64);
-        score.put("name1",32);
-        score.put("author1",16);
-        score.put("keywords",8);
-        score.put("category",4);
-        score.put("brief",2);
+        score.put("title",64);
     }
     FunctionScoreQueryBuilder.FilterFunctionBuilder mkPhaseBuilder(String field, String keyword, int factor){
         int s=score.get(field)*factor;
@@ -34,9 +29,6 @@ public class QueryMaker implements IQueryMaker {
     }
     FunctionScoreQueryBuilder.FilterFunctionBuilder mkMatchBuilder(String field,String keyword,int factor){
         String f=field;
-        if(f.equals("name")||f.equals("author")){
-            f=f+"1";
-        }
         int s=score.get(f)*factor;
         return new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.matchQuery(field, keyword).analyzer("ik_max_word"),
                 ScoreFunctionBuilders.weightFactorFunction(s));
@@ -47,15 +39,12 @@ public class QueryMaker implements IQueryMaker {
             t=10;
         }
         l.add(mkPhaseBuilder("name",k,t*10));
-        l.add(mkPhaseBuilder("author",k,t*10));
+        l.add(mkPhaseBuilder("title",k,t*10));
         for(int i=0;i<t;i++) {
             String keyword=sl.get(i);
             int factor=t-i;
             l.add(mkMatchBuilder("name",keyword,factor));
-            l.add(mkMatchBuilder("author",keyword,factor));
-            l.add(mkMatchBuilder("brief",keyword,factor));
-            l.add(mkMatchBuilder("category",keyword,factor));
-            l.add(mkMatchBuilder("keywords",keyword,factor));
+            l.add(mkMatchBuilder("title",keyword,factor));
         }
     }
 
@@ -75,8 +64,6 @@ public class QueryMaker implements IQueryMaker {
             }
             if(id!=null) {
                 l.add( new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.termQuery("id", id),
-                        ScoreFunctionBuilders.weightFactorFunction(8)));
-                l.add( new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.termQuery("bookid", id),
                         ScoreFunctionBuilders.weightFactorFunction(8)));
             }
         });

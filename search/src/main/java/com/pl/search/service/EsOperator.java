@@ -1,10 +1,8 @@
 package com.pl.search.service;
-
-
+import com.pl.data.common.api.Caller;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 
 import java.util.Collections;
 import java.util.List;
@@ -16,16 +14,15 @@ public class EsOperator {
     private String es;
     public List<String> analyze(String s){
         try {
-//            IQueryMaker.Aq q = new IQueryMaker.Aq();
-//            q.setAnalyzer("ik_max_word");
-//            q.setText(s);
-//            String url=es+"/_analyze";
-//            IQueryMaker.Ar ar = Caller.byPostJson(url,q, IQueryMaker.Ar.class);
-//            List<String> tl=ar.getTokens().stream().map(a->a.getToken()).collect(Collectors.toList());
+            IQueryMaker.Aq q = new IQueryMaker.Aq();
+            q.setAnalyzer("ik_max_word");
+            q.setText(s);
+            String url=es+"/pl-question/_analyze";
+            IQueryMaker.Ar ar = Caller.byPostJson(url,q, IQueryMaker.Ar.class);
+            List<String> tl=ar.getTokens().stream().map(a->a.getToken()).collect(Collectors.toList());
 //            Collections.reverse(tl);
 //            tl.sort((a1,a2)->a2.length()-a1.length());
-//            return tl;
-            return null;
+            return tl;
         }catch (Exception e){
             LoggerFactory.getLogger(getClass()).error("analyze",e);
             return null;
