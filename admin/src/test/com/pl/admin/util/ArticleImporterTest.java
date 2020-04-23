@@ -3,23 +3,22 @@ package com.pl.admin.util;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockServletContext;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class SpiderDataImporterTest {
+class ArticleImporterTest {
 
     @Autowired
-    SpiderDataImporter sdi;
+    private ArticleImporter ai;
     @Test
-    void handle() {
-        sdi.handle();
-    }
-
-    @Test
-    void sub(){
-        String f="123.abc";
-        String r=f.substring(f.indexOf(".")+1);
-        assertEquals("abc",r);
+    void save() {
+        List<ArticleImporter.Item> il=ai.read();
+        assertNotNull(il);
+        ai.save(il);
+        assertNotNull(ai);
     }
 }

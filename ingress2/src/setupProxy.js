@@ -21,4 +21,9 @@ module.exports=function (app) {
             target:"http://localhost:8082"
         })
     )
+    app.use(
+        proxy("/admin/",{
+            target:"http://localhost:8081"
+        })
+    )
 }

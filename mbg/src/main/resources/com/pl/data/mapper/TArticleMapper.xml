@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pl.data.mapper.TArticleMapper">
+  <resultMap id="BaseResultMap" type="com.pl.data.model.TArticle">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="c_name" jdbcType="VARCHAR" property="cName" />
+    <result column="use_index" jdbcType="INTEGER" property="useIndex" />
+    <result column="use_level" jdbcType="INTEGER" property="useLevel" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+    <result column="source_url" jdbcType="VARCHAR" property="sourceUrl" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="dclt" jdbcType="TIMESTAMP" property="dclt" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pl.data.model.TArticle">
+    <result column="text" jdbcType="LONGVARCHAR" property="text" />
+    <result column="c_text" jdbcType="LONGVARCHAR" property="cText" />
+    <result column="html" jdbcType="LONGVARCHAR" property="html" />
+    <result column="c_html" jdbcType="LONGVARCHAR" property="cHtml" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, c_name, use_index, use_level, user_id, create_time, tag, source_url, remark, 
+    dclt
+  </sql>
+  <sql id="Blob_Column_List">
+    text, c_text, html, c_html
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.pl.data.model.TArticleExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.pl.data.model.TArticleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_article
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_article
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pl.data.model.TArticleExample">
+    delete from t_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pl.data.model.TArticle">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_article (name, c_name, use_index, 
+      use_level, user_id, create_time, 
+      tag, source_url, remark, 
+      dclt, text, c_text, 
+      html, c_html)
+    values (#{name,jdbcType=VARCHAR}, #{cName,jdbcType=VARCHAR}, #{useIndex,jdbcType=INTEGER}, 
+      #{useLevel,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{tag,jdbcType=VARCHAR}, #{sourceUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{dclt,jdbcType=TIMESTAMP}, #{text,jdbcType=LONGVARCHAR}, #{cText,jdbcType=LONGVARCHAR}, 
+      #{html,jdbcType=LONGVARCHAR}, #{cHtml,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pl.data.model.TArticle">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="cName != null">
+        c_name,
+      </if>
+      <if test="useIndex != null">
+        use_index,
+      </if>
+      <if test="useLevel != null">
+        use_level,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+      <if test="sourceUrl != null">
+        source_url,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="dclt != null">
+        dclt,
+      </if>
+      <if test="text != null">
+        text,
+      </if>
+      <if test="cText != null">
+        c_text,
+      </if>
+      <if test="html != null">
+        html,
+      </if>
+      <if test="cHtml != null">
+        c_html,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cName != null">
+        #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="useIndex != null">
+        #{useIndex,jdbcType=INTEGER},
+      </if>
+      <if test="useLevel != null">
+        #{useLevel,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceUrl != null">
+        #{sourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="dclt != null">
+        #{dclt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="text != null">
+        #{text,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="cText != null">
+        #{cText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="html != null">
+        #{html,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="cHtml != null">
+        #{cHtml,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pl.data.model.TArticleExample" resultType="java.lang.Long">
+    select count(*) from t_article
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_article
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cName != null">
+        c_name = #{record.cName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.useIndex != null">
+        use_index = #{record.useIndex,jdbcType=INTEGER},
+      </if>
+      <if test="record.useLevel != null">
+        use_level = #{record.useLevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.tag != null">
+        tag = #{record.tag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceUrl != null">
+        source_url = #{record.sourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dclt != null">
+        dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.text != null">
+        text = #{record.text,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.cText != null">
+        c_text = #{record.cText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.html != null">
+        html = #{record.html,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.cHtml != null">
+        c_html = #{record.cHtml,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update t_article
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      c_name = #{record.cName,jdbcType=VARCHAR},
+      use_index = #{record.useIndex,jdbcType=INTEGER},
+      use_level = #{record.useLevel,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      tag = #{record.tag,jdbcType=VARCHAR},
+      source_url = #{record.sourceUrl,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      text = #{record.text,jdbcType=LONGVARCHAR},
+      c_text = #{record.cText,jdbcType=LONGVARCHAR},
+      html = #{record.html,jdbcType=LONGVARCHAR},
+      c_html = #{record.cHtml,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_article
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      c_name = #{record.cName,jdbcType=VARCHAR},
+      use_index = #{record.useIndex,jdbcType=INTEGER},
+      use_level = #{record.useLevel,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      tag = #{record.tag,jdbcType=VARCHAR},
+      source_url = #{record.sourceUrl,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      dclt = #{record.dclt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pl.data.model.TArticle">
+    update t_article
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cName != null">
+        c_name = #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="useIndex != null">
+        use_index = #{useIndex,jdbcType=INTEGER},
+      </if>
+      <if test="useLevel != null">
+        use_level = #{useLevel,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceUrl != null">
+        source_url = #{sourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="dclt != null">
+        dclt = #{dclt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="text != null">
+        text = #{text,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="cText != null">
+        c_text = #{cText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="html != null">
+        html = #{html,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="cHtml != null">
+        c_html = #{cHtml,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.pl.data.model.TArticle">
+    update t_article
+    set name = #{name,jdbcType=VARCHAR},
+      c_name = #{cName,jdbcType=VARCHAR},
+      use_index = #{useIndex,jdbcType=INTEGER},
+      use_level = #{useLevel,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      tag = #{tag,jdbcType=VARCHAR},
+      source_url = #{sourceUrl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      dclt = #{dclt,jdbcType=TIMESTAMP},
+      text = #{text,jdbcType=LONGVARCHAR},
+      c_text = #{cText,jdbcType=LONGVARCHAR},
+      html = #{html,jdbcType=LONGVARCHAR},
+      c_html = #{cHtml,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pl.data.model.TArticle">
+    update t_article
+    set name = #{name,jdbcType=VARCHAR},
+      c_name = #{cName,jdbcType=VARCHAR},
+      use_index = #{useIndex,jdbcType=INTEGER},
+      use_level = #{useLevel,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      tag = #{tag,jdbcType=VARCHAR},
+      source_url = #{sourceUrl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      dclt = #{dclt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

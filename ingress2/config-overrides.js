@@ -1,6 +1,13 @@
 const { override, fixBabelImports,addLessLoader } = require('customize-cra');
 
+const ae=require('react-app-rewire-multiple-entry')([{
+    entry:"src/admin/index.js",
+    template:"public/admin.html",
+    outPath:"admin.html"
+}])
+
 module.exports=override(
+    ae.addMultiEntry,
     fixBabelImports('import',{
          libraryName:'antd',
          libraryDirectory:'es',
@@ -10,7 +17,7 @@ module.exports=override(
         javascriptEnabled:true,
         modifyVars: {
             '@primary-color': '#f50',
-            '@link-color': '#666', // 链接色
+            '@link-color': '#5a9', // 链接色
             '@success-color': '#52c41a', // 成功色
             '@warning-color': '#faad14', // 警告色
             '@error-color': '#f5222d', // 错误色

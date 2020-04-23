@@ -4,7 +4,10 @@
 
   通过执行命令实现：将源码保存，然后通过命令进行编译，执行，最后获取执行结果。
   
-
+2.多页支持
+  
+  依赖于react-app-rewire-multiple-entry，添加pulbic/下的模板->src下添加文件夹->config-overrides里添加入口
+  参考：http://blog.joylau.cn/2019/12/26/React-App-Rewired/
 
 #注意点
 
