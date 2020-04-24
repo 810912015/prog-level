@@ -21,6 +21,11 @@ public class ArticleImporter {
         private String n;
         private String html;
         private String text;
+        private String ctext;
+        private String cname;
+
+        public Item() {
+        }
 
         public String getL() {
             return l;
@@ -53,10 +58,25 @@ public class ArticleImporter {
         public void setText(String text) {
             this.text = text;
         }
+
+        public String getCtext() {
+            return ctext;
+        }
+
+        public void setCtext(String ctext) {
+            this.ctext = ctext;
+        }
+
+        public String getCname() {
+            return cname;
+        }
+
+        public void setCname(String cname) {
+            this.cname = cname;
+        }
     }
 
-    public List<Item> read(){
-        String s="D:\\proj\\ppt\\better-dev-20200423-1.txt";
+    public List<Item> read(String s){
         try {
             List<String> r= Files.readAllLines(Paths.get(s));
             List<Item> ri=new ArrayList<>();
@@ -79,6 +99,8 @@ public class ArticleImporter {
             a.setHtml(i.getHtml());
             a.setSourceUrl(i.getL());
             a.setText(i.getText());
+            a.setcText(i.getCtext());
+            a.setcName(i.getCname());
             Date d=new Date();
             a.setCreateTime(d);
             a.setDclt(d);

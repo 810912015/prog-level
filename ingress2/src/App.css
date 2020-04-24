@@ -5,7 +5,16 @@
   /*box-shadow: 0 0 5px rgb(255,90,0);*/
   display: flex;
 }
-
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+div p:nth-of-type(1){
+  font-size: 30px;
+}
+div p{
+  font-size: 20px;
+}
 .no-scrollbar::-webkit-scrollbar{
    display: none;
 }
@@ -14,7 +23,7 @@
   flex:1
 }
 .shortcut{
-  width:200px;
+  width:300px;
   text-overflow:ellipsis;
   white-space:nowrap
 }

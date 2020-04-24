@@ -2,11 +2,12 @@ import React from 'react'
 import {TagBag,QuestionBag,RecommendBag} from "./question";
 import {Row,Col} from 'antd'
 import {QuestionContext} from "./context";
-import {Route,Switch} from 'react-router-dom'
+import {Link, Route, Switch} from 'react-router-dom'
 import {Take} from "./take";
 import {Login} from "./auth/login";
 import {Register} from "./auth/register";
 import {Reset} from "./auth/reset";
+import {Papers} from "./article/paper";
 
 function Qb() {
     return (
@@ -19,7 +20,10 @@ function Qb() {
 function IndexMain() {
     return (
         <Row>
-            <Col xs={24} sm={24} md={{span: 3, offset: 2}}><TagBag/></Col>
+            <Col xs={24} sm={24} md={{span: 3, offset: 2}}>
+
+                <TagBag/>
+            </Col>
             <Col xs={24} sm={24} md={13} style={{minHeight: "80%"}}>
                <Qb/>
             </Col>
@@ -33,6 +37,7 @@ export function Ing() {
    return (
        <Switch>
            <Route exact path={"/"} component={IndexMain} key={"q"}/>
+           <Route path={"/papers"} component={Papers} key={"papers"}/>
            <Route path="/pass/:id" component={Take} key={"pass"}/>
            <Route path={"/login"} component={Login} key={"login"}/>
            <Route path={"/register"} component={Register} key={"register"}/>

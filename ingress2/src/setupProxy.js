@@ -17,6 +17,11 @@ module.exports=function (app) {
         })
     )
     app.use(
+        proxy("/p/",{
+            target:"http://localhost:8080"
+        })
+    )
+    app.use(
         proxy("/s/",{
             target:"http://localhost:8082"
         })

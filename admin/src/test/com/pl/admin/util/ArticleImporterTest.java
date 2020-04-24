@@ -16,7 +16,8 @@ class ArticleImporterTest {
     private ArticleImporter ai;
     @Test
     void save() {
-        List<ArticleImporter.Item> il=ai.read();
+        String s="D:\\proj\\ppt\\better-dev-20200423-9.txt";
+        List<ArticleImporter.Item> il=ai.read(s);
         assertNotNull(il);
         ai.save(il);
         assertNotNull(ai);
