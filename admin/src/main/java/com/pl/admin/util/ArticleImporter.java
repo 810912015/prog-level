@@ -108,6 +108,23 @@ public class ArticleImporter {
         }
     }
 
+    public String toSql(List<Item> items){
+        StringBuilder sb=new StringBuilder();
+        sb.append("insert into t_article (name,html,sourceUrl,text,cText,cName)");
+        for(Item i:items){
+            sb.append(" values (");
+            sb.append("`"+i.getN()+"`,");
+            sb.append("`"+i.getHtml()+"`,");
+            sb.append("`"+i.getL()+"`,");
+            sb.append("`"+i.getText()+"`,");
+            sb.append("`"+i.getCtext()+"`,");
+            sb.append("`"+i.getCname()+"`");
+            sb.append(")");
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
     @Autowired
     private TArticleMapper articleMapper;
 }

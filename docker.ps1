@@ -8,7 +8,7 @@ for($i=0;$i -lt 3;$i++){
    $iname=$nt+$d
    cd $baseDir$nt
    docker build -t $iname .
-   $dt=$reg+$nt+":v"+$d
+   $dt=$reg+"pl-"+$nt+":v"+$d
    docker tag $iname $dt
    # docker push $dt
    echo $dt

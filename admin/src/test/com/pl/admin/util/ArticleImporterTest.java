@@ -22,4 +22,13 @@ class ArticleImporterTest {
         ai.save(il);
         assertNotNull(ai);
     }
+
+    @Test
+    void save2() {
+        String s="D:\\proj\\ppt\\better-dev-20200423-9.txt";
+        List<ArticleImporter.Item> il=ai.read(s);
+        assertNotNull(il);
+        String r=ai.toSql(il);
+        assertNotNull(r);
+    }
 }

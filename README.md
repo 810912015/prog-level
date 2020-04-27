@@ -17,6 +17,10 @@
 
 1. rabbitmq
 
+  0: docker run -p 6379:6379 --name redis -d -v /data/redis-data:/data redis
+     
+     docker run -d -p 9200:9200 -p 9300:9300 --name es -e "discovery.type=single-node" elasticsearch:7.6.2
+
   a.docker run -d --hostname my-rabbit --name rabbit1 -p 5671:5671 -p 5672:5672 -p 15672:15672 rabbitmq:3-management
   
   b.http://localhost:15672/#/queues/%2F/pl-req
