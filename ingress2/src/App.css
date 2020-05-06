@@ -9,11 +9,11 @@ pre {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
-div p:nth-of-type(1){
-  font-size: 30px;
+.t-article p:nth-of-type(1){
+  font-size: 25px;
 }
-div p{
-  font-size: 20px;
+.t-article p{
+  font-size: 18px;
 }
 .no-scrollbar::-webkit-scrollbar{
    display: none;

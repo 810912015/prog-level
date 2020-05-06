@@ -3,6 +3,7 @@ import {get, post} from "../common/network";
 import {Row, Col, Affix,Drawer,Button} from "antd";
 import ReactHtmlParser from "react-html-parser";
 import {BarsOutlined} from "@ant-design/icons";
+import {QuestionContext} from "../context";
 
 export function PaperList(props) {
     let r=[]
@@ -22,6 +23,7 @@ export function PaperList(props) {
 export function APaper(props) {
     const [item,setItem]=useState(null)
     useEffect(()=>{
+        if(!props.id) return;
         get("/p/article/detail?id="+props.id,(d)=>{
             setItem(d.data)
         })
@@ -37,34 +39,52 @@ export function APaper(props) {
                 </span>
 
             </div>
+            <div className={"t-article"}>
+                {item&&ReactHtmlParser(item.cHtml)}
+            </div>
 
-            {item&&ReactHtmlParser(item.cHtml)}
         </div>
     )
 }
 
 export function Papers() {
+
+    return (
+        <QuestionContext.Consumer>
+            {
+                (c)=><Papers2 {...c}/>
+            }
+        </QuestionContext.Consumer>
+    )
+}
+
+function Papers2(props) {
     const [items,setItems]=useState([])
     const [cur,setCur]=useState(null)
-    const [visible,setVisible]=useState(false)
+
     useEffect(()=>{
         post("/p/article/list",{size:100},(d)=>{
             setItems(d.data)
             setCur(d.data[0].id)
         })
     },[])
+
     return (
         <div>
             <Drawer title="文章列表"
                     placement={window.innerWidth<800?"top":"left"}
                     closable={true}
-                    onClose={()=>setVisible(false)}
+                    onClose={()=>props.setShowArticles(false)}
                     mask={false}
-                    visible={visible}>
-                <PaperList items={items} click={(id)=>setCur(id)}/>
+                    width={"400px"}
+                    visible={props.showArticles}>
+                <PaperList items={items} click={(id)=>{
+                    props.setShowArticles(false)
+                    setCur(id)
+                }}/>
             </Drawer>
 
-            <APaper id={cur} onShow={()=>setVisible(true)}/>
+            <APaper id={cur} onShow={()=>props.setShowArticles(true)}/>
         </div>
     )
 }

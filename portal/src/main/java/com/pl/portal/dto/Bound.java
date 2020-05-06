@@ -9,6 +9,17 @@ public class Bound implements IQueryArgs {
     private Long maxId;
     private Long minId;
     private Integer size;
+
+    @Override
+    public String toString() {
+        return "Bound{" +
+                "maxId=" + maxId +
+                ", minId=" + minId +
+                ", size=" + size +
+                ", forward=" + forward +
+                '}';
+    }
+
     /**
      * true:大于maxId
      * false:小于minId

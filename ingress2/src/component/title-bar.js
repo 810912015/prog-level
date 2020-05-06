@@ -37,7 +37,7 @@ function Tb(props) {
                一个你可以写代码的地方
            </div>
            <div className={"shortcut"}>
-               <Link to={"/papers"} style={{paddingRight:"10px"}}>文章</Link>
+               <Link to={"/papers"} style={{paddingRight:"10px"}} onClick={()=>{props.setShowArticles(!props.showArticles)}}>文章</Link>
               {c}
            </div>
        </div>

@@ -21,7 +21,11 @@ class App extends Component {
         setBusy:(b)=>{
             this.setState({busy:b})
         },
-        height:0
+        height:0,
+        showArticles:false,
+        setShowArticles:(s)=>{
+            this.setState({showArticles:s})
+        }
     }
 
      resize=()=>{

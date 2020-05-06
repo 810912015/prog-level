@@ -46,10 +46,8 @@ public class ArticleController extends BaseController{
         //fill cname using first of ctext
         if(!StringUtils.isEmpty(art.getcText())) {
             TArticle oa = articleMapper.selectByPrimaryKey(art.getId());
-            if (StringUtils.isEmpty(oa.getcName())) {
-                String cn=art.getcText().split("\n")[0];
-                art.setcName(cn);
-            }
+            String cn = art.getcText().split("\n")[0];
+            art.setcName(cn);
             art.setcHtml(toHtml(art.getcText()));
         }
 

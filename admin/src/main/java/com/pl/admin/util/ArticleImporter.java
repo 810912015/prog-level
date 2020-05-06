@@ -3,6 +3,7 @@ package com.pl.admin.util;
 import cn.hutool.json.JSONUtil;
 import com.pl.data.mapper.TArticleMapper;
 import com.pl.data.model.TArticle;
+import com.pl.data.model.TArticleExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -23,6 +24,7 @@ public class ArticleImporter {
         private String text;
         private String ctext;
         private String cname;
+        private String cMixText;
 
         public Item() {
         }
@@ -74,6 +76,14 @@ public class ArticleImporter {
         public void setCname(String cname) {
             this.cname = cname;
         }
+
+        public String getcMixText() {
+            return cMixText;
+        }
+
+        public void setcMixText(String cMixText) {
+            this.cMixText = cMixText;
+        }
     }
 
     public List<Item> read(String s){
@@ -94,37 +104,34 @@ public class ArticleImporter {
 
     public void save(List<Item> items){
         for(Item i:items){
+            if(StringUtils.isEmpty(i.getText())) continue;
+            if(!StringUtils.isEmpty(i.getN())){
+                TArticleExample tae=new TArticleExample();
+                tae.createCriteria().andNameEqualTo(i.getN());
+                Long r=articleMapper.countByExample(tae);
+                if(r>0) continue;
+            }
+
             TArticle a=new TArticle();
-            a.setName(i.getN());
+
+            if(StringUtils.isEmpty(i.getN())){
+                a.setName(i.getL());
+                a.setcName(i.getL());
+            }else{
+                a.setName(i.getN());
+                a.setcName(i.getCname());
+            }
             a.setHtml(i.getHtml());
             a.setSourceUrl(i.getL());
             a.setText(i.getText());
-            a.setcText(i.getCtext());
-            a.setcName(i.getCname());
+            a.setcText(i.getcMixText());
+
             Date d=new Date();
             a.setCreateTime(d);
             a.setDclt(d);
             articleMapper.insert(a);
         }
     }
-
-    public String toSql(List<Item> items){
-        StringBuilder sb=new StringBuilder();
-        sb.append("insert into t_article (name,html,sourceUrl,text,cText,cName)");
-        for(Item i:items){
-            sb.append(" values (");
-            sb.append("`"+i.getN()+"`,");
-            sb.append("`"+i.getHtml()+"`,");
-            sb.append("`"+i.getL()+"`,");
-            sb.append("`"+i.getText()+"`,");
-            sb.append("`"+i.getCtext()+"`,");
-            sb.append("`"+i.getCname()+"`");
-            sb.append(")");
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-
     @Autowired
     private TArticleMapper articleMapper;
 }

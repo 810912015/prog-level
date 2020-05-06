@@ -30,9 +30,14 @@ export function ArticleList(props) {
 export function ArticleDetail(props) {
     const [data,setData]=useState("")
     const [line,setLine]=useState(-1)
+    const [h,setH]=useState("")
     useEffect(()=>{
         setData(props.cText)
+
     },[props.id,props.cText])
+    useEffect(()=>{
+        setH(props.html)
+    },[props.id,props.html])
     useEffect(()=>{
         setLine(props.useLevel||-1)
     },[props.id,props.useLevel])
@@ -48,6 +53,7 @@ export function ArticleDetail(props) {
             useLevel:line
         },(d)=>{})
     }
+    let wh=((window.innerHeight-120)/2)+"px";
    return (
        <div>
            <div style={{padding:"10px 0px"}}>
@@ -64,18 +70,31 @@ export function ArticleDetail(props) {
                </span>
 
            </div>
-           <Row>
-               <Col span={12}>
+           <div>
+               <Row style={{height:wh,overflowY:"auto",borderBottom:"1px solid #f50"}}>
+                   <Col span={12} style={{height:wh,overflowY:"auto"}}>
+                       {ReactHtmlParser(h)}
+                   </Col>
+                   <Col span={12} style={{height:wh,overflowY:"auto"}}>
+                       <pre>{h}</pre>
+                   </Col>
+               </Row>
+               <Row  style={{height:wh,overflowY:"auto"}}>
+                   <Col span={12}>
                    <textarea value={data} style={{width:"100%",height:"100%"}} className={"no-scrollbar"}
                              onChange={(e)=>setData(e.target.value)}
                    />
-               </Col>
-               <Col span={12}>
+                   </Col>
+                   <Col span={12}>
                    <pre style={{paddingLeft:"5px"}}>{
                        ReactHtmlParser(data)
                    }</pre>
-               </Col>
-           </Row>
+                   </Col>
+
+               </Row>
+
+           </div>
+
 
 
        </div>

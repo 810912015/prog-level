@@ -6,6 +6,8 @@ export const QuestionContext=React.createContext({
     loginName:null,
     setLoginName:()=>{},
     busy:false,
-    setBusy:()=>{}
+    setBusy:()=>{},
+    showArticles:false,
+    setShowArticles:()=>{}
 })
 

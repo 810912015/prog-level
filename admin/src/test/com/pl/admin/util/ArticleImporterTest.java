@@ -16,19 +16,19 @@ class ArticleImporterTest {
     private ArticleImporter ai;
     @Test
     void save() {
-        String s="D:\\proj\\ppt\\better-dev-20200423-9.txt";
-        List<ArticleImporter.Item> il=ai.read(s);
-        assertNotNull(il);
-        ai.save(il);
-        assertNotNull(ai);
-    }
-
-    @Test
-    void save2() {
-        String s="D:\\proj\\ppt\\better-dev-20200423-9.txt";
-        List<ArticleImporter.Item> il=ai.read(s);
-        assertNotNull(il);
-        String r=ai.toSql(il);
-        assertNotNull(r);
+        String d="D:\\proj\\ppt\\result\\2020-5-6\\";
+        String[] d1=new String[]{
+                "lobste_rs",
+                "betterdev_link",
+                "stratechery_com",
+                "summary"
+        };
+        for(String td:d1){
+            String s=d+td+".txt";
+            List<ArticleImporter.Item> il=ai.read(s);
+            assertNotNull(il);
+            ai.save(il);
+            assertNotNull(ai);
+        }
     }
 }
