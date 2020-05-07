@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IArticleService {
     List<TArticle> getList(Bound b);
-    TArticle getDetail(Long id);
+    TArticle getDetail(Long id,String version);
 }

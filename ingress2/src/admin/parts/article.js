@@ -33,7 +33,6 @@ export function ArticleDetail(props) {
     const [h,setH]=useState("")
     useEffect(()=>{
         setData(props.cText)
-
     },[props.id,props.cText])
     useEffect(()=>{
         setH(props.html)
@@ -67,6 +66,7 @@ export function ArticleDetail(props) {
                    }}>{line>0?"下线":"上线"}</Button>
                    <Button type={"link"} onClick={save}>保存</Button>
                    <Button type={"link"} onClick={del}>删除</Button>
+                   <a href={"/index.html/#/papers/"+props.id}>预览</a>
                </span>
 
            </div>

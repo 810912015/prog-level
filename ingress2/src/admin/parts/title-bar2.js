@@ -1,9 +1,10 @@
 import React from 'react'
 import {Button,message} from "antd";
 import {Link} from "react-router-dom";
-import {QuestionContext} from "./context";
+
+import {QuestionContext} from "../../component/context";
 import {LogoutOutlined,LoginOutlined,RetweetOutlined} from "@ant-design/icons";
-import {post} from "./common/network";
+import {post} from "../../component/common/network";
 
 
 function Tb(props) {
@@ -30,13 +31,14 @@ function Tb(props) {
 
        <div style={{display:"flex"}}>
            <div  className={"main-brand"}>
-               <a href={"#"}> 分码网</a>
+               <a href={"/index.html"}> 分码网-文章编辑</a>
+
            </div>
            <div className={"brand"}>
                一个你可以写代码的地方
            </div>
            <div className={"shortcut"}>
-               <Link to={"/papers"} style={{paddingRight:"10px"}} onClick={()=>{props.setShowArticles&&props.setShowArticles(!props.showArticles)}}>文章</Link>
+               <a href={"/index.html/#/papers"}>文章</a>
               {c}
            </div>
        </div>
@@ -44,7 +46,7 @@ function Tb(props) {
    )
 }
 
-export function TitleBar() {
+export function TitleBar2() {
    return (
        <QuestionContext.Consumer>
            {

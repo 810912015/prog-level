@@ -2,6 +2,7 @@ package com.pl.data.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class TArticleExample {
@@ -135,6 +136,32 @@ public class TArticleExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
+        }
+
+        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            addCriterion(condition, new java.sql.Date(value.getTime()), property);
+        }
+
+        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
+            if (values == null || values.size() == 0) {
+                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
+            }
+            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
+            Iterator<Date> iter = values.iterator();
+            while (iter.hasNext()) {
+                dateList.add(new java.sql.Date(iter.next().getTime()));
+            }
+            addCriterion(condition, dateList, property);
+        }
+
+        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -844,6 +871,136 @@ public class TArticleExample {
 
         public Criteria andDcltNotBetween(Date value1, Date value2) {
             addCriterion("dclt not between", value1, value2, "dclt");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthIsNull() {
+            addCriterion("auth is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthIsNotNull() {
+            addCriterion("auth is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthEqualTo(String value) {
+            addCriterion("auth =", value, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthNotEqualTo(String value) {
+            addCriterion("auth <>", value, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthGreaterThan(String value) {
+            addCriterion("auth >", value, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthGreaterThanOrEqualTo(String value) {
+            addCriterion("auth >=", value, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthLessThan(String value) {
+            addCriterion("auth <", value, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthLessThanOrEqualTo(String value) {
+            addCriterion("auth <=", value, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthLike(String value) {
+            addCriterion("auth like", value, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthNotLike(String value) {
+            addCriterion("auth not like", value, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthIn(List<String> values) {
+            addCriterion("auth in", values, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthNotIn(List<String> values) {
+            addCriterion("auth not in", values, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthBetween(String value1, String value2) {
+            addCriterion("auth between", value1, value2, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuthNotBetween(String value1, String value2) {
+            addCriterion("auth not between", value1, value2, "auth");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeIsNull() {
+            addCriterion("pub_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeIsNotNull() {
+            addCriterion("pub_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeEqualTo(Date value) {
+            addCriterionForJDBCDate("pub_time =", value, "pubTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeNotEqualTo(Date value) {
+            addCriterionForJDBCDate("pub_time <>", value, "pubTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeGreaterThan(Date value) {
+            addCriterionForJDBCDate("pub_time >", value, "pubTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeGreaterThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("pub_time >=", value, "pubTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeLessThan(Date value) {
+            addCriterionForJDBCDate("pub_time <", value, "pubTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeLessThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("pub_time <=", value, "pubTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeIn(List<Date> values) {
+            addCriterionForJDBCDate("pub_time in", values, "pubTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeNotIn(List<Date> values) {
+            addCriterionForJDBCDate("pub_time not in", values, "pubTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("pub_time between", value1, value2, "pubTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPubTimeNotBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("pub_time not between", value1, value2, "pubTime");
             return (Criteria) this;
         }
     }

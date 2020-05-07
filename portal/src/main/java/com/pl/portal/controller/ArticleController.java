@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,8 +27,11 @@ public class ArticleController {
     @ApiOperation(value = "detail")
     @RequestMapping(value = "/detail",method = RequestMethod.GET)
     @ResponseBody
-    public CommonResult detail(Long id) {
-        return CommonResult.success(articleService.getDetail(id));
+    public CommonResult detail(Long id,String version) {
+        if(StringUtils.isEmpty(version)){
+            version="c";
+        }
+        return CommonResult.success(articleService.getDetail(id,version));
     }
 
     @Autowired

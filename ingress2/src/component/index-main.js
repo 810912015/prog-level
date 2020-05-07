@@ -37,7 +37,8 @@ export function Ing() {
    return (
        <Switch>
            <Route exact path={"/"} component={IndexMain} key={"q"}/>
-           <Route path={"/papers"} component={Papers} key={"papers"}/>
+           <Route path={"/papers/:id"} component={Papers} key={"papers"}/>
+           <Route path={"/papers"} component={Papers} key={"papers1"}/>
            <Route path="/pass/:id" component={Take} key={"pass"}/>
            <Route path={"/login"} component={Login} key={"login"}/>
            <Route path={"/register"} component={Register} key={"register"}/>

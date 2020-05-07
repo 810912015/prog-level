@@ -7,7 +7,13 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface ArticleDao {
+    @Select("select id,name,c_name as cName,source_url as sourceUrl,m_text as cHtml from t_article where id=#{id}")
+    TArticle getMixById(@Param("id") Integer id);
+
     @Select("select id,name,c_name as cName,source_url as sourceUrl,c_html as cHtml from t_article where id=#{id}")
-    public TArticle getWithCtextById(@Param("id") Integer id);
+    TArticle getChById(@Param("id") Integer id);
+
+    @Select("select id,name,c_name as cName,source_url as sourceUrl,text as cHtml from t_article where id=#{id}")
+    TArticle getEnById(@Param("id") Integer id);
 
 }

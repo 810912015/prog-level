@@ -37,6 +37,12 @@ public class TArticle implements Serializable {
     @ApiModelProperty(value = "最后修改时间")
     private Date dclt;
 
+    @ApiModelProperty(value = "作者")
+    private String auth;
+
+    @ApiModelProperty(value = "发表时间")
+    private Date pubTime;
+
     @ApiModelProperty(value = "内容")
     private String text;
 
@@ -48,6 +54,9 @@ public class TArticle implements Serializable {
 
     @ApiModelProperty(value = "中文格式内容")
     private String cHtml;
+
+    @ApiModelProperty(value = "对照内容")
+    private String mText;
 
     private static final long serialVersionUID = 1L;
 
@@ -139,6 +148,22 @@ public class TArticle implements Serializable {
         this.dclt = dclt;
     }
 
+    public String getAuth() {
+        return auth;
+    }
+
+    public void setAuth(String auth) {
+        this.auth = auth;
+    }
+
+    public Date getPubTime() {
+        return pubTime;
+    }
+
+    public void setPubTime(Date pubTime) {
+        this.pubTime = pubTime;
+    }
+
     public String getText() {
         return text;
     }
@@ -171,6 +196,14 @@ public class TArticle implements Serializable {
         this.cHtml = cHtml;
     }
 
+    public String getmText() {
+        return mText;
+    }
+
+    public void setmText(String mText) {
+        this.mText = mText;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -188,10 +221,13 @@ public class TArticle implements Serializable {
         sb.append(", sourceUrl=").append(sourceUrl);
         sb.append(", remark=").append(remark);
         sb.append(", dclt=").append(dclt);
+        sb.append(", auth=").append(auth);
+        sb.append(", pubTime=").append(pubTime);
         sb.append(", text=").append(text);
         sb.append(", cText=").append(cText);
         sb.append(", html=").append(html);
         sb.append(", cHtml=").append(cHtml);
+        sb.append(", mText=").append(mText);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

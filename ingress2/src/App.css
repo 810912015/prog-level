@@ -41,7 +41,11 @@ pre {
   cursor: grab;
   display: block;
 }
-
+@media screen and (max-width: 840px){
+  .brand{
+    display: none;
+  }
+}
 @media screen and (max-width: 600px) {
   .my-row{
     display: block;
@@ -49,9 +53,7 @@ pre {
   .my-gutter{
     display: none;
   }
-  .brand{
-    display: none;
-  }
+
   .shortcut{
     width:100px;
     text-overflow:ellipsis;

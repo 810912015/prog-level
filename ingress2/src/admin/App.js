@@ -4,7 +4,7 @@ import './App.css';
 import {HashRouter} from "react-router-dom";
 
 import {QuestionContext} from "../component/context";
-import {TitleBar} from "../component/title-bar";
+import {TitleBar2} from "./parts/title-bar2";
 import {authHeader,busy} from "../component/common/network";
 import {Bi} from "../component/common/busy-indicator"
 
@@ -46,7 +46,7 @@ class App extends Component {
                 <HashRouter>
                     <Affix offsetTop={0}>
                         <Layout.Header style={{backgroundColor:"#eee"}}>
-                            <TitleBar/>
+                            <TitleBar2/>
                         </Layout.Header>
                         <Bi/>
                     </Affix>

@@ -13,12 +13,15 @@
     <result column="source_url" jdbcType="VARCHAR" property="sourceUrl" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="dclt" jdbcType="TIMESTAMP" property="dclt" />
+    <result column="auth" jdbcType="VARCHAR" property="auth" />
+    <result column="pub_time" jdbcType="DATE" property="pubTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pl.data.model.TArticle">
     <result column="text" jdbcType="LONGVARCHAR" property="text" />
     <result column="c_text" jdbcType="LONGVARCHAR" property="cText" />
     <result column="html" jdbcType="LONGVARCHAR" property="html" />
     <result column="c_html" jdbcType="LONGVARCHAR" property="cHtml" />
+    <result column="m_text" jdbcType="LONGVARCHAR" property="mText" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -80,10 +83,10 @@
   </sql>
   <sql id="Base_Column_List">
     id, name, c_name, use_index, use_level, user_id, create_time, tag, source_url, remark, 
-    dclt
+    dclt, auth, pub_time
   </sql>
   <sql id="Blob_Column_List">
-    text, c_text, html, c_html
+    text, c_text, html, c_html, m_text
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.pl.data.model.TArticleExample" resultMap="ResultMapWithBLOBs">
     select
@@ -156,13 +159,15 @@
     insert into t_article (name, c_name, use_index, 
       use_level, user_id, create_time, 
       tag, source_url, remark, 
-      dclt, text, c_text, 
-      html, c_html)
+      dclt, auth, pub_time, 
+      text, c_text, html, 
+      c_html, m_text)
     values (#{name,jdbcType=VARCHAR}, #{cName,jdbcType=VARCHAR}, #{useIndex,jdbcType=INTEGER}, 
       #{useLevel,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{tag,jdbcType=VARCHAR}, #{sourceUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{dclt,jdbcType=TIMESTAMP}, #{text,jdbcType=LONGVARCHAR}, #{cText,jdbcType=LONGVARCHAR}, 
-      #{html,jdbcType=LONGVARCHAR}, #{cHtml,jdbcType=LONGVARCHAR})
+      #{dclt,jdbcType=TIMESTAMP}, #{auth,jdbcType=VARCHAR}, #{pubTime,jdbcType=DATE}, 
+      #{text,jdbcType=LONGVARCHAR}, #{cText,jdbcType=LONGVARCHAR}, #{html,jdbcType=LONGVARCHAR}, 
+      #{cHtml,jdbcType=LONGVARCHAR}, #{mText,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pl.data.model.TArticle">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -200,6 +205,12 @@
       <if test="dclt != null">
         dclt,
       </if>
+      <if test="auth != null">
+        auth,
+      </if>
+      <if test="pubTime != null">
+        pub_time,
+      </if>
       <if test="text != null">
         text,
       </if>
@@ -211,6 +222,9 @@
       </if>
       <if test="cHtml != null">
         c_html,
+      </if>
+      <if test="mText != null">
+        m_text,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -244,6 +258,12 @@
       <if test="dclt != null">
         #{dclt,jdbcType=TIMESTAMP},
       </if>
+      <if test="auth != null">
+        #{auth,jdbcType=VARCHAR},
+      </if>
+      <if test="pubTime != null">
+        #{pubTime,jdbcType=DATE},
+      </if>
       <if test="text != null">
         #{text,jdbcType=LONGVARCHAR},
       </if>
@@ -255,6 +275,9 @@
       </if>
       <if test="cHtml != null">
         #{cHtml,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="mText != null">
+        #{mText,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -300,6 +323,12 @@
       <if test="record.dclt != null">
         dclt = #{record.dclt,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.auth != null">
+        auth = #{record.auth,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pubTime != null">
+        pub_time = #{record.pubTime,jdbcType=DATE},
+      </if>
       <if test="record.text != null">
         text = #{record.text,jdbcType=LONGVARCHAR},
       </if>
@@ -311,6 +340,9 @@
       </if>
       <if test="record.cHtml != null">
         c_html = #{record.cHtml,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.mText != null">
+        m_text = #{record.mText,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -330,10 +362,13 @@
       source_url = #{record.sourceUrl,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      auth = #{record.auth,jdbcType=VARCHAR},
+      pub_time = #{record.pubTime,jdbcType=DATE},
       text = #{record.text,jdbcType=LONGVARCHAR},
       c_text = #{record.cText,jdbcType=LONGVARCHAR},
       html = #{record.html,jdbcType=LONGVARCHAR},
-      c_html = #{record.cHtml,jdbcType=LONGVARCHAR}
+      c_html = #{record.cHtml,jdbcType=LONGVARCHAR},
+      m_text = #{record.mText,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -350,7 +385,9 @@
       tag = #{record.tag,jdbcType=VARCHAR},
       source_url = #{record.sourceUrl,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
-      dclt = #{record.dclt,jdbcType=TIMESTAMP}
+      dclt = #{record.dclt,jdbcType=TIMESTAMP},
+      auth = #{record.auth,jdbcType=VARCHAR},
+      pub_time = #{record.pubTime,jdbcType=DATE}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -388,6 +425,12 @@
       <if test="dclt != null">
         dclt = #{dclt,jdbcType=TIMESTAMP},
       </if>
+      <if test="auth != null">
+        auth = #{auth,jdbcType=VARCHAR},
+      </if>
+      <if test="pubTime != null">
+        pub_time = #{pubTime,jdbcType=DATE},
+      </if>
       <if test="text != null">
         text = #{text,jdbcType=LONGVARCHAR},
       </if>
@@ -399,6 +442,9 @@
       </if>
       <if test="cHtml != null">
         c_html = #{cHtml,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="mText != null">
+        m_text = #{mText,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -415,10 +461,13 @@
       source_url = #{sourceUrl,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       dclt = #{dclt,jdbcType=TIMESTAMP},
+      auth = #{auth,jdbcType=VARCHAR},
+      pub_time = #{pubTime,jdbcType=DATE},
       text = #{text,jdbcType=LONGVARCHAR},
       c_text = #{cText,jdbcType=LONGVARCHAR},
       html = #{html,jdbcType=LONGVARCHAR},
-      c_html = #{cHtml,jdbcType=LONGVARCHAR}
+      c_html = #{cHtml,jdbcType=LONGVARCHAR},
+      m_text = #{mText,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.pl.data.model.TArticle">
@@ -432,7 +481,9 @@
       tag = #{tag,jdbcType=VARCHAR},
       source_url = #{sourceUrl,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      dclt = #{dclt,jdbcType=TIMESTAMP}
+      dclt = #{dclt,jdbcType=TIMESTAMP},
+      auth = #{auth,jdbcType=VARCHAR},
+      pub_time = #{pubTime,jdbcType=DATE}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
