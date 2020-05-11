@@ -1,0 +1,54 @@
+﻿<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.pl</groupId>
+    <artifactId>all</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>all-in-one</name>
+    <description>all-in-one project</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <skipTests>true</skipTests>
+    </properties>
+
+    <parent>
+        <groupId>com.pl</groupId>
+        <artifactId>prog-level</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+
+ <dependency>
+            <groupId>com.pl</groupId>
+            <artifactId>admin</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+ <dependency>
+            <groupId>com.pl</groupId>
+            <artifactId>portal</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+ <dependency>
+            <groupId>com.pl</groupId>
+            <artifactId>search</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>  
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

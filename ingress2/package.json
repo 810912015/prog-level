@@ -14,13 +14,13 @@
     "less-loader": "^5.0.0",
     "monaco-editor": "^0.20.0",
     "react": "^16.13.1",
+    "react-app-rewire-multiple-entry": "^2.2.0",
     "react-app-rewired": "^2.1.5",
     "react-dom": "^16.13.1",
-    "react-html-parser": "^2.0.2",
+    "react-raw-html": "^0.4.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "serve": "^11.3.0",
-    "react-app-rewire-multiple-entry": "^2.2.0"
+    "serve": "^11.3.0"
   },
   "scripts": {
     "start": "react-app-rewired start",

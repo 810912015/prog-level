@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {get, post} from "../../component/common/network";
 import {Row, Col, Button} from 'antd'
-import ReactHtmlParser from 'react-html-parser'
+import RawHtml from "react-raw-html"
 
 export function AArticle(props) {
     return (
@@ -66,14 +66,14 @@ export function ArticleDetail(props) {
                    }}>{line>0?"下线":"上线"}</Button>
                    <Button type={"link"} onClick={save}>保存</Button>
                    <Button type={"link"} onClick={del}>删除</Button>
-                   <a href={"/index.html/#/papers/"+props.id}>预览</a>
+                   <a href={"/index.html#/papers/"+props.id}>预览</a>
                </span>
 
            </div>
            <div>
                <Row style={{height:wh,overflowY:"auto",borderBottom:"1px solid #f50"}}>
                    <Col span={12} style={{height:wh,overflowY:"auto"}}>
-                       {ReactHtmlParser(h)}
+                       <RawHtml.div>{h}</RawHtml.div>
                    </Col>
                    <Col span={12} style={{height:wh,overflowY:"auto"}}>
                        <pre>{h}</pre>
@@ -86,17 +86,12 @@ export function ArticleDetail(props) {
                    />
                    </Col>
                    <Col span={12}>
-                   <pre style={{paddingLeft:"5px"}}>{
-                       ReactHtmlParser(data)
-                   }</pre>
+                   <pre style={{paddingLeft:"5px"}}>
+                       <RawHtml.div>{data}</RawHtml.div>
+                   </pre>
                    </Col>
-
                </Row>
-
            </div>
-
-
-
        </div>
    )
 }

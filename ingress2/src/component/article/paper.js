@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useMemo, useRef, useState} from 'react'
 import {get, post} from "../common/network";
 import {Row, Col, Affix,Drawer,Button} from "antd";
-import ReactHtmlParser from "react-html-parser";
 import {BarsOutlined} from "@ant-design/icons";
 import {QuestionContext} from "../context";
+import RawHtml from "react-raw-html"
 
 export function PaperList(props) {
     let s=props.st||{textAlign:"right",paddingRight:"15px"}
@@ -21,9 +21,16 @@ export function PaperList(props) {
         <div style={s}>{r}</div>
     )
 }
+function makePre() {
+   let code=false;
+   return function (node) {
+       let start=node.type==='tag'
+   }
+}
 export function APaper(props) {
     const [item,setItem]=useState(null)
     const [version,setVersion]=useState("c")
+
 
     useEffect(()=>{
         if(!props.id) return;
@@ -33,7 +40,17 @@ export function APaper(props) {
     },[props.id,version])
     let r;
     if(item) {
-        r = ReactHtmlParser(item.cHtml)
+        r=<RawHtml.div>{item.cHtml}</RawHtml.div>
+
+        // r =ReactHtmlParser(item.cHtml,{ decodeEntities:false,transform:(node,index)=>{
+        //         console.log("parse",node)
+        //     if(node.type==='code'){
+        //
+        //         return (
+        //             <pre>{node.text}</pre>
+        //         )
+        //     }
+        // }})
     }
     return (
         <div style={{wordBreak:"break-all",wordWrap:"break-word",padding:"20px"}}>

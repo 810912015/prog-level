@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
 import {Affix,Button,Drawer,message,Tabs} from "antd"
 import {post} from "./common/network";
-import ReactHtmlParser from 'react-html-parser'
+import RawHtml from "react-raw-html"
 import {MultiLangEditor} from "./common/CoderEditor";
 
 export function getSourceObjFromArray(list) {
@@ -180,7 +180,7 @@ export function Take(props) {
                             {item.id}
                             <span>{item.name}</span>
                             <div>
-                                {ReactHtmlParser(item.title)}
+                                <RawHtml.div>{item.title}</RawHtml.div>
                             </div>
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="我的提交" key="2">

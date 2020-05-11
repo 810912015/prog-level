@@ -64,9 +64,9 @@ public class ArticleService  implements IArticleService{
                     code=false;
                 }
                 if(code||isCodeEnd){
-                    ensb.append(t);
-                    chsb.append(t);
-                    msb.append(t);
+                    ensb.append(t+"\n");
+                    chsb.append(t+"\n");
+                    msb.append(t+"\n");
                 }else {
                     boolean isEn = ln % 2 == 0;
                     String lang=isEn?"t-en":"t-ch";

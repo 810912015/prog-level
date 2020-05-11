@@ -15,6 +15,7 @@
         <module>admin</module>
         <module>search</module>
         <module>portal</module>
+<!--        <module>all</module>-->
     </modules>
 
     <parent>

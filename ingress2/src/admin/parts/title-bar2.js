@@ -31,14 +31,14 @@ function Tb(props) {
 
        <div style={{display:"flex"}}>
            <div  className={"main-brand"}>
-               <a href={"/index.html"}> 分码网-文章编辑</a>
+               <a href={"/index.html"}> 分码编程-文章编辑</a>
 
            </div>
            <div className={"brand"}>
-               一个你可以写代码的地方
+               编程练习和文档翻译
            </div>
            <div className={"shortcut"}>
-               <a href={"/index.html/#/papers"}>文章</a>
+               <a href={"/index.html#/papers"}>文章</a>
               {c}
            </div>
        </div>
