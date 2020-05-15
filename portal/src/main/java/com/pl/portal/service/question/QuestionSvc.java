@@ -6,11 +6,14 @@ import com.pl.data.mapper.QuestionMapper;
 import com.pl.data.model.Question;
 import com.pl.data.model.QuestionExample;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
+@CacheConfig(cacheNames = {"myCache1"})
 public class QuestionSvc implements IQuestionSvc {
     static List<Meta> METAS= null;
     synchronized void initMeta() {
@@ -35,6 +38,7 @@ public class QuestionSvc implements IQuestionSvc {
     }
 
     @Override
+    @Cacheable(key="'q_tags'")
     public Result<List<Meta>> allTags() {
         if(METAS==null) initMeta();
         return Result.success(METAS);
@@ -71,6 +75,7 @@ public class QuestionSvc implements IQuestionSvc {
         }
     }
     @Override
+    @Cacheable(key="'q_recommend'")
     public Result<List<Index<Question>>> recommend() {
         if(recommends==null) initRecommends();
         return Result.success(recommends);

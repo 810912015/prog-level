@@ -41,16 +41,6 @@ export function APaper(props) {
     let r;
     if(item) {
         r=<RawHtml.div>{item.cHtml}</RawHtml.div>
-
-        // r =ReactHtmlParser(item.cHtml,{ decodeEntities:false,transform:(node,index)=>{
-        //         console.log("parse",node)
-        //     if(node.type==='code'){
-        //
-        //         return (
-        //             <pre>{node.text}</pre>
-        //         )
-        //     }
-        // }})
     }
     return (
         <div style={{wordBreak:"break-all",wordWrap:"break-word",padding:"20px"}}>

@@ -2,6 +2,8 @@
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 spring:
+  cache:
+    type: none
   datasource:
     url: jdbc:mysql://192.168.16.102:3306/wpd?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root

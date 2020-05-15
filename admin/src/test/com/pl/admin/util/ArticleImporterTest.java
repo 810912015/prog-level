@@ -16,14 +16,14 @@ class ArticleImporterTest {
     private ArticleImporter ai;
     @Test
     void save() {
-        String d="D:\\proj\\ppt\\result\\2020-5-10\\";
+        String d="D:\\proj\\ppt\\result\\2020-5-15\\";
         String[] d1=new String[]{
 //                "lobste_rs",
 //                "betterdev_link",
 //                "stratechery_com",
 //                "summary",
                 "content",
-                "content1"
+//                "content1"
         };
         for(String td:d1){
             String s=d+td+".txt";

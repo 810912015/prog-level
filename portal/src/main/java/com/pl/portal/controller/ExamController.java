@@ -14,6 +14,8 @@ import com.pl.data.model.*;
 import com.pl.data.model.Pass;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @Api(tags = "ExamController",description = "ExamController api")
+@CacheConfig(cacheNames = {"myCache1"})
 public class ExamController extends BaseController {
 
     @RequestMapping(value = "/exam/pass",method = RequestMethod.POST)
@@ -90,6 +93,7 @@ public class ExamController extends BaseController {
 
     @RequestMapping(value = "/question/all",method = RequestMethod.POST)
     @ResponseBody
+    @Cacheable(key="'q_l_'+#b.toString()")
     public List<ThinQuestion> getAll(@RequestBody Bound b) {
         try {
             b.normalize();
@@ -124,6 +128,7 @@ public class ExamController extends BaseController {
 
     @RequestMapping(value = "/question/delete/{id}",method = RequestMethod.GET)
     @ResponseBody
+    @Cacheable(key="'q_d_'+#id")
     public boolean deleteById(@PathVariable int id) {
         boolean qr = qm.deleteByPrimaryKey(id) > 0;
         ValidationExample ve = new ValidationExample();

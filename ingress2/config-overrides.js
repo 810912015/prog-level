@@ -4,6 +4,10 @@ const ae=require('react-app-rewire-multiple-entry')([{
     entry:"src/admin/index.js",
     template:"public/admin.html",
     outPath:"admin.html"
+},{
+    entry:"src/detail/index.js",
+    template:"public/detail.html",
+    outPath:"detail.html"
 }])
 
 module.exports=override(

@@ -16,7 +16,7 @@ import java.util.List;
 @CacheConfig(cacheNames = {"myCache1"})
 public class ArticleService implements IArticleService {
     @Override
-    //@Cacheable(key="'list_'+#b.toString()")
+    @Cacheable(key="'list_'+#b.toString()")
     public List<TArticle> getList(Bound b) {
         b.normalize();
         TArticleExample ae=new TArticleExample();
@@ -25,7 +25,7 @@ public class ArticleService implements IArticleService {
     }
 
     @Override
-    //@Cacheable(key="'detail_'+#id.intValue()+'_'+version")
+    @Cacheable(key="'detail_'+#id.intValue()+'_'+#version")
     public TArticle getDetail(Long id,String version) {
         if(version.equals("e")) {
             return articleDao.getEnById(id.intValue());

@@ -60,6 +60,7 @@ class App extends Component {
                 <Layout.Footer style={{padding:0}}>
                     <div style={{textAlign:"center",backgroundColor:"#888",color:"#eee",padding:"2px"}}>
                         <div className={"space"}>分码网 编程入门社区 联系请邮件810912015@qq.com</div>
+                        <div className={"space"}> <a href={"http://www.beian.miit.gov.cn/"}>沪ICP备20013508号-1</a></div>
                     </div>
                 </Layout.Footer>
             </Layout>
