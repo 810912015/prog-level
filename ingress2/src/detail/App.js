@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Layout, Affix} from 'antd';
+import {Layout, Affix, Drawer} from 'antd';
 import './App.css';
 import {HashRouter} from "react-router-dom";
 import {QuestionContext} from "../component/context";
-import {authHeader,busy} from "../component/common/network";
-import {APaper} from "../component/article/paper";
+import {authHeader, busy, post} from "../component/common/network";
+import {APaper, PaperList} from "../component/article/paper";
 
 
 class App extends Component {
@@ -20,7 +20,28 @@ class App extends Component {
         setBusy:(b)=>{
             this.setState({busy:b})
         },
-        height:0
+        height:0,
+        showArticles:false,
+        setShowArticles:(s)=>{
+            if(s&&this.state.items.length===0) {
+                post("/p/article/list",{size:50},(d)=>{
+                    this.setState({items:d.data})
+                })
+            }
+
+            this.setState({showArticles:s})
+        },
+        items:[],
+        id:(()=>{
+            try {
+                let s = window.location.search;
+                let id = s.substr(4);
+                let idi = parseInt(id);
+                return idi;
+            }catch (e) {
+                return 217;
+            }
+        })()
     }
 
      resize=()=>{
@@ -41,12 +62,38 @@ class App extends Component {
         <QuestionContext.Provider value={this.state}>
             <Layout className={"layout"}>
                 <HashRouter>
-                    <APaper id={217}/>
+                    <Qr/>
+                    <Papers {...this.state} setId={(id)=>{this.setState({id:id})}}/>
+                    <APaper id={this.state.id} onShow={()=>{this.state.setShowArticles(true)}}/>
+                    <Qr/>
                 </HashRouter>
             </Layout>
         </QuestionContext.Provider>
     );
   }
+}
+
+export function Papers(props) {
+  return (
+      <Drawer title="文章列表"
+              placement={window.innerWidth<800?"top":"left"}
+              closable={true}
+              onClose={()=>props.setShowArticles(false)}
+              mask={false}
+              width={"400px"}
+              visible={props.showArticles}>
+          <PaperList items={props.items} click={(id)=>{
+              props.setShowArticles(false)
+              props.setId(id)
+          }}/>
+      </Drawer>
+  )
+}
+
+export function Qr() {
+return (
+    <img src={"code-search.png"} style={{width:"100%",height:"auto"}}/>
+)
 }
 
 export default App;

@@ -38,6 +38,21 @@
         <!--</dependency>-->
         <!--Swagger-UI API文档生产工具-->
         <dependency>
+            <groupId>cn.com.riversoft</groupId>
+            <artifactId>weixin-common</artifactId>
+            <version>0.9.9-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.com.riversoft</groupId>
+            <artifactId>weixin-mp</artifactId>
+            <version>0.9.9-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.pivot.tools</groupId>
             <artifactId>json-builder</artifactId>
             <version>1.0.0</version>
@@ -112,6 +127,10 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
         </dependency>
     </dependencies>
     <build>

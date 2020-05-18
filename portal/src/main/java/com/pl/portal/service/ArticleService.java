@@ -20,7 +20,7 @@ public class ArticleService implements IArticleService {
     public List<TArticle> getList(Bound b) {
         b.normalize();
         TArticleExample ae=new TArticleExample();
-        ae.handleQueryArgs(b);
+        ae.handleQueryArgs(b).andUseLevelGreaterThan(0);
         return articleMapper.selectByExample(ae);
     }
 
