@@ -21,13 +21,14 @@ function IndexMain() {
     return (
         <Row>
             <Col xs={24} sm={24} md={{span: 3, offset: 2}}>
-
                 <TagBag/>
+                <img src={"qr.jpg"}/>
             </Col>
             <Col xs={24} sm={24} md={13} style={{minHeight: "80%"}}>
                <Qb/>
             </Col>
             <Col xs={24} sm={24} md={6}>
+                <img src={"code-search.png"} style={{width:"100%",height:"auto"}}/>
                 {<RecommendBag/>}
             </Col>
         </Row>)

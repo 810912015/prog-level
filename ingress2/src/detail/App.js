@@ -5,7 +5,14 @@ import {HashRouter} from "react-router-dom";
 import {QuestionContext} from "../component/context";
 import {authHeader, busy, post} from "../component/common/network";
 import {APaper, PaperList} from "../component/article/paper";
+import {Footer} from "../footer";
 
+function get_url_params() {
+    var w_t =  window.location.href.split('/');
+    var len = w_t.length - 1;
+    var w_id = w_t[len];
+    return w_id;
+}
 
 class App extends Component {
     state={
@@ -20,7 +27,7 @@ class App extends Component {
         setBusy:(b)=>{
             this.setState({busy:b})
         },
-        height:0,
+
         showArticles:false,
         setShowArticles:(s)=>{
             if(s&&this.state.items.length===0) {
@@ -34,39 +41,33 @@ class App extends Component {
         items:[],
         id:(()=>{
             try {
-                let s = window.location.search;
-                let id = s.substr(4);
+                let id =get_url_params();
                 let idi = parseInt(id);
+                if(isNaN(idi)) return 0;
                 return idi;
             }catch (e) {
-                return 217;
+                return 0;
             }
         })()
     }
-
-     resize=()=>{
-        this.setState({height:window.innerHeight-50})
-     }
-     componentDidMount() {
-         busy.register(this.state.setBusy)
-        this.setState({height:window.innerHeight-50})
-        window.addEventListener("resize",this.resize)
-     }
-     componentWillUnmount() {
-        window.removeEventListener("resize",this.resize)
-     }
-
+    changeUrl=(nid)=>{
+        if(this.state.id!==nid) {
+            window.location.href = window.location.origin + "/detail.html#/" + nid;
+        }
+    }
     render() {
-        let h=this.state.height+"px"
     return (
         <QuestionContext.Provider value={this.state}>
             <Layout className={"layout"}>
                 <HashRouter>
+                    <Layout.Content>
                     <Qr/>
-                    <Papers {...this.state} setId={(id)=>{this.setState({id:id})}}/>
-                    <APaper id={this.state.id} onShow={()=>{this.state.setShowArticles(true)}}/>
+                    <Papers {...this.state} setId={(id)=>{this.setState({id:id});this.changeUrl(id);}}/>
+                    <APaper id={this.state.id} onShow={()=>{this.state.setShowArticles(true)}} idChange={this.changeUrl}/>
                     <Qr/>
+                    </Layout.Content>
                 </HashRouter>
+                <Footer/>
             </Layout>
         </QuestionContext.Provider>
     );
@@ -92,7 +93,9 @@ export function Papers(props) {
 
 export function Qr() {
 return (
-    <img src={"code-search.png"} style={{width:"100%",height:"auto"}}/>
+    <a href={"/index.html#/papers"}>
+    <img src={"code-search.png"} className={"qr"}/>
+    </a>
 )
 }
 

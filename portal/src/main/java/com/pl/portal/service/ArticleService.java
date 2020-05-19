@@ -27,6 +27,9 @@ public class ArticleService implements IArticleService {
     @Override
     @Cacheable(key="'detail_'+#id.intValue()+'_'+#version")
     public TArticle getDetail(Long id,String version) {
+        if(id==null||id==0){
+            id=getDefaultId();
+        }
         if(version.equals("e")) {
             return articleDao.getEnById(id.intValue());
         }else if(version.equals("m")){
@@ -34,6 +37,12 @@ public class ArticleService implements IArticleService {
         }else{
             return articleDao.getChById(id.intValue());
         }
+    }
+
+    @Override
+    @Cacheable(key="'default_article_id'")
+    public Long getDefaultId() {
+        return articleDao.getDefaultId();
     }
 
     @Autowired

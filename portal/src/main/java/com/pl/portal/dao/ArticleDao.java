@@ -21,4 +21,7 @@ public interface ArticleDao {
     @Select("select id,c_name as cName,auth from t_article where use_level>0 order by id desc limit 5")
     List<TArticle> getLatest5();
 
+    @Select("select max(id) from t_article where use_level>0")
+    Long getDefaultId();
+
 }

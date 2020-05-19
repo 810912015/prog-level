@@ -41,7 +41,20 @@ pre {
   cursor: grab;
   display: block;
 }
+
+.qr{
+  width:600px;
+  height: auto;
+  float: right;
+  display: block;
+}
 @media screen and (max-width: 840px){
+  .qr{
+    width:100%;
+    height: auto;
+    float:none;
+    display: block;
+  }
   .brand{
     display: none;
   }

@@ -27,7 +27,7 @@ public class WxArticleService implements IWxArticleService {
             Article r=new Article();
             r.setTitle(a.getcName());
             r.setDescription(a.getAuth());
-            r.setUrl("http://progprac.com/detail.html?id="+a.getId());
+            r.setUrl("http://progprac.com/detail.html#/"+a.getId());
             r.setPicUrl("http://wx.qlogo.cn/mmopen/jJSbu4Te5ib9ibK9JaC1ZKib5wl0fWWR6lia6JjfLeLNmdHf0THRzDHjxfIEkGG5nNyVydHGoLaEkmNrbc3M1htZAXqTRtbZN02x/64");
             news.add(r);
         }

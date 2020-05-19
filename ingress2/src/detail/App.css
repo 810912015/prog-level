@@ -35,8 +35,20 @@ pre {
   cursor: grab;
   display: block;
 }
-
+.qr{
+  width:600px;
+  height: auto;
+  float: right;
+}
+@media  screen and (max-width: 800px) {
+  .qr{
+    width:100%;
+    height: auto;
+    float: none;
+  }
+}
 @media screen and (max-width: 600px) {
+
   .my-row{
     display: block;
   }

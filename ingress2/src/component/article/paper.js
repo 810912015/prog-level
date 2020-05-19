@@ -33,9 +33,12 @@ export function APaper(props) {
 
 
     useEffect(()=>{
-        if(!props.id) return;
+        //if(!props.id) return;
         get("/p/article/detail?id="+props.id+"&version="+version,(d)=>{
             setItem(d.data)
+            if(typeof props.idChange==='function'){
+                props.idChange(d.data.id)
+            }
         })
     },[props.id,version])
     let r;
@@ -81,16 +84,15 @@ function Papers2(props) {
             setItems(d.data)
         })
     },[])
+    const listClick=(id)=>{
+        props.setShowArticles(false)
+        setCur(id)
+        window.location.href=window.location.origin+"/#/papers/"+id;
+    }
     let c;
     if(!cur){
         c=(
-
-            <PaperList st={{padding:"10px"}} items={items} click={(id)=>{
-                props.setShowArticles(false)
-                setCur(id)
-                props.history.push("papers/"+id)
-            }}/>
-
+            <PaperList st={{padding:"10px"}} items={items} click={listClick}/>
         )
     }else{
         c=( <APaper id={cur||(items&&items.length&&items[0].id)} onShow={()=>props.setShowArticles(true)}/>)
@@ -104,11 +106,12 @@ function Papers2(props) {
                     mask={false}
                     width={"400px"}
                     visible={props.showArticles}>
-                <PaperList items={items} click={(id)=>{
-                    props.setShowArticles(false)
-                    setCur(id)
-                }}/>
+                <PaperList items={items} click={listClick}/>
             </Drawer>
+            <a href={"/detail.html#/"+cur}>
+                <img src={"code-search.png"} className={"qr"}/>
+            </a>
+
             {c}
         </div>
     )
