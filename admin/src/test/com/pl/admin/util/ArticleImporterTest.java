@@ -16,7 +16,7 @@ class ArticleImporterTest {
     private ArticleImporter ai;
     @Test
     void save() {
-        String d="D:\\proj\\ppt\\result\\2020-5-15\\";
+        String d="D:\\proj\\ppt\\result\\2020-5-19\\";
         String[] d1=new String[]{
 //                "lobste_rs",
 //                "betterdev_link",

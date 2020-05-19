@@ -2,7 +2,7 @@ import React from 'react'
 import {TagBag,QuestionBag,RecommendBag} from "./question";
 import {Row,Col} from 'antd'
 import {QuestionContext} from "./context";
-import {Link, Route, Switch} from 'react-router-dom'
+import { Route, Switch} from 'react-router-dom'
 import {Take} from "./take";
 import {Login} from "./auth/login";
 import {Register} from "./auth/register";
@@ -22,13 +22,13 @@ function IndexMain() {
         <Row>
             <Col xs={24} sm={24} md={{span: 3, offset: 2}}>
                 <TagBag/>
-                <img src={"qr.jpg"}/>
+                <img src={"qr.jpg"} alt={""}/>
             </Col>
             <Col xs={24} sm={24} md={13} style={{minHeight: "80%"}}>
                <Qb/>
             </Col>
             <Col xs={24} sm={24} md={6}>
-                <img src={"code-search.png"} style={{width:"100%",height:"auto"}}/>
+                <img src={"code-search.png"} style={{width:"100%",height:"auto"}} alt={""}/>
                 {<RecommendBag/>}
             </Col>
         </Row>)

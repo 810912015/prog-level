@@ -30,13 +30,14 @@ function Tb(props) {
 
        <div style={{display:"flex"}}>
            <div  className={"main-brand"}>
-               <a href={"#"}> 分码编程</a>
+               <a href={"/index.html"}> 分码编程</a>
            </div>
            <div className={"brand"}>
                编程练习和文档翻译
            </div>
            <div className={"shortcut"}>
-               <Link to={"/papers"} style={{paddingRight:"10px"}} onClick={()=>{props.setShowArticles&&props.setShowArticles(!props.showArticles)}}>文章</Link>
+               <Link to={"/papers"} style={{paddingRight:"10px"}}
+                     onClick={()=>{props.setShowArticles&&props.setShowArticles(!props.showArticles)}}>文章</Link>
               {c}
            </div>
        </div>

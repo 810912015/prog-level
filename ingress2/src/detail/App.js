@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {Layout, Affix, Drawer} from 'antd';
+import {Layout, Drawer} from 'antd';
 import './App.css';
 import {HashRouter} from "react-router-dom";
 import {QuestionContext} from "../component/context";
-import {authHeader, busy, post} from "../component/common/network";
+import {authHeader, post} from "../component/common/network";
 import {APaper, PaperList} from "../component/article/paper";
 import {Footer} from "../footer";
 
@@ -94,7 +94,7 @@ export function Papers(props) {
 export function Qr() {
 return (
     <a href={"/index.html#/papers"}>
-    <img src={"code-search.png"} className={"qr"}/>
+    <img src={"code-search.png"} className={"qr"} alt={"扫描关注"}/>
     </a>
 )
 }

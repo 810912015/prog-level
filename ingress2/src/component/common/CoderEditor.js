@@ -101,8 +101,8 @@ export class MultiLangEditor extends React.Component{
 
     constructor(props){
         super(props)
-        let sl=this.getFirstLang(this.props.sourceList);
-        this. state={
+        let sl=this.getFirstLang(this.props.sourceList)
+        this.state={
             lang:sl[0]||"",
             source:sl[1]||"",
             list:this.props.sourceList||{},

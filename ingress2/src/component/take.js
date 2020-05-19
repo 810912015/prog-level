@@ -81,6 +81,15 @@ export function Prs(props) {
     )
 }
 
+function handleProtocol(rawHtml) {
+    if(!rawHtml) return rawHtml;
+    if(window.location.protocol==="http:"){
+        let reg=new RegExp("https://","g")
+        return rawHtml.replace(reg,"http://")
+    }
+    return rawHtml;
+}
+
 export function Take(props) {
     const [item,setItem]=useState({id:props.match.params.id||props.id||0})
     const [so,setSo]=useState({})
@@ -91,13 +100,15 @@ export function Take(props) {
     const [show,setShow]=useState(false)
     const [pass,setPass]=useState([])
     useEffect(()=>{
+        if(!lw.w) {
+            setLw({w: window.innerWidth / 2})
+        }
+        window.addEventListener("resize",resize)
+    })
+    useEffect(()=>{
         let id=qid;
         post("/question/get/"+id,{},
             (d)=>{
-            if(!lw.w) {
-                setLw({w: window.innerWidth / 2})
-            }
-            window.addEventListener("resize",resize)
                 let so=getSourceObjFromArray(d.s);
                 setCur({
                     skeleton:d.s[0].source,
@@ -138,8 +149,8 @@ export function Take(props) {
         })
     }
     const changeTab=(k)=>{
-        console.log("change tab",k,k==2)
-        if(k==2){
+        console.log("change tab",k,k===2)
+        if(k===2){
             post("/exam/pass-mine",{qid:qid,size:10},(d)=>{
                 setPass(d)
             })

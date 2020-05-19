@@ -1,6 +1,6 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {get, post} from "../common/network";
-import {Row, Col, Affix,Drawer,Button} from "antd";
+import {Drawer,Button} from "antd";
 import {BarsOutlined} from "@ant-design/icons";
 import {QuestionContext} from "../context";
 import RawHtml from "react-raw-html"
@@ -21,12 +21,7 @@ export function PaperList(props) {
         <div style={s}>{r}</div>
     )
 }
-function makePre() {
-   let code=false;
-   return function (node) {
-       let start=node.type==='tag'
-   }
-}
+
 export function APaper(props) {
     const [item,setItem]=useState(null)
     const [version,setVersion]=useState("c")
@@ -109,7 +104,7 @@ function Papers2(props) {
                 <PaperList items={items} click={listClick}/>
             </Drawer>
             <a href={"/detail.html#/"+cur}>
-                <img src={"code-search.png"} className={"qr"}/>
+                <img src={"code-search.png"} className={"qr"} alt={"扫描关注"}/>
             </a>
 
             {c}

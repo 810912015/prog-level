@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Layout, Affix} from 'antd';
+import React from 'react';
+import { Layout} from 'antd';
 
 export function Footer() {
   return (
