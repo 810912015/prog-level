@@ -29,6 +29,13 @@ public class CommonResult<T> {
         return new CommonResult<T>(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), data);
     }
 
+    public static  CommonResult copy(CommonResult s) {
+        return new CommonResult(s.getCode(),s.getMessage(),null);
+    }
+
+    public static <T> CommonResult<T> copy(CommonResult s,T data) {
+        return new CommonResult(s.getCode(),s.getMessage(),data);
+    }
     /**
      * 成功返回结果
      *

@@ -1,6 +1,3 @@
-cooee:
-  job:
-    enabled: false
 pl:
   runner:
     dir: D:\pl-runner\upload-sources\

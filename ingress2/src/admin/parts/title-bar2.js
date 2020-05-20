@@ -38,7 +38,8 @@ function Tb(props) {
                编程练习和文档翻译
            </div>
            <div className={"shortcut"}>
-               <a href={"/index.html#/papers"}>文章</a>
+               <Link to={"/"} title={"编辑"} style={{padding:"0px 10px"}}>{"编辑"}</Link>
+               <Link to={"/translate"} title={"翻译"} style={{padding:"0px 10px"}}>{"翻译"}</Link>
               {c}
            </div>
        </div>

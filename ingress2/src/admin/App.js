@@ -9,6 +9,7 @@ import {authHeader,busy} from "../component/common/network";
 import {Bi} from "../component/common/busy-indicator"
 
 import {Pannel} from "./parts/Pannel";
+import {Footer} from "../footer";
 
 class App extends Component {
     state={
@@ -54,14 +55,7 @@ class App extends Component {
                         <Pannel/>
                     </Layout.Content>
                 </HashRouter>
-                <Layout.Footer style={{padding:0}}>
-                    <div style={{textAlign:"center",backgroundColor:"#888",color:"#eee",padding:"2px"}}>
-                        <div className={"space"}>分码网 编程入门社区 联系请邮件810912015@qq.com</div>
-                        <div className={"space"}>
-                            <a href={"http://www.beian.miit.gov.cn/"}>沪ICP备20013508号-1</a>
-                            </div>
-                    </div>
-                </Layout.Footer>
+                <Footer/>
             </Layout>
         </QuestionContext.Provider>
     );

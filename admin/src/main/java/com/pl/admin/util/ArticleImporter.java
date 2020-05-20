@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -89,20 +90,30 @@ public class ArticleImporter {
     public List<Item> read(String s){
         try {
             List<String> r= Files.readAllLines(Paths.get(s));
-            List<Item> ri=new ArrayList<>();
-            for(String t:r){
-                if(StringUtils.isEmpty(t)) continue;
-                Item i=JSONUtil.toBean(t,Item.class);
-                ri.add(i);
-            }
-            return ri;
+            return getItems(r);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public void save(List<Item> items){
+    private List<Item> getItems(List<String> r) {
+        List<Item> ri=new ArrayList<>();
+        for(String t:r){
+            if(StringUtils.isEmpty(t)) continue;
+            Item i= JSONUtil.toBean(t, Item.class);
+            ri.add(i);
+        }
+        return ri;
+    }
+
+    public List<Item> fromStr(String s){
+
+        return getItems(Arrays.asList(s));
+    }
+
+    public List<TArticle> save(List<Item> items){
+        List<TArticle> ra=new ArrayList<>();
         for(Item i:items){
             if(StringUtils.isEmpty(i.getText())) continue;
             if(!StringUtils.isEmpty(i.getN())){
@@ -130,7 +141,9 @@ public class ArticleImporter {
             a.setCreateTime(d);
             a.setDclt(d);
             articleMapper.insert(a);
+            ra.add(a);
         }
+        return ra;
     }
     @Autowired
     private TArticleMapper articleMapper;

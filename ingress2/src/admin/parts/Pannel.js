@@ -5,6 +5,7 @@ import {Login} from "../../component/auth/login";
 import {Register} from "../../component/auth/register";
 import {Reset} from "../../component/auth/reset";
 import {Article} from "./article";
+import {Translator} from "./translate";
 
 export function Pannel() {
   return (
@@ -14,5 +15,6 @@ export function Pannel() {
           <Route path={"/login"} component={Login} key={"login"}/>
           <Route path={"/register"} component={Register} key={"register"}/>
           <Route path={"/reset"} component={Reset} key={"reset"}/>
+          <Route path={"/translate"} component={Translator} key={"translate"}/>
       </Switch>)
 }
