@@ -1,8 +1,11 @@
 package com.pl.admin.service;
 
+import cn.hutool.json.JSON;
+import com.alibaba.druid.support.json.JSONUtils;
 import com.pl.admin.util.ArticleImporter;
 import com.pl.data.common.api.CmdRunner;
 import com.pl.data.common.api.CommonResult;
+import com.pl.data.common.api.HttpUtil;
 import com.pl.data.mapper.TArticleMapper;
 import com.pl.data.model.TArticle;
 import com.pl.data.model.TArticleExample;
@@ -28,8 +31,8 @@ public class Translator implements ITranslator {
     private TArticleMapper articleMapper;
     @Autowired
     private ArticleImporter ai;
-    @Value("${pl.trans.cmd}")
-    private String preCmd;
+    @Value("${pl.trans.ip}")
+    private String ip;
 
     private boolean existsByUrl(Link link){
         TArticleExample tae=new TArticleExample();
@@ -48,8 +51,8 @@ public class Translator implements ITranslator {
         if(exists==null||!exists) {
             return CommonResult.success(getArticle(link),"此url正在翻译中");
         }
-        String cmd=preCmd+link.toCmd();
-        CommonResult<String> r=callTrans(cmd);
+
+        CommonResult<String> r=callSvc(ip+":7070/translate",new CmdPrm(link,ip));
         return CommonResult.copy(r,getArticle(link));
     }
     private List<TArticle> getArticle(Link link){
@@ -61,10 +64,18 @@ public class Translator implements ITranslator {
         return articleMapper.selectByExample(tae);
     }
 
-    private CommonResult<String> callTrans(String cmd){
-        CmdRunner.runCmd(cmd);
-        return CommonResult.success("");
+    /**
+     * 调用翻译服务
+     * @param url
+     * @param prm
+     * @return
+     */
+    private CommonResult<String> callSvc(String url,CmdPrm prm){
+        String r=HttpUtil.postJson(url, JSONUtils.toJSONString(prm));
+        return CommonResult.success(r);
     }
+
+
     @Override
     public CommonResult<List<TArticle>> query(Link link) {
         return CommonResult.success(getArticle(link));

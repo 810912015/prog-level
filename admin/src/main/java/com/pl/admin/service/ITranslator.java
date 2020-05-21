@@ -70,6 +70,55 @@ public interface ITranslator {
         }
     }
 
+    class CmdPrm{
+        private String url;
+        private String type;
+        private String to;
+        private String pattern;
+
+        public CmdPrm(){
+
+        }
+        public CmdPrm(Link l,String ip){
+            this.url=l.url;
+            this.type=l.type;
+            this.pattern=l.linkerContainerPattern;
+            this.to=ip;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getTo() {
+            return to;
+        }
+
+        public void setTo(String to) {
+            this.to = to;
+        }
+
+        public String getPattern() {
+            return pattern;
+        }
+
+        public void setPattern(String pattern) {
+            this.pattern = pattern;
+        }
+    }
+
     class Result extends Link{
         private String json;
 
