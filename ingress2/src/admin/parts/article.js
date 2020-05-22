@@ -8,7 +8,7 @@ export function AArticle(props) {
         <div style={{padding:"5px"}}>
             <a onClick={()=>props.click(props.id)}>
                 {props.id}
-                <span style={{marginLeft:"10px"}}>
+                <span style={{marginLeft:"10px",wordBreak:"break-all"}}>
                      {props.cName||props.name}
                 </span>
 
@@ -96,14 +96,21 @@ export function ArticleDetail(props) {
    )
 }
 
-export function Article() {
+export function Article(props) {
     const [list,setList]=useState([])
     const [cur,setCur]=useState({})
+    const [id,setId]=useState(props.match.params.id||0)
     useEffect(()=>{
         post("/admin/article/list",{},(d)=>{
             setList(d.data)
         })
     },[])
+    useEffect(()=>{
+        if(!id) return;
+        get("/admin/article/detail?id="+id,(d)=>{
+            setCur(d.data)
+        })
+    },[id])
     const onDel=(id)=>{
         let r=[]
         list.forEach((a)=>{
@@ -116,11 +123,7 @@ export function Article() {
     return (
         <Row>
             <Col span={4}>
-                <ArticleList items={list} click={(id)=>{
-                    get("/admin/article/detail?id="+id,(d)=>{
-                        setCur(d.data)
-                    })
-                }}/>
+                <ArticleList items={list} click={setId}/>
             </Col>
             <Col span={20}>
                 <ArticleDetail {...cur} onDel={onDel}/>

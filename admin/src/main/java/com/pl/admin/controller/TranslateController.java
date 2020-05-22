@@ -43,6 +43,13 @@ public class TranslateController {
         return translator.query(link);
     }
 
+    @ApiOperation(value = "clear")
+    @RequestMapping(value = "clear",method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult<String> clear(@RequestBody ITranslator.Link link) {
+        return translator.clearLock(link);
+    }
+
     @ApiOperation(value = "done")
     @RequestMapping(value = "done",method = RequestMethod.POST)
     @ResponseBody

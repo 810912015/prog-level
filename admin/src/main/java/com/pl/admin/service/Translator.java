@@ -1,6 +1,7 @@
 package com.pl.admin.service;
 
 import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.druid.support.json.JSONUtils;
 import com.pl.admin.util.ArticleImporter;
 import com.pl.data.common.api.CmdRunner;
@@ -15,9 +16,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,14 +52,31 @@ public class Translator implements ITranslator {
             return CommonResult.success(getArticle(link),"此文章已翻译");
         }
 
-        Boolean exists=redisService.getRedis().opsForValue().setIfAbsent(link.runningKey(),"", Duration.ofHours(2));
+        Boolean exists=redisService.getRedis().opsForValue().setIfAbsent(link.runningKey(),
+                LocalTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                Duration.ofHours(2));
         if(exists==null||!exists) {
             return CommonResult.success(getArticle(link),"此url正在翻译中");
         }
 
-        CommonResult<String> r=callSvc(ip+":7070/translate",new CmdPrm(link,ip));
+        CommonResult<String> r=callSvc("http://"+ip+":7070/translate",new CmdPrm(link,ip));
+        if(!r.isSuccess()){
+            redisService.getRedis().delete(link.runningKey());
+        }
         return CommonResult.copy(r,getArticle(link));
     }
+
+    @Override
+    public CommonResult<String> clearLock(Link link) {
+        String k=link.runningKey();
+        String s=redisService.get(k);
+        if(StringUtils.isEmpty(s)){
+            return CommonResult.failed("此url无锁");
+        }
+        redisService.getRedis().delete(k);
+        return CommonResult.success("已清除。加锁时间"+s);
+    }
+
     private List<TArticle> getArticle(Link link){
         String rk=link.resultKey();
         List<String> rl=redisService.getRedis().opsForList().range(rk,0,100);
@@ -71,8 +93,13 @@ public class Translator implements ITranslator {
      * @return
      */
     private CommonResult<String> callSvc(String url,CmdPrm prm){
-        String r=HttpUtil.postJson(url, JSONUtils.toJSONString(prm));
-        return CommonResult.success(r);
+        try {
+            String r = HttpUtil.postJson(url, JSONUtil.toJsonStr(prm));
+            return CommonResult.success(r);
+        }catch (Exception e){
+            logger.error("",e);
+            return CommonResult.failed(e.getMessage());
+        }
     }
 
 

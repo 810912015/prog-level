@@ -7,6 +7,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 public interface ITranslator {
@@ -137,6 +138,8 @@ public interface ITranslator {
      * @return 翻译操作id
      */
     CommonResult<List<TArticle>> translate(Link link);
+
+    CommonResult<String> clearLock(Link link);
 
     /**
      * 查询翻译结果

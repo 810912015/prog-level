@@ -1,3 +1,4 @@
+### 注意点
 docker build -t reader-admin .
 docker run --name ra -e "spring.profiles.active=prodhttps" reader-admin
 

@@ -1,6 +1,10 @@
 #mybatis:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#depend on os: under windows the value is of windows directory format
+#pl:
+#  runner:
+#    dir: "/data/runner"
 spring:
   cache:
     type: none
@@ -18,7 +22,7 @@ spring:
         login-username: druid
         login-password: druid
   redis:
-    host: localhost # Redis服务器地址
+    host: 192.168.16.102 # Redis服务器地址
     database: 0 # Redis数据库索引（默认为0）
     port: 6379 # Redis服务器连接端口
     password: # Redis服务器连接密码（默认为空）
@@ -30,7 +34,7 @@ spring:
         min-idle: 0 # 连接池中的最小空闲连接
     timeout: 30000ms # 连接超时时间（毫秒）
   rabbitmq:
-    host: localhost
+    host: 192.168.16.102
     port: 5672
 #    username: admin
 #    password: admin

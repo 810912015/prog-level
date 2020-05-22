@@ -11,6 +11,7 @@ export function Pannel() {
   return (
       <Switch>
           <Route exact path={"/"} component={Article} key={"q"}/>
+          <Route exact path={"/art/:id"} component={Article} key={"art"}/>
           <Route path="/pass/:id" component={Take} key={"pass"}/>
           <Route path={"/login"} component={Login} key={"login"}/>
           <Route path={"/register"} component={Register} key={"register"}/>

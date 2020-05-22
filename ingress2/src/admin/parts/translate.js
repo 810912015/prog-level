@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {Form,Input,Select,Button,Row,Col} from "antd";
 import {post} from "../../component/common/network";
+import {Link} from "react-router-dom";
 
 const layout = {
     labelCol: { span: 8 },
@@ -14,14 +15,29 @@ export function ResShow(props) {
     if(!props){
         return null;
     }
+    let l=null;
+    if(props.data) {
+        if (props.data.length) {
+            let d = props.data[0];
+            if (d.id) {
+                l = (
+                    <Row>
+                        <Col>{d.name}</Col>
+                        <Col>
+                            <Link to={"/art/" + d.id} title={"编辑"} style={{padding: "0px 10px"}}>{"编辑"}</Link>
+                        </Col>
+                    </Row>
+                )
+            }
+        }else {
+           l=(<div>{props.data}</div>)
+        }
+    }
     return  (
         <div>
             <div>{props.code}</div>
             <div>{props.message}</div>
-            <div>{
-                JSON.stringify(props.data)
-            }
-            </div>
+            {l}
            </div>
     )
 
@@ -37,21 +53,27 @@ export function Translator(props) {
            setRes(d)
        })
     }
-    const query=()=>{
+    const makeCall=(tag)=>{
         let p={
             url:form.getFieldValue("url"),
             type:form.getFieldValue("type")
         }
-        post ("/admin/translate/result",p,(d)=>{
+        post ("/admin/translate/"+tag,p,(d)=>{
             setRes(d)
         })
+    }
+    const query=()=>{
+        makeCall("result")
+    }
+    const clear=()=>{
+        makeCall("clear")
     }
   return (
       <div>
       <Form
           {...layout}
           name="basic" form={form}
-          initialValues={{ remember: true }}
+          initialValues={{ type: "c" }}
           onFinish={onFinish}
       >
           <Form.Item name="url" label="文章地址" rules={[{ required: true }]}>
@@ -60,7 +82,7 @@ export function Translator(props) {
           <Form.Item name="type" label="地址类型">
               <Select
                   placeholder="地址类型"
-                  allowClear defaultValue={"c"}
+                  allowClear
               >
                   <Select.Option value="c">单个文章</Select.Option>
                   <Select.Option value="s">聚合</Select.Option>
@@ -79,6 +101,9 @@ export function Translator(props) {
               </Button>
               <Button type="default" onClick={query}>
                   查询结果
+              </Button>
+              <Button type="default" danger={true} onClick={clear}>
+                  清除同步锁
               </Button>
           </Form.Item>
       </Form>
