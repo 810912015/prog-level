@@ -50,6 +50,13 @@ public class TranslateController {
         return translator.clearLock(link);
     }
 
+    @ApiOperation(value = "query-lock")
+    @RequestMapping(value = "query-lock",method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult<String> queryLock(@RequestBody ITranslator.Link link) {
+        return translator.queryLock(link);
+    }
+
     @ApiOperation(value = "done")
     @RequestMapping(value = "done",method = RequestMethod.POST)
     @ResponseBody

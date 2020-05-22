@@ -140,6 +140,7 @@ public interface ITranslator {
     CommonResult<List<TArticle>> translate(Link link);
 
     CommonResult<String> clearLock(Link link);
+    CommonResult<String> queryLock(Link link);
 
     /**
      * 查询翻译结果

@@ -17,7 +17,9 @@ export function ResShow(props) {
     }
     let l=null;
     if(props.data) {
-        if (props.data.length) {
+        if(typeof props.data==="string"){
+            l=(<div>{props.data}</div>)
+        }else if (props.data.length) {
             let d = props.data[0];
             if (d.id) {
                 l = (
@@ -29,8 +31,6 @@ export function ResShow(props) {
                     </Row>
                 )
             }
-        }else {
-           l=(<div>{props.data}</div>)
         }
     }
     return  (
@@ -68,6 +68,9 @@ export function Translator(props) {
     const clear=()=>{
         makeCall("clear")
     }
+    const queryLock=()=>{
+        makeCall("query-lock")
+    }
   return (
       <div>
       <Form
@@ -104,6 +107,9 @@ export function Translator(props) {
               </Button>
               <Button type="default" danger={true} onClick={clear}>
                   清除同步锁
+              </Button>
+              <Button type="default"  onClick={queryLock}>
+                  查询同步锁
               </Button>
           </Form.Item>
       </Form>
