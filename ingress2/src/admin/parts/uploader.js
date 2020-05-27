@@ -15,11 +15,11 @@ export function Uploader(props) {
         }
     })
     const afterPost=(d1) => {
-        if(d1.code==="1"){
-            setUrl(d1.url)
-            props.change(d1.url)
+        if(d1.data){
+            setUrl(d1.data)
+            props.change(d1.data)
         }else{
-            setMsg(d1.msg)
+            setMsg(d1.message)
         }
     };
     const dropImage=(fs)=>{
@@ -66,9 +66,12 @@ Uploader.propTypes={
 }
 
 export function UploaderExample() {
+    const [url,setUrl]=useState(null)
    return (
-       <Uploader id={"123"} change={(e)=>{
-       console.log(e)
-       }} title={"img"}/>
+       <div>
+           <Uploader id={"123"} change={setUrl} title={"文件"}/>
+           <div>{url}</div>
+       </div>
+
    )
 }
