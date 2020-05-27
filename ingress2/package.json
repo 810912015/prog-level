@@ -17,6 +17,7 @@
     "react-app-rewire-multiple-entry": "^2.2.0",
     "react-app-rewired": "^2.1.5",
     "react-dom": "^16.13.1",
+    "react-dropzone": "^11.0.1",
     "react-raw-html": "^0.4.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
@@ -42,5 +43,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prop-types": "^15.7.2"
   }
 }

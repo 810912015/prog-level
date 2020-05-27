@@ -40,6 +40,7 @@ function Tb(props) {
            <div className={"shortcut"}>
                <Link to={"/"} title={"编辑"} style={{padding:"0px 10px"}}>{"编辑"}</Link>
                <Link to={"/translate"} title={"翻译"} style={{padding:"0px 10px"}}>{"翻译"}</Link>
+               <Link to={"/upload"} title={"上传"} style={{padding:"0px 10px"}}>{"上传"}</Link>
               {c}
            </div>
        </div>

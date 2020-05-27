@@ -85,7 +85,7 @@ export const post = (url,data,success,fail) => {
 }
 export const upload = function (url, file, success, fail) {
     let filedata = new FormData();
-    filedata.append('file', file, 'file');
+    filedata.append('file', file, file.name);
     filedata.append('path', file.path);
 
     fetch(url, {

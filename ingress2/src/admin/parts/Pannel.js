@@ -6,6 +6,7 @@ import {Register} from "../../component/auth/register";
 import {Reset} from "../../component/auth/reset";
 import {Article} from "./article";
 import {Translator} from "./translate";
+import {UploaderExample} from "./uploader";
 
 export function Pannel() {
   return (
@@ -17,5 +18,6 @@ export function Pannel() {
           <Route path={"/register"} component={Register} key={"register"}/>
           <Route path={"/reset"} component={Reset} key={"reset"}/>
           <Route path={"/translate"} component={Translator} key={"translate"}/>
+          <Route path={"/upload"} component={UploaderExample} key={"upload"}/>
       </Switch>)
 }
