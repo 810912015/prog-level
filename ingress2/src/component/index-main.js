@@ -22,13 +22,13 @@ function IndexMain() {
         <Row>
             <Col xs={24} sm={24} md={{span: 3, offset: 2}}>
                 <TagBag/>
-                <img src={"qr.jpg"} alt={""}/>
+                <img src={"https://progprac.obs.cn-south-1.myhuaweicloud.com:443/qr.jpg"} alt={""}/>
             </Col>
             <Col xs={24} sm={24} md={13} style={{minHeight: "80%"}}>
                <Qb/>
             </Col>
             <Col xs={24} sm={24} md={6}>
-                <img src={"code-search.png"} style={{width:"100%",height:"auto"}} alt={""}/>
+                <img src={"https://progprac.obs.cn-south-1.myhuaweicloud.com:443/code-search19.png"} style={{width:"100%",height:"auto"}} alt={""}/>
                 {<RecommendBag/>}
             </Col>
         </Row>)

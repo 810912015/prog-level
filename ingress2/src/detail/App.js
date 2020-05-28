@@ -94,7 +94,7 @@ export function Papers(props) {
 export function Qr() {
 return (
     <a href={"/index.html#/papers"}>
-    <img src={"code-search.png"} className={"qr"} alt={"扫描关注"}/>
+    <img src={"https://progprac.obs.cn-south-1.myhuaweicloud.com:443/code-search19.png"} className={"qr"} alt={"扫描关注"}/>
     </a>
 )
 }

@@ -30,7 +30,7 @@ function Tb(props) {
 
        <div style={{display:"flex"}}>
            <div  className={"main-brand"}>
-               <a href={"/index.html"}> 分码编程</a>
+               <a href={"/default.html"}> 分码编程</a>
            </div>
            <div className={"brand"}>
                编程练习和文档翻译

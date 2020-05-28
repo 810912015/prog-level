@@ -31,7 +31,7 @@ function Tb(props) {
 
        <div style={{display:"flex"}}>
            <div  className={"main-brand"}>
-               <a href={"/index.html"}> 分码编程-文章编辑</a>
+               <a href={"/default.html"}> 分码编程-文章编辑</a>
 
            </div>
            <div className={"brand"}>

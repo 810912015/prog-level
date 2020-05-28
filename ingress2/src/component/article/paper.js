@@ -104,7 +104,7 @@ function Papers2(props) {
                 <PaperList items={items} click={listClick}/>
             </Drawer>
             <a href={"/detail.html#/"+cur}>
-                <img src={"code-search.png"} className={"qr"} alt={"扫描关注"}/>
+                <img src={"https://progprac.obs.cn-south-1.myhuaweicloud.com:443/code-search19.png"} className={"qr"} alt={"扫描关注"}/>
             </a>
 
             {c}
