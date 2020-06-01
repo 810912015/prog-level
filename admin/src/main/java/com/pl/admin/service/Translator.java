@@ -57,7 +57,7 @@ public class Translator implements ITranslator {
         private static final int FULL=3;
         private boolean shouldCallNow(){
             Long r=redisService.getRedis().opsForHash().size(KEY);
-            return r==null||r<FULL;
+            return r < FULL;
         }
 
         public boolean exist(String key){
@@ -78,10 +78,11 @@ public class Translator implements ITranslator {
             if(f==null) return;
             if(!shouldCallNow()) return;
             Set<Object> r = redisService.getRedis().opsForHash().keys(KEY);
-            if (r == null || r.isEmpty()) return;
+            if (r.isEmpty()) return;
             for(Object o:r){
                 if(o==null) continue;
                 Object or=redisService.getRedis().opsForHash().get(KEY,o);
+                assert or != null;
                 Link l=JSONUtil.toBean(or.toString(),Link.class);
                 if(f.apply(l)){
                     break;
@@ -94,7 +95,7 @@ public class Translator implements ITranslator {
         Boolean exists=redisService.getRedis().opsForValue().setIfAbsent(link1.runningKey(),
                 Long.toString(new Date().getTime()),
                 Duration.ofHours(4));
-        if(exists) {
+        if(exists!=null&&exists) {
             CommonResult<String> r = callSvc("http://" + ip + ":7070/translate", new CmdPrm(link1, ip));
             if (!r.isSuccess()) {
                 redisService.getRedis().delete(link1.runningKey());
