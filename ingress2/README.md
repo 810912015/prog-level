@@ -19,3 +19,7 @@ In the project directory, you can run:
 ### add a html under /public
 
 ### add an item in entry in ./config-overrides.js
+
+##about security
+
+when 401 or 403 is arrived,then modify window location by add or replace last part with 'login'

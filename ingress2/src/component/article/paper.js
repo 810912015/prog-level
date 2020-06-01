@@ -82,7 +82,7 @@ function Papers2(props) {
     const listClick=(id)=>{
         props.setShowArticles(false)
         setCur(id)
-        window.location.href=window.location.origin+"/#/papers/"+id;
+        window.location.href=window.location.origin+"/index.html#/papers/"+id;
     }
     let c;
     if(!cur){

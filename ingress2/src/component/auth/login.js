@@ -28,7 +28,7 @@ function Login2(props) {
     const [form]=Form.useForm()
     const [msg,setMsg]=useState("")
     const finish=values=>{
-        post("/auth/login",{name:values.name,pwd:values.pwd,kapcha:""},(d)=>{
+        post(props.authUrl||"/auth/login",{name:values.name,pwd:values.pwd,kapcha:""},(d)=>{
             if(d.success){
                 props.setLoginName(d.data.uname);
                 props.history.push("/")

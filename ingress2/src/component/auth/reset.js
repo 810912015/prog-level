@@ -16,7 +16,7 @@ export const Reset=(props)=>{
             kapcha:"",
             confirm:form.getFieldValue("confirm")
         }
-        post("/auth/reset",ro,(d)=>{
+        post(props.authUrl||"/auth/reset",ro,(d)=>{
             if(!d.success){
                 setMsgs(d.msgs)
             }else{

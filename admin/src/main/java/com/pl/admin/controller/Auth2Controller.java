@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @Controller
 @Api(tags = "Auth2Controller",description = "Auth2Controller api")
-@RequestMapping("/auth")
+@RequestMapping("/admin/auth")
 public class Auth2Controller extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(Auth2Controller.class);
     @Autowired

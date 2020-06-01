@@ -9,7 +9,7 @@ import {post} from "../../component/common/network";
 
 function Tb(props) {
     const logout=()=>{
-       post("/auth/logout",{},(d)=>{
+       post("/admin/auth/logout",{},(d)=>{
            message.info("已注销")
            props.setLoginName("")
        })

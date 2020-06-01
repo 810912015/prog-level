@@ -63,7 +63,7 @@ export const Register= (props) => {
             kapcha:"",
             confirm:form.getFieldValue("confirm")
         }
-        post("/auth/register",ro,(d)=>{
+        post(props.authUrl||"/auth/register",ro,(d)=>{
             if(!d.success){
                 setMsgs(d.msgs)
             }else{
