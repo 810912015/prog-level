@@ -68,4 +68,16 @@ public class TranslateController {
            return CommonResult.failed(e.getMessage());
         }
     }
+
+    @ApiOperation(value = "finish")
+    @RequestMapping(value = "finish",method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult<String> finish(@RequestBody ITranslator.Link link) {
+        try {
+            return translator.finish(link);
+        }catch (Exception e){
+            LoggerFactory.getLogger(this.getClass()).error("",e);
+            return CommonResult.failed(e.getMessage());
+        }
+    }
 }

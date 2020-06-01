@@ -19,6 +19,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -34,6 +36,9 @@ public class Translator implements ITranslator {
     @Value("${pl.trans.ip}")
     private String ip;
 
+    @Autowired
+    QProvider qProvider;
+
     private boolean existsByUrl(Link link){
         TArticleExample tae=new TArticleExample();
         tae.createCriteria().andNameEqualTo(link.getUrl());
@@ -41,28 +46,83 @@ public class Translator implements ITranslator {
         return c>0;
     }
 
+    /**
+     * 保证任何时候只有给定数量的翻译在进行，多余的进入队列，当队列变化时执行可能的翻译操作
+     */
+    @Component
+    public static class QProvider{
+        @Autowired
+        private RedisService redisService;
+        private static final String KEY="t_q";
+        private static final int FULL=3;
+        private boolean shouldCallNow(){
+            Long r=redisService.getRedis().opsForHash().size(KEY);
+            return r==null||r<FULL;
+        }
+
+        public boolean exist(String key){
+            return redisService.getRedis().opsForHash().hasKey(KEY,key);
+        }
+
+        public void add(Link link,Function<Link,Boolean> f){
+            if(exist(link.runningKey())) return;
+            redisService.getRedis().opsForHash().put(KEY,link.runningKey(),JSONUtil.toJsonStr(link));
+            onChange(f);
+        }
+        public void remove(String key,Function<Link,Boolean> f){
+            redisService.getRedis().opsForHash().delete(KEY,key);
+            onChange(f);
+        }
+
+        private void onChange(Function<Link,Boolean> f){
+            if(f==null) return;
+            if(!shouldCallNow()) return;
+            Set<Object> r = redisService.getRedis().opsForHash().keys(KEY);
+            if (r == null || r.isEmpty()) return;
+            for(Object o:r){
+                if(o==null) continue;
+                Object or=redisService.getRedis().opsForHash().get(KEY,o);
+                Link l=JSONUtil.toBean(or.toString(),Link.class);
+                if(f.apply(l)){
+                    break;
+                }
+            }
+        }
+    }
+
+    public boolean callOne(Link link1){
+        Boolean exists=redisService.getRedis().opsForValue().setIfAbsent(link1.runningKey(),
+                Long.toString(new Date().getTime()),
+                Duration.ofHours(4));
+        if(exists) {
+            CommonResult<String> r = callSvc("http://" + ip + ":7070/translate", new CmdPrm(link1, ip));
+            if (!r.isSuccess()) {
+                redisService.getRedis().delete(link1.runningKey());
+                return false;
+            }else{
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public CommonResult<List<TArticle>> translate(Link link) {
         if(existsByUrl(link)){
             return CommonResult.success(getArticle(link),"此文章已翻译");
         }
-        Boolean exists=redisService.getRedis().opsForValue().setIfAbsent(link.runningKey(),
-                Long.toString(new Date().getTime()),
-                Duration.ofHours(2));
-        if(exists==null||!exists) {
-            return CommonResult.success(getArticle(link),"此url正在翻译中");
+        if(qProvider.exist(link.runningKey())){
+            return CommonResult.success(new ArrayList<>(),"此url正在翻译中");
         }
 
-        CommonResult<String> r=callSvc("http://"+ip+":7070/translate",new CmdPrm(link,ip));
-        if(!r.isSuccess()){
-            redisService.getRedis().delete(link.runningKey());
-        }
-        return CommonResult.copy(r,getArticle(link));
+        qProvider.add(link,this::callOne);
+        return CommonResult.success(new ArrayList<>());
     }
 
     @Override
     public CommonResult<String> clearLock(Link link) {
         String k=link.runningKey();
+        qProvider.remove(k,this::callOne);
         String s=redisService.get(k);
         if(StringUtils.isEmpty(s)){
             return CommonResult.failed("此url无锁");
@@ -110,7 +170,6 @@ public class Translator implements ITranslator {
 
     @Override
     public CommonResult<String> done(Result result) {
-        redisService.getRedis().delete(result.runningKey());
         List<TArticle> ra=ai.save(ai.fromStr(result.getJson()));
         if(ra==null||ra.isEmpty()) return CommonResult.success("");
         String rk=result.resultKey();
@@ -121,5 +180,10 @@ public class Translator implements ITranslator {
         return CommonResult.success("");
     }
 
-
+    @Override
+    public CommonResult<String> finish(Link link) {
+        redisService.getRedis().delete(link.runningKey());
+        qProvider.remove(link.runningKey(),this::callOne);
+        return CommonResult.success("");
+    }
 }
