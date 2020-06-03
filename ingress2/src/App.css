@@ -48,7 +48,20 @@ pre {
   float: right;
   display: block;
 }
+.vertical-center-box{
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+.vertical-center{
+  width:40%
+}
 @media screen and (max-width: 840px){
+  .vertical-center{
+    width:90%
+  }
   .qr{
     width:100%;
     height: auto;

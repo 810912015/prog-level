@@ -15,6 +15,8 @@
     <result column="dclt" jdbcType="TIMESTAMP" property="dclt" />
     <result column="auth" jdbcType="VARCHAR" property="auth" />
     <result column="pub_time" jdbcType="DATE" property="pubTime" />
+    <result column="thumbnail" jdbcType="VARCHAR" property="thumbnail" />
+    <result column="brief" jdbcType="VARCHAR" property="brief" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.pl.data.model.TArticle">
     <result column="text" jdbcType="LONGVARCHAR" property="text" />
@@ -83,7 +85,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, name, c_name, use_index, use_level, user_id, create_time, tag, source_url, remark, 
-    dclt, auth, pub_time
+    dclt, auth, pub_time, thumbnail, brief
   </sql>
   <sql id="Blob_Column_List">
     text, c_text, html, c_html, m_text
@@ -160,14 +162,16 @@
       use_level, user_id, create_time, 
       tag, source_url, remark, 
       dclt, auth, pub_time, 
-      text, c_text, html, 
-      c_html, m_text)
+      thumbnail, brief, text, 
+      c_text, html, c_html, 
+      m_text)
     values (#{name,jdbcType=VARCHAR}, #{cName,jdbcType=VARCHAR}, #{useIndex,jdbcType=INTEGER}, 
       #{useLevel,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{tag,jdbcType=VARCHAR}, #{sourceUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{dclt,jdbcType=TIMESTAMP}, #{auth,jdbcType=VARCHAR}, #{pubTime,jdbcType=DATE}, 
-      #{text,jdbcType=LONGVARCHAR}, #{cText,jdbcType=LONGVARCHAR}, #{html,jdbcType=LONGVARCHAR}, 
-      #{cHtml,jdbcType=LONGVARCHAR}, #{mText,jdbcType=LONGVARCHAR})
+      #{thumbnail,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, #{text,jdbcType=LONGVARCHAR}, 
+      #{cText,jdbcType=LONGVARCHAR}, #{html,jdbcType=LONGVARCHAR}, #{cHtml,jdbcType=LONGVARCHAR}, 
+      #{mText,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pl.data.model.TArticle">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -210,6 +214,12 @@
       </if>
       <if test="pubTime != null">
         pub_time,
+      </if>
+      <if test="thumbnail != null">
+        thumbnail,
+      </if>
+      <if test="brief != null">
+        brief,
       </if>
       <if test="text != null">
         text,
@@ -263,6 +273,12 @@
       </if>
       <if test="pubTime != null">
         #{pubTime,jdbcType=DATE},
+      </if>
+      <if test="thumbnail != null">
+        #{thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null">
+        #{brief,jdbcType=VARCHAR},
       </if>
       <if test="text != null">
         #{text,jdbcType=LONGVARCHAR},
@@ -329,6 +345,12 @@
       <if test="record.pubTime != null">
         pub_time = #{record.pubTime,jdbcType=DATE},
       </if>
+      <if test="record.thumbnail != null">
+        thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brief != null">
+        brief = #{record.brief,jdbcType=VARCHAR},
+      </if>
       <if test="record.text != null">
         text = #{record.text,jdbcType=LONGVARCHAR},
       </if>
@@ -364,6 +386,8 @@
       dclt = #{record.dclt,jdbcType=TIMESTAMP},
       auth = #{record.auth,jdbcType=VARCHAR},
       pub_time = #{record.pubTime,jdbcType=DATE},
+      thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+      brief = #{record.brief,jdbcType=VARCHAR},
       text = #{record.text,jdbcType=LONGVARCHAR},
       c_text = #{record.cText,jdbcType=LONGVARCHAR},
       html = #{record.html,jdbcType=LONGVARCHAR},
@@ -387,7 +411,9 @@
       remark = #{record.remark,jdbcType=VARCHAR},
       dclt = #{record.dclt,jdbcType=TIMESTAMP},
       auth = #{record.auth,jdbcType=VARCHAR},
-      pub_time = #{record.pubTime,jdbcType=DATE}
+      pub_time = #{record.pubTime,jdbcType=DATE},
+      thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+      brief = #{record.brief,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -431,6 +457,12 @@
       <if test="pubTime != null">
         pub_time = #{pubTime,jdbcType=DATE},
       </if>
+      <if test="thumbnail != null">
+        thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null">
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
       <if test="text != null">
         text = #{text,jdbcType=LONGVARCHAR},
       </if>
@@ -463,6 +495,8 @@
       dclt = #{dclt,jdbcType=TIMESTAMP},
       auth = #{auth,jdbcType=VARCHAR},
       pub_time = #{pubTime,jdbcType=DATE},
+      thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      brief = #{brief,jdbcType=VARCHAR},
       text = #{text,jdbcType=LONGVARCHAR},
       c_text = #{cText,jdbcType=LONGVARCHAR},
       html = #{html,jdbcType=LONGVARCHAR},
@@ -483,7 +517,9 @@
       remark = #{remark,jdbcType=VARCHAR},
       dclt = #{dclt,jdbcType=TIMESTAMP},
       auth = #{auth,jdbcType=VARCHAR},
-      pub_time = #{pubTime,jdbcType=DATE}
+      pub_time = #{pubTime,jdbcType=DATE},
+      thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      brief = #{brief,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

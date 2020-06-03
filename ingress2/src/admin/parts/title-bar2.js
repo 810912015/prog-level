@@ -16,7 +16,10 @@ function Tb(props) {
     }
     let c;
     if(props.loginName){
-        c= (<>{props.loginName}
+        c= (<>
+            <span style={{display:"inline-block",width:"60px",lineHeight:"15px",overflow:"hidden",
+                textOverflow:"ellipsis",
+                whiteSpace:"nowrap"}}>{props.loginName}</span>
         <Button type={"link"} onClick={logout} title={"注销"}><LogoutOutlined /></Button>
         </>)
     }else{

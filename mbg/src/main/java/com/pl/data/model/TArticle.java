@@ -43,6 +43,12 @@ public class TArticle implements Serializable {
     @ApiModelProperty(value = "发表时间")
     private Date pubTime;
 
+    @ApiModelProperty(value = "标志图片")
+    private String thumbnail;
+
+    @ApiModelProperty(value = "简介")
+    private String brief;
+
     @ApiModelProperty(value = "内容")
     private String text;
 
@@ -164,6 +170,22 @@ public class TArticle implements Serializable {
         this.pubTime = pubTime;
     }
 
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getBrief() {
+        return brief;
+    }
+
+    public void setBrief(String brief) {
+        this.brief = brief;
+    }
+
     public String getText() {
         return text;
     }
@@ -223,6 +245,8 @@ public class TArticle implements Serializable {
         sb.append(", dclt=").append(dclt);
         sb.append(", auth=").append(auth);
         sb.append(", pubTime=").append(pubTime);
+        sb.append(", thumbnail=").append(thumbnail);
+        sb.append(", brief=").append(brief);
         sb.append(", text=").append(text);
         sb.append(", cText=").append(cText);
         sb.append(", html=").append(html);

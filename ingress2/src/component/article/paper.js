@@ -21,6 +21,47 @@ export function PaperList(props) {
         <div style={s}>{r}</div>
     )
 }
+export function PaperBrief(props) {
+    let url=props.thumbnail||"https://progprac.obs.cn-south-1.myhuaweicloud.com:443/268-3.jpg";
+    return (
+        <div style={{display:'flex'}}>
+            <div style={{width:"100px"}}>
+                <img src={url} style={{width:"100px",height:"auto"}}/>
+            </div>
+            <div style={{flex:1}}>
+                <div>{props.cName}</div>
+                <div>
+                    <span>{props.auth}</span><span>{props.pubTime}</span>
+                </div>
+                <div>{props.brief}</div>
+
+            </div>
+        </div>
+    )
+}
+export function PaperList2(props) {
+   
+    let r=[]
+    if(props.items){
+        props.items.forEach(a=>{
+            r.push(
+                <div key={a.id} style={{paddingTop:"5px"}}>
+                    <a onClick={()=>props.click(a.id)}>
+                        <PaperBrief {...a}/>
+                    </a>
+                </div>
+            )
+        })
+    }
+    return (
+        <div className={"vertical-center-box"}>
+            <div className={"vertical-center"}>
+                {r}
+            </div>
+
+        </div>
+    )
+}
 
 export function APaper(props) {
     const [item,setItem]=useState(null)
@@ -87,7 +128,7 @@ function Papers2(props) {
     let c;
     if(!cur){
         c=(
-            <PaperList st={{padding:"10px"}} items={items} click={listClick}/>
+            <PaperList2 st={{padding:"10px"}} items={items} click={listClick}/>
         )
     }else{
         c=( <APaper id={cur||(items&&items.length&&items[0].id)} onShow={()=>props.setShowArticles(true)}/>)
