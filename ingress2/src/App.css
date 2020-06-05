@@ -41,7 +41,14 @@ pre {
   cursor: grab;
   display: block;
 }
-
+.line-el-2{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-lines: multiple;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
 .qr{
   width:600px;
   height: auto;
@@ -56,7 +63,7 @@ pre {
   justify-items: center;
 }
 .vertical-center{
-  width:40%
+  width:98%
 }
 @media screen and (max-width: 840px){
   .vertical-center{

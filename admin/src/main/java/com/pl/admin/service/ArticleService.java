@@ -1,5 +1,7 @@
 package com.pl.admin.service;
 
+import cn.hutool.core.text.escape.Html4Escape;
+import com.google.common.html.HtmlEscapers;
 import com.pl.admin.dto.Bound;
 import com.pl.data.common.api.CommonResult;
 import com.pl.data.mapper.TArticleMapper;
@@ -20,6 +22,9 @@ public class ArticleService  implements IArticleService{
     public CommonResult save(TArticle art) {
         if(art==null||art.getId()==null) return CommonResult.failed("对象和id都不能为空");
         artConverter.convert(art);
+        if(art.getBrief()!=null&&art.getBrief().length()>100){
+            art.setBrief(art.getBrief().substring(0,100));
+        }
         return CommonResult.success(
                 articleMapper.updateByPrimaryKeySelective(art));
     }
@@ -67,9 +72,15 @@ public class ArticleService  implements IArticleService{
                     code=false;
                 }
                 if(code||isCodeEnd){
-                    ensb.append(t+"\n");
-                    chsb.append(t+"\n");
-                    msb.append(t+"\n");
+                    String s=t;
+                    if(s.startsWith("#")){
+                        s=HtmlEscapers.htmlEscaper().escape(t);
+                    }
+                    s+="\n";
+
+                    ensb.append(s);
+                    chsb.append(s);
+                    msb.append(s);
                 }else {
                     boolean isEn = ln % 2 == 0;
                     String lang=isEn?"t-en":"t-ch";
