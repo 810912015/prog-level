@@ -19,6 +19,15 @@ public interface ITranslator {
         private String type;
         private String linkerContainerPattern;
 
+        @Override
+        public String toString() {
+            return "Link{" +
+                    "url='" + url + '\'' +
+                    ", type='" + type + '\'' +
+                    ", linkerContainerPattern='" + linkerContainerPattern + '\'' +
+                    '}';
+        }
+
         public String toCmd(){
             if(!StringUtils.isEmpty(linkerContainerPattern)) {
                 return String.format("node betterdev.js -t -r -to=192.168.16.102 -%s %s %s", type, url, linkerContainerPattern);
@@ -36,8 +45,7 @@ public interface ITranslator {
         }
 
         private String makeId(String key){
-            return String.format("%s_%s_%s",key,url,
-                    LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+            return String.format("%s_%s",key,url);
         }
         public String runningKey(){
             return makeId("t_running_");

@@ -11,4 +11,10 @@
            eternal="false"
            overflowToDisk="false"
            timeToLiveSeconds="120" />
+
+    <cache name="myCache2"
+           maxElementsInMemory="2000"
+           eternal="false"
+           overflowToDisk="false"
+           timeToLiveSeconds="1200" />
 </ehcache>

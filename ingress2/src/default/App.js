@@ -4,6 +4,7 @@ import './App.css';
 import {Footer} from "../footer";
 import {Tb} from "./title-bar-default"
 import {HashRouter} from "react-router-dom";
+import {Summary} from "./summary";
 
 class App extends Component {
     render() {
@@ -62,11 +63,10 @@ export function Intro() {
            <h2>
                致力于编程入门和编程技术的传播
            </h2>
-
+               <Summary/>
            <h3>
                主要包括文章和习题二部分：
            </h3>
-
 
            <h3>
                <a href={"/index.html#papers"}>文章</a>

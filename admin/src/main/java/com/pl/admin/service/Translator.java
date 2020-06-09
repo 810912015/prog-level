@@ -16,10 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -54,9 +51,16 @@ public class Translator implements ITranslator {
         @Autowired
         private RedisService redisService;
         private static final String KEY="t_q";
+
         private static final int FULL=3;
         private boolean shouldCallNow(){
-            Long r=redisService.getRedis().opsForHash().size(KEY);
+            Set<String> ss=redisService.getRedis().keys("t_running_*");
+            if(ss==null||ss.isEmpty()) {
+                logger.info("translating null");
+                return true;
+            }
+            int r=ss.size();
+            logger.info("translating "+r);
             return r < FULL;
         }
 
@@ -69,8 +73,18 @@ public class Translator implements ITranslator {
             redisService.getRedis().opsForHash().put(KEY,link.runningKey(),JSONUtil.toJsonStr(link));
             onChange(f);
         }
-        public void remove(String key,Function<Link,Boolean> f){
-            redisService.getRedis().opsForHash().delete(KEY,key);
+        public void remove(Link link,Function<Link,Boolean> f) {
+            String key=link.runningKey();
+            Set<Object> s = redisService.getRedis().opsForHash().keys(KEY);
+            logger.info("remove,"+key+","+s.size());
+            for (Object t : s) {
+                if (t == null) continue;
+                String k = t.toString();
+                if(k.startsWith(key)) {
+                    redisService.getRedis().opsForHash().delete(KEY, k);
+                    logger.info(k + " removed," + (f == null));
+                }
+            }
             onChange(f);
         }
 
@@ -78,6 +92,7 @@ public class Translator implements ITranslator {
             if(f==null) return;
             if(!shouldCallNow()) return;
             Set<Object> r = redisService.getRedis().opsForHash().keys(KEY);
+            logger.info("in list "+r.size());
             if (r.isEmpty()) return;
             for(Object o:r){
                 if(o==null) continue;
@@ -91,12 +106,15 @@ public class Translator implements ITranslator {
         }
     }
 
+
     public boolean callOne(Link link1){
         Boolean exists=redisService.getRedis().opsForValue().setIfAbsent(link1.runningKey(),
                 Long.toString(new Date().getTime()),
                 Duration.ofHours(4));
+        logger.info("lock "+link1.toString()+exists);
         if(exists!=null&&exists) {
             CommonResult<String> r = callSvc("http://" + ip + ":7070/translate", new CmdPrm(link1, ip));
+            logger.info("call "+r.toString());
             if (!r.isSuccess()) {
                 redisService.getRedis().delete(link1.runningKey());
                 return false;
@@ -109,6 +127,7 @@ public class Translator implements ITranslator {
 
     @Override
     public CommonResult<List<TArticle>> translate(Link link) {
+        logger.info("begin "+link.toCmd());
         if(existsByUrl(link)){
             return CommonResult.success(getArticle(link),"此文章已翻译");
         }
@@ -117,13 +136,14 @@ public class Translator implements ITranslator {
         }
 
         qProvider.add(link,this::callOne);
+        logger.info("add "+link.toCmd());
         return CommonResult.success(new ArrayList<>());
     }
 
     @Override
     public CommonResult<String> clearLock(Link link) {
         String k=link.runningKey();
-        qProvider.remove(k,this::callOne);
+        qProvider.remove(link,this::callOne);
         String s=redisService.get(k);
         if(StringUtils.isEmpty(s)){
             return CommonResult.failed("此url无锁");
@@ -178,13 +198,14 @@ public class Translator implements ITranslator {
                 .opsForList().
                 rightPushAll(rk,ra.stream().map(a->Integer.toString(a.getId())).collect(Collectors.toList()));
         redisService.expire(rk,24*60*60*1000);
+        qProvider.remove(result,null);
         return CommonResult.success("");
     }
 
     @Override
     public CommonResult<String> finish(Link link) {
         redisService.getRedis().delete(link.runningKey());
-        qProvider.remove(link.runningKey(),this::callOne);
+        qProvider.remove(link,this::callOne);
         return CommonResult.success("");
     }
 }

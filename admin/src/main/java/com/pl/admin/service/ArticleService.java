@@ -44,8 +44,8 @@ public class ArticleService  implements IArticleService{
             if(!StringUtils.isEmpty(art.getcText())) {
                 split(art);
             }
-            if(art.getAuth()!=null&&art.getAuth().length()>100){
-                art.setAuth(art.getAuth().substring(0,100));
+            if(art.getAuth()!=null&&art.getAuth().length()>200){
+                art.setAuth(art.getAuth().substring(0,200));
             }
         }
 
