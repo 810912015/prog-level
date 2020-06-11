@@ -10,10 +10,8 @@ export function Uploader(props) {
     const [msg,setMsg]=useState("")
     const [url,setUrl]=useState(props.url||"")
     useEffect(()=>{
-        if(props.url&&props.url!==url){
-            setUrl(props.url)
-        }
-    })
+       setUrl(props.url)
+    },[props.url])
     const afterPost=(d1) => {
         if(d1.data){
             setUrl(d1.data)

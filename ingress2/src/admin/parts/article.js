@@ -36,13 +36,9 @@ export function ArticleDetail(props) {
     const [h,setH]=useState("")
     useEffect(()=>{
         setData(props.cText)
-    },[props.id,props.cText])
-    useEffect(()=>{
-        setH(props.html)
-    },[props.id,props.html])
-    useEffect(()=>{
-        setLine(props.useLevel||-1)
-    },[props.id,props.useLevel])
+        setBrief(props.brief||"")
+        setThumbnail(props.thumbnail||"")
+    },[props])
     const del=()=>{
         post("/admin/article/del?id="+props.id,{},(d)=>{
             props.onDel(props.id);
@@ -83,20 +79,20 @@ export function ArticleDetail(props) {
 
            </div>
            <div style={{padding:"8px 0px"}}>
-               <h3>说明：1.奇数行是英文，偶数行是中文；2.pre标签会分别包含在中英文中；3.pre内可包含img；4.前3行（6行，中英文各3行）分别是标题，作者，时间</h3>
-               <Row>
+               <h5>说明：1.奇数行是英文，偶数行是中文；2.pre标签会分别包含在中英文中；3.pre内可包含img；4.前3行（6行，中英文各3行）分别是标题，作者，时间</h5>
+               <Row style={{padding:"10px",border:"1px dashed #ddd"}}>
                    <Col span={1} style={{textAlign:"right"}}>
                        <span>标志图</span>
                    </Col>
-                   <Col span={8}>
-                       <Uploader id={"tn"} change={setThumbnail} title={"图片"}/>
-                       <div>{thumbnail}</div>
+                   <Col span={8} style={{border:"1px dashed #ddd",paddingLeft:"10px"}}>
+                       <input style={{width:"100%"}} type={'text'} value={thumbnail} onChange={(e)=>setThumbnail(e.target.value)}/>
+                       <Uploader id={"tn"} url={thumbnail} change={setThumbnail} title={"图片"}/>
                    </Col>
                    <Col span={1} style={{textAlign:"right"}}>
                        <span>简介</span>
                    </Col>
                    <Col span={14}>
-                       <textarea value={brief} style={{width:"100%",height:"80px"}} onChange={(e)=>setBrief(e.target.value)}/></Col>
+                       <textarea value={brief} style={{width:"100%",height:"100px"}} onChange={(e)=>setBrief(e.target.value)}/></Col>
 
 
                </Row>

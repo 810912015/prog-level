@@ -22,8 +22,8 @@ public class ArticleService  implements IArticleService{
     public CommonResult save(TArticle art) {
         if(art==null||art.getId()==null) return CommonResult.failed("对象和id都不能为空");
         artConverter.convert(art);
-        if(art.getBrief()!=null&&art.getBrief().length()>100){
-            art.setBrief(art.getBrief().substring(0,100));
+        if(art.getBrief()!=null&&art.getBrief().length()>200){
+            art.setBrief(art.getBrief().substring(0,200));
         }
         return CommonResult.success(
                 articleMapper.updateByPrimaryKeySelective(art));
