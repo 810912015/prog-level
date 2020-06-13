@@ -52,7 +52,7 @@ public class Translator implements ITranslator {
         private RedisService redisService;
         private static final String KEY="t_q";
 
-        private static final int FULL=3;
+        private static final int FULL=2;
         private boolean shouldCallNow(){
             Set<String> ss=redisService.getRedis().keys("t_running_*");
             if(ss==null||ss.isEmpty()) {

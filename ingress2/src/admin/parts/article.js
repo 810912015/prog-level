@@ -38,7 +38,9 @@ export function ArticleDetail(props) {
         setData(props.cText)
         setBrief(props.brief||"")
         setThumbnail(props.thumbnail||"")
-    },[props])
+        setH(props.html)
+        setLine(props.useLevel||-1)
+    },[props.id])
     const del=()=>{
         post("/admin/article/del?id="+props.id,{},(d)=>{
             props.onDel(props.id);
@@ -51,7 +53,8 @@ export function ArticleDetail(props) {
             useLevel:line,
             thumbnail:thumbnail,
             brief:brief
-        },(d)=>{})
+        },(d)=>{
+        })
     }
     if(!props.id){
         return (
