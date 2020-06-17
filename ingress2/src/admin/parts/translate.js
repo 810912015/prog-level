@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Form,Input,Select,Button,Row,Col} from "antd";
-import {post} from "../../component/common/network";
+import {post,get} from "../../component/common/network";
 import {Link} from "react-router-dom";
 
 const layout = {
@@ -46,6 +46,7 @@ export function ResShow(props) {
 export function Translator(props) {
     const [res,setRes]=useState(null)
     const [form] = Form.useForm();
+    const [sche,setSche]=useState([])
     const onFinish=(v)=>{
        let p={...v}
        if(!p.type) p.type="c";
@@ -70,6 +71,17 @@ export function Translator(props) {
     }
     const queryLock=()=>{
         makeCall("query-lock")
+    }
+    const queryScheduled=()=>{
+        get("/admin/translate/scheduled",(d)=>{
+            setSche(d);
+        })
+    }
+    let ss=[]
+    if(sche&&sche.data){
+        ss=sche.data.map(a=>(
+            <a href={a}>{a}</a>
+        ))
     }
   return (
       <div>
@@ -111,11 +123,16 @@ export function Translator(props) {
               <Button type="default"  onClick={queryLock}>
                   查询同步锁
               </Button>
+              <Button type={"default"} onClick={queryScheduled}>排队中</Button>
           </Form.Item>
       </Form>
         <Row>
             <Col span={8} offset={8}>
                 <ResShow {...res}/>
+                <div style={{marginTop:"10px"}}>
+                    <div>排队中的url</div>
+                    {ss}
+                </div>
             </Col>
         </Row>
       </div>

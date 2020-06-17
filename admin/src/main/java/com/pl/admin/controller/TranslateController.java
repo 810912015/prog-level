@@ -80,4 +80,16 @@ public class TranslateController {
             return CommonResult.failed(e.getMessage());
         }
     }
+
+    @ApiOperation(value = "scheduled")
+    @RequestMapping(value = "scheduled",method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<List<String>> scheduled() {
+        try {
+            return translator.scheduled();
+        }catch (Exception e){
+            LoggerFactory.getLogger(this.getClass()).error("",e);
+            return CommonResult.failed(e.getMessage());
+        }
+    }
 }

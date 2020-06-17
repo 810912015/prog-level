@@ -64,6 +64,11 @@ public class Translator implements ITranslator {
             return r < FULL;
         }
 
+        public List<String> scheduled(){
+            Set<Object> ss=redisService.getRedis().opsForHash().keys(KEY);
+            if(ss.isEmpty()) return new ArrayList<>();
+            return ss.stream().map(a->a.toString().substring(11)).collect(Collectors.toList());
+        }
         public boolean exist(String key){
             return redisService.getRedis().opsForHash().hasKey(KEY,key);
         }
@@ -207,5 +212,10 @@ public class Translator implements ITranslator {
         redisService.getRedis().delete(link.runningKey());
         qProvider.remove(link,this::callOne);
         return CommonResult.success("");
+    }
+
+    @Override
+    public CommonResult<List<String>> scheduled() {
+        return CommonResult.success(qProvider.scheduled());
     }
 }
