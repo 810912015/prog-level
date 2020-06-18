@@ -80,7 +80,9 @@ export function Translator(props) {
     let ss=[]
     if(sche&&sche.data){
         ss=sche.data.map(a=>(
-            <a href={a}>{a}</a>
+            <div>
+                <a href={a}>{a}</a>
+            </div>
         ))
     }
   return (

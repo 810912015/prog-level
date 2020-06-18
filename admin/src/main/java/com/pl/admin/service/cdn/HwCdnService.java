@@ -14,7 +14,6 @@ import java.io.InputStream;
 public class HwCdnService implements ICdnService {
     private static final Logger log= LoggerFactory.getLogger(HwCdnService.class);
     private static final String endPoint="obs.cn-south-1.myhuaweicloud.com";
-    private static final String readEndPoint="progprac.obs.cn-south-1.myhuaweicloud.com";
     private static final String ak="QUJZ3H1LADG04AOJSDYX";
     private static final String sk="pCYp6Rjq8VaWeQlLnuye48ncTRdYePzmuZb3ODWZ";
     private static final String bucket="progprac";
