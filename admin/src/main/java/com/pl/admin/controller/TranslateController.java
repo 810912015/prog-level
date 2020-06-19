@@ -92,4 +92,15 @@ public class TranslateController {
             return CommonResult.failed(e.getMessage());
         }
     }
+    @ApiOperation(value = "running")
+    @RequestMapping(value = "running",method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<List<String>> running() {
+        try {
+            return translator.running();
+        }catch (Exception e){
+            LoggerFactory.getLogger(this.getClass()).error("",e);
+            return CommonResult.failed(e.getMessage());
+        }
+    }
 }

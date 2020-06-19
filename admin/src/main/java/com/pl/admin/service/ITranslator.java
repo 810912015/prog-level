@@ -159,4 +159,5 @@ public interface ITranslator {
     CommonResult<String> done(Result result);
     CommonResult<String> finish(Link link);
     CommonResult<List<String>> scheduled();
+    CommonResult<List<String>> running();
 }

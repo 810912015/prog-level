@@ -43,10 +43,32 @@ export function ResShow(props) {
 
 }
 
+export function Translating(props) {
+    if(!props.sche||!props.sche.data||!props.sche.data.length) return null;
+    let r=[]
+    props.sche.data.forEach(a=>{
+        r.push(
+            <div>
+                <a href={a}>{a}</a>
+                <a style={{marginLeft:"10px"}} onClick={()=>props.translating(1,a)}>{"查询结果"}</a>
+                <a style={{marginLeft:"10px"}} onClick={()=>props.translating(2,a)}>{"查询同步锁"}</a>
+                <a style={{marginLeft:"10px"}} onClick={()=>props.translating(3,a)}>清除同步锁</a>
+            </div>
+        )
+    })
+    return (
+        <div style={{marginTop:"10px"}}>
+            <div>{props.title}</div>
+            {r}
+        </div>
+    )
+}
+
 export function Translator(props) {
     const [res,setRes]=useState(null)
     const [form] = Form.useForm();
-    const [sche,setSche]=useState([])
+    const [sche,setSche]=useState(null)
+    const [run,setRun]=useState(null)
     const onFinish=(v)=>{
        let p={...v}
        if(!p.type) p.type="c";
@@ -77,13 +99,16 @@ export function Translator(props) {
             setSche(d);
         })
     }
-    let ss=[]
-    if(sche&&sche.data){
-        ss=sche.data.map(a=>(
-            <div>
-                <a href={a}>{a}</a>
-            </div>
-        ))
+    const running=()=>{
+        get("/admin/translate/running",(d)=>{
+            setRun(d);
+        })
+    }
+    const translating=(op,a)=>{
+        let p={url:a}
+        let tag=op===1?"result":op===2?"query-lock":op===3?"clear":null;
+        if(!tag) return;
+        post("/admin/translate/"+tag,p,setRes)
     }
   return (
       <div>
@@ -125,16 +150,15 @@ export function Translator(props) {
               <Button type="default"  onClick={queryLock}>
                   查询同步锁
               </Button>
-              <Button type={"default"} onClick={queryScheduled}>排队中</Button>
+              <Button type={"dashed"} danger={true} onClick={queryScheduled}>排队中</Button>
+              <Button type={"dashed"} danger={true} onClick={running}>翻译中</Button>
           </Form.Item>
       </Form>
         <Row>
             <Col span={8} offset={8}>
                 <ResShow {...res}/>
-                <div style={{marginTop:"10px"}}>
-                    <div>排队中的url</div>
-                    {ss}
-                </div>
+                <Translating sche={run} title={"翻译中"} translating={translating}/>
+                <Translating sche={sche} title={"排队中"} translating={translating}/>
             </Col>
         </Row>
       </div>
