@@ -20,7 +20,7 @@
     "react-dropzone": "^11.0.1",
     "react-raw-html": "^0.4.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1",
+    "react-scripts": "5.0.1",
     "serve": "^11.3.0",
     "typescript": "^3.9.5"
   },
